@@ -176,7 +176,6 @@ const Navbar = () => {
                             </button>
                             <div className={`${show ? 'right-0 top-[40px] visible' : 'right-0 top-[90px]  invisible'}  absolute z-50  bg-white rounded-2xl py-2 px-4 w-[190px] transition-all my-transition`}>
                                 <ul>
-                                    {/* import { , , , FaSignOutAlt, FaInfoCircle, FaPhone } from 'react-icons/fa'; */}
                                     <Link href={"/my-profile"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                         <FaUser size={18}></FaUser>
                                         <li className=" ">My Profile</li>
@@ -193,20 +192,30 @@ const Navbar = () => {
                                         <FaStar size={18}></FaStar>
                                         <li className=" ">My Reviews</li>
                                     </Link>
-                                    
-                                    <Link href={"/"}><li className="block md:hidden w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white">Home</li></Link>
-                                    <Link href={"#"}><li className="block md:hidden w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white">My Reviews</li></Link>
-                                    <Link href={"#"}><li className="block md:hidden w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white">About Us</li></Link>
-                                    <Link href={"#"}><li className="block md:hidden w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white">Contuct Us</li></Link>
+                                    <Link href={""} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                        <FaInfoCircle size={18}></FaInfoCircle>
+                                        <li className=" ">About Us</li>
+                                    </Link>
+                                    <Link href={""} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                        <FaPhone size={18}></FaPhone>
+                                        <li className=" ">Contact Us</li>
+                                    </Link>
 
+                                  
                                     {
                                         user ? <>
-
-                                            <div onClick={handleLogOut}><li className="w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white">Log Out</li></div>
+                                            <div onClick={handleLogOut} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                <FaSignOutAlt size={18}></FaSignOutAlt>
+                                                <li className=" ">Logout</li>
+                                            </div>
 
 
                                         </> : <>
-                                            <Link href={"/signIn"}><li className="w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white">Sign In</li></Link>
+                                            <Link href={"/signIn"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                <FaStar size={18}></FaStar>
+                                                <li className=" ">SignIn</li>
+                                            </Link>
+                                          
 
                                         </>
                                     }
