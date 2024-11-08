@@ -94,27 +94,28 @@ const FeaturedBooks = () => {
 
       {/* Swiper for carousel functionality */}
       <Swiper
-        ref={swiperRef} // Assign the reference to Swiper
-        spaceBetween={20}
-        slidesPerView={4} // 4 items per view
-        breakpoints={{
-          640: {
-            slidesPerView: 1, // 1 item per view for small screens
-          },
-          768: {
-            slidesPerView: 2, // 2 items per view for medium screens
-          },
-          1024: {
-            slidesPerView: 4, // 4 items per view for large screens
-          },
-        }}
-      >
-        {books?.map((book) => (
-          <SwiperSlide key={book._id}>
-              <BooksCard book={book}></BooksCard>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+  ref={swiperRef} // Assign the reference to Swiper
+  spaceBetween={20}
+  slidesPerView={1} // Default to 1 item per view for small screens
+  breakpoints={{
+    640: {
+      slidesPerView: 1, // 1 item per view for screens up to 640px
+    },
+    768: {
+      slidesPerView: 2, // 2 items per view for medium screens
+    },
+    1024: {
+      slidesPerView: 4, // 4 items per view for large screens
+    },
+  }}
+>
+  {books?.map((book) => (
+    <SwiperSlide key={book._id}>
+      <BooksCard book={book}></BooksCard>
+    </SwiperSlide>
+  ))}
+</Swiper>
+
 
       {/* arrow left */}
       <button
