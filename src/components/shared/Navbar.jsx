@@ -176,15 +176,24 @@ const Navbar = () => {
                             </button>
                             <div className={`${show ? 'right-0 top-[40px] visible' : 'right-0 top-[90px]  invisible'}  absolute z-50  bg-white rounded-2xl py-2 px-4 w-[190px] transition-all my-transition`}>
                                 <ul>
-                                    {/* import { , FaClipboardList, FaHeart, FaStar, FaSignOutAlt, FaInfoCircle, FaPhone } from 'react-icons/fa'; */}
-                                    <Link href={"/my-profile"} className="flex justify-between w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white ">
-
-                                        <FaUser size={20}></FaUser>
+                                    {/* import { , , , FaSignOutAlt, FaInfoCircle, FaPhone } from 'react-icons/fa'; */}
+                                    <Link href={"/my-profile"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                        <FaUser size={18}></FaUser>
                                         <li className=" ">My Profile</li>
                                     </Link>
-
-                                    <Link href={"/my-order"}><li className="hidden md:block w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white ">My Order</li></Link>
-                                    <Link href={"/wishlist"}><li className="hidden md:block w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white ">Wishlist</li></Link>
+                                    <Link href={"/my-order"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                        <FaClipboardList size={18}></FaClipboardList>
+                                        <li className=" ">My Order</li>
+                                    </Link>
+                                    <Link href={"/wishlist"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                        <FaHeart size={18}></FaHeart>
+                                        <li className=" ">Wishlist</li>
+                                    </Link>
+                                    <Link href={"/my-reviews"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                        <FaStar size={18}></FaStar>
+                                        <li className=" ">My Reviews</li>
+                                    </Link>
+                                    
                                     <Link href={"/"}><li className="block md:hidden w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white">Home</li></Link>
                                     <Link href={"#"}><li className="block md:hidden w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white">My Reviews</li></Link>
                                     <Link href={"#"}><li className="block md:hidden w-full p-1 pl-3 rounded-md hover:bg-bg-blue hover:text-white">About Us</li></Link>

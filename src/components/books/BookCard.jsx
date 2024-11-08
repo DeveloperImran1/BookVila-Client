@@ -5,14 +5,14 @@ import { FaCartShopping } from "react-icons/fa6";
 import Link from "next/link";
 import Image from "next/image";
 
-const BooksCard = ({ product }) => {
+const BooksCard = ({ book }) => {
     const [userRating, setUserRating] = useState(3);
 
-    const { category, color, description, image, offer, price, title, totalAvailable, _id } = product;
-    console.log("single product", product)
+    const { category, color, description, image, offer, price, title, totalAvailable, _id } = book;
+    console.log("single book", book)
     return (
         <>
-            <Link href={`/product/${_id}`}>
+            <Link href={`/book/${_id}`}>
                 <div className="rounded-md border-2 p-4 w-full space-y-3  relative bg-white">
                     <div>
 
@@ -22,7 +22,7 @@ const BooksCard = ({ product }) => {
                     </div>
 
                     <div className="hover:scale-110  my-transition cursor-pointer flex flex-col justify-center items-center ">
-                        <Image height={676} width={1200} src={`${image || 'https://i.ibb.co/x6jR8ny/Link-prod16-png.png'}`} alt="product" className="w-[180px] h-[150px] my-4 rounded-md" />
+                        <Image height={676} width={1200} src={`${image || 'https://i.ibb.co/x6jR8ny/Link-prod16-png.png'}`} alt="book" className="w-[180px] h-[150px] my-4 rounded-md" />
 
                     </div>
 
