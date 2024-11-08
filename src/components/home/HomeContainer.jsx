@@ -1,11 +1,14 @@
-import Books from "../books/Books";
+"use client"
 import Banner from "./Banner";
+import FeaturedBooks from "./FeaturedBooks";
+
 
 const HomeContainer = () => {
     return (
         <div className=" ">
           <Banner></Banner>
-          <Books></Books>
+         
+          <FeaturedBooks/>
         </div>
     );
 };
