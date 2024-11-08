@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { FaCartShopping } from "react-icons/fa6";
 import { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react"; // Import Swiper components
@@ -23,14 +23,14 @@ const FeaturedBooks = () => {
     }
   };
 
-
   const books = [
     {
       _id: "1",
       category: "Electronics",
       color: "Black",
       description: "High-quality wireless headphones with noise cancellation.",
-      image: "https://www.shutterstock.com/image-vector/3d-wireless-headphones-mockup-set-260nw-2130630635.jpg",
+      image:
+        "https://www.shutterstock.com/image-vector/3d-wireless-headphones-mockup-set-260nw-2130630635.jpg",
       offer: 20,
       price: 79.99,
       title: "Wireless Headphones",
@@ -41,7 +41,8 @@ const FeaturedBooks = () => {
       category: "Home Appliances",
       color: "Silver",
       description: "Energy-efficient smart vacuum cleaner.",
-      image: "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
+      image:
+        "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
       offer: 15,
       price: 199.99,
       title: "Smart Vacuum Cleaner",
@@ -52,7 +53,8 @@ const FeaturedBooks = () => {
       category: "Fashion",
       color: "Blue",
       description: "Stylish denim jacket for all occasions.",
-      image: "https://www.shutterstock.com/image-vector/3d-wireless-headphones-mockup-set-260nw-2130630635.jpg",
+      image:
+        "https://www.shutterstock.com/image-vector/3d-wireless-headphones-mockup-set-260nw-2130630635.jpg",
       offer: 10,
       price: 49.99,
       title: "Denim Jacket",
@@ -63,7 +65,8 @@ const FeaturedBooks = () => {
       category: "Fitness",
       color: "Green",
       description: "Durable yoga mat for all fitness levels.",
-      image: "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
+      image:
+        "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
       offer: 5,
       price: 29.99,
       title: "Yoga Mat",
@@ -74,7 +77,8 @@ const FeaturedBooks = () => {
       category: "book",
       color: "Multi",
       description: "A motivational book for personal growth.",
-      image: "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
+      image:
+        "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
       offer: 25,
       price: 14.99,
       title: "Motivational Book",
@@ -90,32 +94,32 @@ const FeaturedBooks = () => {
           <Link href={`/book/${books[0]._id}`}>
             <h1 className="text-bg-blue underline">See more</h1>
           </Link>
-        )}      </div>
+        )}{" "}
+      </div>
 
       {/* Swiper for carousel functionality */}
       <Swiper
-  ref={swiperRef} // Assign the reference to Swiper
-  spaceBetween={20}
-  slidesPerView={1} // Default to 1 item per view for small screens
-  breakpoints={{
-    640: {
-      slidesPerView: 1, // 1 item per view for screens up to 640px
-    },
-    768: {
-      slidesPerView: 2, // 2 items per view for medium screens
-    },
-    1024: {
-      slidesPerView: 4, // 4 items per view for large screens
-    },
-  }}
->
-  {books?.map((book) => (
-    <SwiperSlide key={book._id}>
-      <BooksCard book={book}></BooksCard>
-    </SwiperSlide>
-  ))}
-</Swiper>
-
+        ref={swiperRef} // Assign the reference to Swiper
+        spaceBetween={20}
+        slidesPerView={1} // Default to 1 item per view for small screens
+        breakpoints={{
+          640: {
+            slidesPerView: 1, // 1 item per view for screens up to 640px
+          },
+          768: {
+            slidesPerView: 2, // 2 items per view for medium screens
+          },
+          1024: {
+            slidesPerView: 4, // 4 items per view for large screens
+          },
+        }}
+      >
+        {books?.map((book) => (
+          <SwiperSlide key={book._id}>
+            <BooksCard book={book}></BooksCard>
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
       {/* arrow left */}
       <button
@@ -145,7 +149,6 @@ const FeaturedBooks = () => {
           <path d="M685.248 104.704a64 64 0 010 90.496L368.448 512l316.8 316.8a64 64 0 01-90.496 90.496L232.704 557.248a64 64 0 010-90.496l362.048-362.048a64 64 0 0190.496 0z"></path>
         </svg>
       </button>
-
     </div>
   );
 };

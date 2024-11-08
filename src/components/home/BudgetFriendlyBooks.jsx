@@ -87,21 +87,22 @@ const BudgetFriendlyBooks = () => {
     return (
         <div className="container p-8 bg-white relative my-8">
       <div className="flex justify-between mb-6 font-semibold">
-        <h1 className="text-2xl text-gray-600">Budget Friendly Books</h1>
+        <h1 className="text-2xl text-gray-600">Featured book</h1>
         {books && books?.length > 0 && (
           <Link href={`/book/${books[0]._id}`}>
             <h1 className="text-bg-blue underline">See more</h1>
           </Link>
-        )}      </div>
+        )}{" "}
+      </div>
 
       {/* Swiper for carousel functionality */}
       <Swiper
         ref={swiperRef} // Assign the reference to Swiper
         spaceBetween={20}
-        slidesPerView={4} // 4 items per view
+        slidesPerView={1} // Default to 1 item per view for small screens
         breakpoints={{
           640: {
-            slidesPerView: 1, // 1 item per view for small screens
+            slidesPerView: 1, // 1 item per view for screens up to 640px
           },
           768: {
             slidesPerView: 2, // 2 items per view for medium screens
@@ -113,7 +114,7 @@ const BudgetFriendlyBooks = () => {
       >
         {books?.map((book) => (
           <SwiperSlide key={book._id}>
-              <BooksCard book={book}></BooksCard>
+            <BooksCard book={book}></BooksCard>
           </SwiperSlide>
         ))}
       </Swiper>
@@ -146,7 +147,6 @@ const BudgetFriendlyBooks = () => {
           <path d="M685.248 104.704a64 64 0 010 90.496L368.448 512l316.8 316.8a64 64 0 01-90.496 90.496L232.704 557.248a64 64 0 010-90.496l362.048-362.048a64 64 0 0190.496 0z"></path>
         </svg>
       </button>
-
     </div>
     );
 };
