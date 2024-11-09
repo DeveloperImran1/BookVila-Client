@@ -1,3 +1,4 @@
+import TableRow from "./TableRow";
 
 const LeftSide = () => {
     return (
@@ -7,7 +8,7 @@ const LeftSide = () => {
                 <table className='table table-px-0 border-t'>
                     <tbody>
                         {[1, 2,1,1,1,1,1,].map((item, index) => (
-                            <tr key={index.index}>ff</tr>
+                            <TableRow key={index} />
                         ))}
                     </tbody>
                 </table>
