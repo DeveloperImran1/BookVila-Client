@@ -1,8 +1,9 @@
+import OrderSummary from "./OrderSummary";
 
 const RightSide = () => {
     return (
         <div>
-            RightSide
+            <OrderSummary/>
         </div>
     );
 };
