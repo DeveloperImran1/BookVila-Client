@@ -1,3 +1,4 @@
+import Checkout from "./Checkout";
 import DiscountCard from "./DiscountCard";
 import OrderSummary from "./OrderSummary";
 import PromoCode from "./PromoCode";
@@ -8,6 +9,7 @@ const RightSide = () => {
             <OrderSummary/>
             <DiscountCard/>
             <PromoCode/>
+            <Checkout/>
         </div>
     );
 };
