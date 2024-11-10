@@ -1,0 +1,67 @@
+animation {
+    transform: translateX(0);
+    transition: 0.6s ease;
+    opacity: 1;
+    filter: blur(0);
+  }
+
+
+  .form-box.login .animation {
+    transition-delay: calc(0.1s * var(--j));
+  }
+
+
+  .active .form-box.login .animation {
+    transform: translateX(-120%);
+    opacity: 0;
+    filter: blur(10px);
+    transition-delay: calc(0.1s * var(--i));
+  }
+
+
+  .form-box.register .animation {
+    transform: translateX(120%);
+    opacity: 0;
+    filter: blur(10px);
+    transition-delay: calc(0.1s * var(--j));
+  }
+
+
+  .active .form-box.register .animation {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+    transition-delay: calc(0.1s * var(--i));
+  }
+
+
+  .info-text.login .animation {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+    transition-delay: calc(0.1s * var(--j));
+  }
+
+
+  .active .info-text.login .animation {
+    transform: translateX(120px);
+    opacity: 0;
+    filter: blur(10px);
+    transition-delay: calc(0.1s * var(--i));
+  }
+
+
+  .info-text.register .animation {
+    transform: translateX(-120%);
+    opacity: 0;
+    filter: blur(10px);
+    transition-delay: calc(0.1s * var(--j));
+  }
+
+
+  .active .info-text.register .animation {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+    transition-delay: calc(0.1s * var(--i));
+  }
