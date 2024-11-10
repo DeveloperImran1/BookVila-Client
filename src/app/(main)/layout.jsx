@@ -9,7 +9,7 @@ const MainLayout = ({ children }) => {
   const path = usePathname();
 
   return (
-    <div      >
+    <div>
       {
         path.includes("login") || path.includes("register") ? <></> : <Navbar></Navbar>
       }
