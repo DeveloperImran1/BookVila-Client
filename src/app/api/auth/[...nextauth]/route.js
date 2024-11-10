@@ -20,9 +20,8 @@ export const authOptions = {
             },
             async authorize(credentials) {
                 const { email, password } = credentials;
-                const userInfo = {email, password}
+                const userInfo = { email, password }
 
-                console.log("user info is", credentials)
 
                 // Validation
                 if (!email || !password) {
@@ -31,10 +30,9 @@ export const authOptions = {
 
                 const res = await axios.post(`http://localhost:9000/getSingleUser`, userInfo)
                 const currentUser = res?.data;
-                console.log("currentUser", currentUser)
 
                 // User not found or password not match
-                if (currentUser?.success) {
+                if (!currentUser?.success) {
                     throw new Error(currentUser?.message);
                 }
 
@@ -57,29 +55,24 @@ export const authOptions = {
         async signIn({ user, account, profile }) {
             const { email, name, image } = user;
 
+
+
+
             if (account.provider === 'google' || account.provider === 'facebook') {
                 try {
-                    // const db = await connectDB();
+                    console.log("Google or facebood user info is", user, "Account is ", account, "profile is ", profile)
 
-                    // // Check if user exists
-                    // const existingUser = await db.collection('users').findOne({ email });
+                    const newUser = {
+                        name: name,
+                        email: email,
+                        photo: image,
+                      }
+                  
+                      console.log("newUser", newUser)
+                      const resp = await axios.post('http://localhost:9000/addeNewUser', newUser)
+                      console.log("SignUp korar por responce is ", resp)
 
-                    // if (!existingUser) {
-                    //     // Insert new user if they don't exist
-                    //     await db.collection('users').insertOne({
-                    //         email,
-                    //         name,
-                    //         image,
-                    //         provider: account.provider,
-                    //         createdAt: new Date(),
-                    //         role: "organizer",
-                    //         followers: [],
-                    //         review: [],
-                    //         block: false,
-                    //     });
-
-                    // }
-
+                   
                     // Return user details
                     return true;
                 } catch (error) {
@@ -92,14 +85,24 @@ export const authOptions = {
         },
         async jwt({ token, user }) {
             if (user) {
-                token.id = user._id;
-                token.email = user.email;
+                console.log("token is", token, "user is", user)
+                token.id = user?.user?._id;
+                token.name = user?.user?.name;
+                token.email = user?.user?.email;
+                token.photo = user?.user?.photo;
             }
             return token;
         },
         async session({ session, token }) {
+            console.log("token is", token, "settion is", session)   // settion is {
+                // user: { name: undefined, email: undefined, image: undefined },
+                // expires: '2024-12-10T11:23:54.046Z'
+            //   }
+
             session.user.id = token.id;
+            session.user.name = token.name;
             session.user.email = token.email;
+            session.user.photo = token.photo;
             return session;
         }
     },

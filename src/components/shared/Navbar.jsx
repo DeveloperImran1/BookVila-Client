@@ -15,7 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaUser, FaClipboardList, FaHeart, FaStar, FaSignOutAlt, FaInfoCircle, FaPhone } from 'react-icons/fa';
 import { Button, Drawer, DrawerAction, DrawerContent, Skeleton, SkeletonLine } from 'keep-react'
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
     const [show, setShow] = useState(false)
@@ -29,9 +29,9 @@ const Navbar = () => {
 
     console.log(session)
     const handleLogOut = () => {
-        // logOut()
-        // Swal ("Logout", "You have Login Out", "success");
-        // return navigate("/signIn")
+        signOut()
+        Swal ("Logout", "You have Login Out", "success");
+        navigate("/login")
     }
 
     const boiShomogro = [
@@ -291,11 +291,18 @@ const Navbar = () => {
                                         <p>Contact Us</p>
                                         <AiOutlinePhone></AiOutlinePhone>
                                     </Link>
-                                    <Link href="" className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                                    {
+                                        user ? <div onClick={handleLogOut} className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}>
+                                            <p>Logout</p>
+                                            <FiLogIn></FiLogIn>
+                                        </div> :  <div className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                                     >
                                         <p>Login</p>
                                         <FiLogIn></FiLogIn>
-                                    </Link>
+                                    </div>
+                                    }
+                               
+                                  
                                 </div>
                             </DrawerContent>
                         </Drawer>
@@ -334,9 +341,9 @@ const Navbar = () => {
                         </ul>
                         <div onClick={() => setShow(!show)} className="flex items-center border-2 rounded-[32px] relative cursor-pointer">
                             <button className="rounded-full transition-all duration-300 hover:scale-90">
-                                <Image height={676} width={1200} src={`${'https://static.vecteezy.com/system/resources/previews/013/042/571/original/default-avatar-profile-icon-social-media-user-photo-in-flat-style-vector.jpg'}`} alt="user" className="h-[50px] w-[50px] rounded-full " />
+                                <Image height={676} width={1200} src={`${user?.photo || 'https://static.vecteezy.com/system/resources/previews/013/042/571/original/default-avatar-profile-icon-social-media-user-photo-in-flat-style-vector.jpg'}`} alt="user" className="h-[50px] w-[50px] rounded-full " />
                             </button>
-                            <div className={`${show ? 'right-0 top-[40px] visible' : 'right-0 top-[90px]  invisible'}  absolute z-50  bg-white rounded-2xl py-2 px-4 w-[190px] transition-all my-transition`}>
+                            <div className={`${show ? 'right-0 top-[50px] visible' : 'right-0 top-[90px]  invisible'}  absolute z-50  bg-white rounded-2xl py-2 px-4 w-[190px] transition-all my-transition`}>
                                 <ul>
                                     <Link href={"/my-profile"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                         <FaUser size={18}></FaUser>
@@ -373,9 +380,9 @@ const Navbar = () => {
 
 
                                         </> : <>
-                                            <Link href={"/signIn"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                            <Link href={"/login"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                                 <FaStar size={18}></FaStar>
-                                                <li className=" ">SignIn</li>
+                                                <li className=" ">Login</li>
                                             </Link>
 
 

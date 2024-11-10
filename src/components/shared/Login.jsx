@@ -75,16 +75,16 @@ const Login = () => {
         });
         console.log("responce is", resp)
         setLoading(false)
-        // // thik vabe login hole home page a pathia dibo.
-        // if (resp?.ok) {
-        //     successfullySignIn(resp?.url)
-        //     e.target.reset()
+        // thik vabe login hole home page a pathia dibo.
+        if (resp?.ok) {
+            successfullySignIn(resp?.url)
+            e.target.reset()
             
-        // }
-        // else {
-        //     errorSignIn()
-        //     console.log("Sign In Error ", resp?.error)
-        // }
+        }
+        else {
+            errorSignIn()
+            console.log("Sign In Error ", resp?.error)
+        }
     };
 
     return (

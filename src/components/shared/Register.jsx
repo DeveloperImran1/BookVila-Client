@@ -117,21 +117,21 @@ const Register = () => {
         return   errorSignInExistUser()
     }
 
-    // // nextJs dia login korar way: 
-    // const responce = await signIn('credentials', {
-    //   email, password,
-    //   redirect: false
-    // });
-    // console.log("responce is", responce)
-    // setLoading(false)
-    // // thik vabe login hole home page a pathia dibo.
-    // if (responce.status === 200) {
-    //   successfullySignIn()
-    //   router.push('/register/wellcome-popup')
-    // }
-    // else {
-    //   errorSignIn()
-    // }
+    // nextJs dia login korar way: 
+    const responce = await signIn('credentials', {
+      email, password,
+      redirect: false
+    });
+    console.log("responce is", responce)
+    setLoading(false)
+    // thik vabe login hole home page a pathia dibo.
+    if (responce.status === 200) {
+      successfullySignIn()
+      router.push('/')
+    }
+    else {
+      errorSignIn()
+    }
   };
 
 
