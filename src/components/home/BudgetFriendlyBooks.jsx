@@ -87,7 +87,8 @@ const BudgetFriendlyBooks = () => {
     return (
         <div className="container p-8 bg-white relative my-8">
       <div className="flex justify-between mb-6 font-semibold">
-        <h1 className="text-2xl text-gray-600">Featured book</h1>
+        <h1 className="text-2xl text-gray-600">Budget Friendly Books
+        </h1>
         {books && books?.length > 0 && (
           <Link href={`/book/${books[0]._id}`}>
             <h1 className="text-bg-blue underline">See more</h1>
