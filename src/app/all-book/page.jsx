@@ -19,21 +19,32 @@ const AllBooksPage = () => {
 
   // Authors, categories, and subjects options
   const authors = [
-    "রবীন্দ্রনাথ ঠাকুর",
-    "কাজী নজরুল ইসলাম",
-    "শরৎচন্দ্র চট্টোপাধ্যায়",
-    "সেলিনা হোসেন",
-    "আখতারুজ্জামান ইলিয়াস",
-    "হুমায়ুন আহমেদ",
-    "মাইকেল মধুসূদন দত্ত",
-    "জীবনানন্দ দাশ",
-    "বুদ্ধদেব বসু",
-    "মানিক বন্দ্যোপাধ্যায়",
-    "হাসান আজিজুল হক",
-    "Arif Azad",
-    "Tarik Jamil",
+    { bengali: "রবীন্দ্রনাথ ঠাকুর", english: "Rabindranath Tagore" },
+    { bengali: "কাজী নজরুল ইসলাম", english: "Kazi Nazrul Islam" },
+    {
+      bengali: "শরৎচন্দ্র চট্টোপাধ্যায়",
+      english: "Sarat Chandra Chattopadhyay",
+    },
+    { bengali: "সেলিনা হোসেন", english: "Selina Hossain" },
+    { bengali: "আখতারুজ্জামান ইলিয়াস", english: "Akhtaruzzaman Elias" },
+    { bengali: "হুমায়ুন আহমেদ", english: "Humayun Ahmed" },
+    { bengali: "মাইকেল মধুসূদন দত্ত", english: "Michael Madhusudan Dutt" },
+    { bengali: "জীবনানন্দ দাশ", english: "Jibanananda Das" },
+    { bengali: "বুদ্ধদেব বসু", english: "Buddhadeb Basu" },
+    { bengali: "মানিক বন্দ্যোপাধ্যায়", english: "Manik Bandopadhyay" },
+    { bengali: "হাসান আজিজুল হক", english: "Hasan Azizul Haque" },
+    { bengali: "আরিফ আজাদ", english: "Arif Azad" },
+    { bengali: "তারিক জামিল", english: "Tarik Jamil" },
   ];
-  const categories = ["কাব্য", "উপন্যাস", "ছোটগল্প", "মহাকাব্য", "নাটক", "কবিতা"];
+
+  const categories = [
+    "কাব্য",
+    "উপন্যাস",
+    "ছোটগল্প",
+    "মহাকাব্য",
+    "নাটক",
+    "কবিতা",
+  ];
   const subjects = ["দেশপ্রেম", "প্রতিবাদী", "ভালোবাসা"];
 
   // Handle checkbox change
@@ -66,15 +77,23 @@ const AllBooksPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [searchQuery, selectedAuthors, selectedCategories, selectedSubjects, page]);
+  }, [
+    searchQuery,
+    selectedAuthors,
+    selectedCategories,
+    selectedSubjects,
+    page,
+  ]);
 
   useEffect(() => {
     fetchBooks();
   }, [fetchBooks]);
 
   // Filter authors based on search input
-  const filteredAuthors = authors.filter((author) =>
-    author.toLowerCase().includes(searchAuthorQuery.toLowerCase())
+  const filteredAuthors = authors.filter(
+    (author) =>
+      author.bengali.includes(searchAuthorQuery) ||
+      author.english.toLowerCase().includes(searchAuthorQuery.toLowerCase())
   );
 
   // Pagination handlers
@@ -119,13 +138,15 @@ const AllBooksPage = () => {
             {/* Scrollable container for authors */}
             <div className="flex flex-col max-h-[200px] overflow-y-auto">
               {filteredAuthors.map((author) => (
-                <label key={author}>
+                <label key={author.bengali}>
                   <input
                     type="checkbox"
-                    onChange={() => handleCheckboxChange(setSelectedAuthors, author)}
-                    checked={selectedAuthors.includes(author)}
+                    onChange={() =>
+                      handleCheckboxChange(setSelectedAuthors, author.bengali)
+                    }
+                    checked={selectedAuthors.includes(author.bengali)}
                   />
-                  {author}
+                  {author.bengali} 
                 </label>
               ))}
             </div>
