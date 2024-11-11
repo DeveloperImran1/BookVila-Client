@@ -4,58 +4,59 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Image from "next/image";
 
-const FamousWriter = () => {
-  const swiperRef = useRef(null); // Reference to the Swiper component
-  const [writers, setWriters] = useState([]);
-
-  useEffect(() => {
-    const writersData = [
-      {
-        _id: "1",
-        image: "https://i.postimg.cc/C5ZwRcK7/main-qimg-99eb055ce0df63ce8b7b68ee23e50a4d.webp",
-        name: "রবীন্দ্রনাথ ঠাকুর",
-      },
-      {
-        _id: "2",
-        image: "https://i.postimg.cc/1zntnRYw/image.jpg",
-        name: "জীবনানন্দ দাশ",
-      },
-      {
-        _id: "3",
-        image: "https://i.postimg.cc/Lsyj6D3m/image.jpg",
-        name: "কাজী নজরুল ইসলাম",
-      },
-      {
-        _id: "4",
-        image: "https://i.postimg.cc/CLY5XDb7/image.jpg",
-        name: "জয়নুল আবেদিন",
-      },
-      {
-        _id: "5",
-        image: "https://i.postimg.cc/4dV4FNdj/image.jpg",
-        name: "সুফিয়া কামাল",
-      },
-    ];
-
-    setWriters(writersData); // Set data in the state
-  }, []);
-
-  const prevSlider = () => {
-    if (swiperRef.current) {
-      swiperRef.current.swiper.slidePrev(); // Go to previous slide
-    }
-  };
-
-  const nextSlider = () => {
-    if (swiperRef.current) {
-      swiperRef.current.swiper.slideNext(); // Go to next slide
-    }
-  };
-
-  return (
-    <div className="container p-8 bg-white my-8 relative">
+const FamousPublisher = () => {
+   
+    const swiperRef = useRef(null); // Reference to the Swiper component
+    const [writers, setWriters] = useState([]);
+  
+    useEffect(() => {
+      const writersData = [
+        {
+          _id: "1",
+          image: "https://i.postimg.cc/NMhtt5LC/250px-Dhaka-Bordhoman-House-at-Bangla-academy-03678.jpg",
+          name: "বাংলা একাডেমি",
+        },
+        {
+          _id: "2",
+          image: "https://i.postimg.cc/XqJQDg3R/image.jpg",
+          name: "সমকালীন প্রকাশন",
+        },
+        {
+          _id: "3",
+          image: "https://i.postimg.cc/FFBZH3hK/hqdefault.jpg",
+          name: "বাতিঘর",
+        },
+        {
+          _id: "4",
+          image: "https://i.postimg.cc/FzM3gbKg/1816133.jpg",
+          name: "দে'জ পাবলিশং",
+        },
+        {
+          _id: "5",
+          image: "https://i.postimg.cc/kMBznWkj/2200162.jpg",
+          name: "মওলা ব্রাদার্স",
+        },
+      ];
+  
+      setWriters(writersData); // Set data in the state
+    }, []);
+  
+    const prevSlider = () => {
+      if (swiperRef.current) {
+        swiperRef.current.swiper.slidePrev(); // Go to previous slide
+      }
+    };
+  
+    const nextSlider = () => {
+      if (swiperRef.current) {
+        swiperRef.current.swiper.slideNext(); // Go to next slide
+      }
+    };
+   
+    return (
+        <div className="container p-8 bg-white my-8 relative">
       <div className="flex justify-between mb-6 font-semibold">
-        <h1 className="text-2xl text-gray-600">জনপ্রিয় লেখক</h1>
+        <h1 className="text-2xl text-gray-600">জনপ্রিয় প্রকাশনী</h1>
         <h1>See more</h1>
       </div>
 
@@ -117,7 +118,7 @@ const FamousWriter = () => {
         </svg>
       </button>
     </div>
-  );
+    );
 };
 
-export default FamousWriter;
+export default FamousPublisher;
