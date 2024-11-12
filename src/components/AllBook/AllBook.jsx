@@ -3,13 +3,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { Range } from "react-range";
+import BooksCard from "../books/BookCard";
+import { useQuery } from "@tanstack/react-query";
 
 const MIN = 0;
-const MAX = 1000;
+const MAX = 999;
 
-const AllBooksPage = () => {
-  // State setup
-  const [books, setBooks] = useState([]);
+const AllBook = () => {
+  //   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedAuthors, setSelectedAuthors] = useState([]);
@@ -244,10 +245,22 @@ const AllBooksPage = () => {
   };
 
   // Memoize fetchBooks to prevent redefinition on every render
-  const fetchBooks = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [minPrice, maxPrice] = priceRange; // Slider এর মান destructure করা
+  const {
+    data: books = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [
+      "books",
+      searchQuery,
+      selectedAuthors,
+      selectedCategories,
+      selectedSubjects,
+      page,
+      priceRange,
+    ],
+    queryFn: async () => {
+      const [minPrice, maxPrice] = priceRange;
       const response = await axiosPublic.get("/books", {
         params: {
           searchQuery,
@@ -256,30 +269,17 @@ const AllBooksPage = () => {
           subject: selectedSubjects.join(","),
           page,
           limit: 10,
-          minPrice, // minPrice যোগ করা হলো
-          maxPrice, // maxPrice যোগ করা হলো
+          minPrice,
+          maxPrice,
         },
       });
-      setBooks(response.data.books);
-      setTotalPages(response.data.totalPages);
-    } catch (error) {
-      console.error("Error fetching books:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [
-    searchQuery,
-    selectedAuthors,
-    selectedCategories,
-    selectedSubjects,
-    page,
-    priceRange, // priceRange কে dependency হিসেবে যুক্ত করা হলো
-    axiosPublic,
-  ]);
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
 
-  useEffect(() => {
-    fetchBooks();
-  }, [fetchBooks]);
+  if (isLoading) return <p>Loading books...</p>;
+  if (error) return <p>Error loading books: {error.message}</p>;
 
   // Filter authors based on search input
   const filteredAuthors = authors.filter(
@@ -306,7 +306,7 @@ const AllBooksPage = () => {
         .includes((searchCategoriesQuery || "").toLowerCase())
   );
 
-  console.log(searchAuthorQuery);
+  console.log(books);
   console.log(searchSubjectsQuery);
 
   // Pagination handlers
@@ -317,7 +317,6 @@ const AllBooksPage = () => {
   const handlePrevPage = () => {
     if (page > 1) setPage(page - 1);
   };
-
   return (
     <div className="container mx-auto">
       <h1>All Books</h1>
@@ -336,7 +335,6 @@ const AllBooksPage = () => {
           {/* Filter Checkboxes */}
           <div>
             <h3>Authors</h3>
-
             <input
               type="text"
               placeholder="Search Authors"
@@ -362,9 +360,9 @@ const AllBooksPage = () => {
             </div>
           </div>
 
+          {/* categories filtering  */}
           <div>
             <h3>Categories</h3>
-
             <input
               type="text"
               placeholder="Search Category"
@@ -393,9 +391,9 @@ const AllBooksPage = () => {
             </div>
           </div>
 
+          {/* subject filtering  */}
           <div>
             <h3>Subjects</h3>
-
             {/* Author Search Input */}
             <input
               type="text"
@@ -439,7 +437,7 @@ const AllBooksPage = () => {
                     height: "6px",
                     width: "70%",
                     backgroundColor: "#ccc",
-                    margin: "20px 0",
+                    margin: "50px 0",
                     position: "relative",
                   }}
                 >
@@ -450,14 +448,15 @@ const AllBooksPage = () => {
                 <div
                   {...props}
                   style={{
-                    height: "20px",
-                    width: "20px",
+                    height: "30px",
+                    width: "30px",
                     backgroundColor: "#999",
                     borderRadius: "50%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     position: "relative",
+                    marginTop: "-30px", // নতুন এই padding যোগ করা হয়েছে
                   }}
                 >
                   <span
@@ -474,26 +473,18 @@ const AllBooksPage = () => {
                 </div>
               )}
             />
-            <p>Min Price: {priceRange[0]}</p>
-            <p>Max Price: {priceRange[1]}</p>
           </div>
         </div>
 
         {/* Book List */}
         <div className="w-10/12">
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
+           
             <ul className="grid grid-cols-3 gap-5">
-              {books.map((book) => (
-                <li key={book._id}>
-                  <h4>{book.bookName.join(" / ")}</h4>
-                  <img src={book.coverImage} alt={book.bookName[0]} />
-                  <p>{book.description}</p>
-                </li>
+              {books?.books?.map((book) => (
+                <BooksCard key={book._id} book={book} />
               ))}
             </ul>
-          )}
+          
         </div>
       </div>
       {/* Pagination */}
@@ -525,4 +516,4 @@ const AllBooksPage = () => {
   );
 };
 
-export default AllBooksPage;
+export default AllBook;
