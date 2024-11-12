@@ -2,6 +2,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { Range } from "react-range";
+
+const MIN = 0;
+const MAX = 1000;
 
 const AllBooksPage = () => {
   // State setup
@@ -16,6 +20,7 @@ const AllBooksPage = () => {
   const [searchAuthorQuery, setSearchAuthorQuery] = useState("");
   const [searchSubjectsQuery, setSearchSubjectsQuery] = useState("");
   const [searchCategoriesQuery, setSearchCategoriesQuery] = useState("");
+  const [priceRange, setPriceRange] = useState([MIN, MAX]);
 
   const axiosPublic = useAxiosPublic();
 
@@ -26,6 +31,9 @@ const AllBooksPage = () => {
     setSearchSubjectsQuery(String(e.target.value || ""));
   const handleSearchCategoriesChange = (e) =>
     setSearchCategoriesQuery(String(e.target.value || ""));
+  const handlePriceChange = (values) => {
+    setPriceRange(values);
+  };
 
   // Authors, categories, and subjects options
   const authors = [
@@ -49,6 +57,11 @@ const AllBooksPage = () => {
 
   const subjects = [
     { bengali: "দেশপ্রেম", english: "Patriotism", banglish: "Deshprem" },
+    {
+      bengali: "প্রেম ও বেদনা",
+      english: "Love and Sorrow",
+      banglish: "Prem o Bedona",
+    },
     { bengali: "প্রতিবাদী", english: "Revolutionary", banglish: "Protibadi" },
     { bengali: "ভালোবাসা", english: "Love", banglish: "Bhalobasha" },
     {
@@ -234,6 +247,7 @@ const AllBooksPage = () => {
   const fetchBooks = useCallback(async () => {
     setLoading(true);
     try {
+      const [minPrice, maxPrice] = priceRange; // Slider এর মান destructure করা
       const response = await axiosPublic.get("/books", {
         params: {
           searchQuery,
@@ -242,6 +256,8 @@ const AllBooksPage = () => {
           subject: selectedSubjects.join(","),
           page,
           limit: 10,
+          minPrice, // minPrice যোগ করা হলো
+          maxPrice, // maxPrice যোগ করা হলো
         },
       });
       setBooks(response.data.books);
@@ -257,6 +273,7 @@ const AllBooksPage = () => {
     selectedCategories,
     selectedSubjects,
     page,
+    priceRange, // priceRange কে dependency হিসেবে যুক্ত করা হলো
     axiosPublic,
   ]);
 
@@ -315,7 +332,7 @@ const AllBooksPage = () => {
         />
       </div>
       <div className="flex gap-8">
-        <div className="w-2/12">
+        <div className="w-2/12 flex flex-col gap-6">
           {/* Filter Checkboxes */}
           <div>
             <h3>Authors</h3>
@@ -403,6 +420,62 @@ const AllBooksPage = () => {
                 </label>
               ))}
             </div>
+          </div>
+
+          {/* filtering price */}
+          <div>
+            <h2>Price Range Filter</h2>
+            <Range
+              values={priceRange}
+              step={10}
+              min={MIN}
+              max={MAX}
+              onChange={handlePriceChange}
+              draggableTrack
+              renderTrack={({ props, children }) => (
+                <div
+                  {...props}
+                  style={{
+                    height: "6px",
+                    width: "70%",
+                    backgroundColor: "#ccc",
+                    margin: "20px 0",
+                    position: "relative",
+                  }}
+                >
+                  {children}
+                </div>
+              )}
+              renderThumb={({ props, index }) => (
+                <div
+                  {...props}
+                  style={{
+                    height: "20px",
+                    width: "20px",
+                    backgroundColor: "#999",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                  }}
+                >
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      transform: "translateY(-50%)", // Center-aligns the text vertically
+                      fontSize: "12px",
+                      color: "#fff",
+                    }}
+                  >
+                    {priceRange[index]}
+                  </span>
+                </div>
+              )}
+            />
+            <p>Min Price: {priceRange[0]}</p>
+            <p>Max Price: {priceRange[1]}</p>
           </div>
         </div>
 
