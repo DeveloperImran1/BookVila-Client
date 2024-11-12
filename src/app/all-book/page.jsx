@@ -56,6 +56,11 @@ const AllBooksPage = () => {
       english: "Society and Civilization",
       banglish: "Shomaj o Shobbota",
     },
+    {
+      bengali: "গ্রামবাংলার জীবন",
+      english: "Rural Life of Bengal",
+      banglish: "GramBanglar Jibon",
+    },
     { bengali: "থ্রিলার", english: "Thriller", banglish: "Thriller" },
     {
       bengali: "বাংলাদেশ প্রসঙ্গ রাজনীতি",
@@ -165,7 +170,6 @@ const AllBooksPage = () => {
       english: "Contemporary Novel",
       banglish: "Shomokaline Uponyas",
     },
-    { bengali: "মাসুদ রানা", english: "Masud Rana", banglish: "Masud Rana" },
     {
       bengali: "হিন্দু ধর্মীয় বই",
       english: "Hindu Religious Books",
@@ -179,7 +183,7 @@ const AllBooksPage = () => {
   ];
 
   const categories = [
-    { bengali: "কাব্য", english: "Poetry", banglish: "Kobyo" },
+    { bengali: "কাব্য", english: "Poetry", banglish: "Kabyo" },
     { bengali: "উপন্যাস", english: "Novel", banglish: "Uponyash" },
     { bengali: "ছোটগল্প", english: "Short Story", banglish: "Chotogolpo" },
     { bengali: "মহাকাব্য", english: "Epic", banglish: "Mohakabyo" },
@@ -342,7 +346,7 @@ const AllBooksPage = () => {
           </div>
 
           <div>
-            <h3>Authors</h3>
+            <h3>Categories</h3>
 
             <input
               type="text"
@@ -359,9 +363,12 @@ const AllBooksPage = () => {
                   <input
                     type="checkbox"
                     onChange={() =>
-                      handleCheckboxChange(setSelectedAuthors, category.bengali)
+                      handleCheckboxChange(
+                        setSelectedCategories,
+                        category.bengali
+                      )
                     }
-                    checked={selectedAuthors.includes(category.bengali)}
+                    checked={selectedCategories.includes(category.bengali)} // Update this line
                   />
                   {category.bengali}
                 </label>
@@ -388,10 +395,7 @@ const AllBooksPage = () => {
                   <input
                     type="checkbox"
                     onChange={() =>
-                      handleCheckboxChange(
-                        setSearchSubjectsQuery,
-                        subject.bengali
-                      )
+                      handleCheckboxChange(setSelectedSubjects, subject.bengali)
                     }
                     checked={selectedSubjects.includes(subject.bengali)}
                   />
