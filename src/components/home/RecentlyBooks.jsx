@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { FaCartShopping } from "react-icons/fa6";
 import { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react"; // Import Swiper components
@@ -7,8 +7,9 @@ import Link from "next/link";
 import Image from "next/image";
 import BooksCard from "../books/BookCard";
 
-const FeaturedBooks = () => {
-  const [userRating, setUserRating] = useState(3);
+const RecentlyBooks = () => {
+    
+    const [userRating, setUserRating] = useState(3);
   const swiperRef = useRef(null); // Reference to the Swiper component
 
   const prevSlider = () => {
@@ -23,14 +24,14 @@ const FeaturedBooks = () => {
     }
   };
 
+
   const books = [
     {
       _id: "1",
       category: "Electronics",
       color: "Black",
       description: "High-quality wireless headphones with noise cancellation.",
-      image:
-        "https://www.shutterstock.com/image-vector/3d-wireless-headphones-mockup-set-260nw-2130630635.jpg",
+      image: "https://www.shutterstock.com/image-vector/3d-wireless-headphones-mockup-set-260nw-2130630635.jpg",
       offer: 20,
       price: 79.99,
       title: "Wireless Headphones",
@@ -41,8 +42,7 @@ const FeaturedBooks = () => {
       category: "Home Appliances",
       color: "Silver",
       description: "Energy-efficient smart vacuum cleaner.",
-      image:
-        "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
+      image: "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
       offer: 15,
       price: 199.99,
       title: "Smart Vacuum Cleaner",
@@ -53,8 +53,7 @@ const FeaturedBooks = () => {
       category: "Fashion",
       color: "Blue",
       description: "Stylish denim jacket for all occasions.",
-      image:
-        "https://www.shutterstock.com/image-vector/3d-wireless-headphones-mockup-set-260nw-2130630635.jpg",
+      image: "https://www.shutterstock.com/image-vector/3d-wireless-headphones-mockup-set-260nw-2130630635.jpg",
       offer: 10,
       price: 49.99,
       title: "Denim Jacket",
@@ -65,8 +64,7 @@ const FeaturedBooks = () => {
       category: "Fitness",
       color: "Green",
       description: "Durable yoga mat for all fitness levels.",
-      image:
-        "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
+      image: "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
       offer: 5,
       price: 29.99,
       title: "Yoga Mat",
@@ -77,19 +75,19 @@ const FeaturedBooks = () => {
       category: "book",
       color: "Multi",
       description: "A motivational book for personal growth.",
-      image:
-        "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
+      image: "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
       offer: 25,
       price: 14.99,
       title: "Motivational Book",
       totalAvailable: 100,
     },
   ];
-
-  return (
-    <div className="container p-8 bg-white relative my-8">
+    
+    return (
+        <div className="container p-8 bg-white relative my-8">
       <div className="flex justify-between mb-6 font-semibold">
-        <h1 className="text-2xl text-gray-600">Featured book</h1>
+        <h1 className="text-2xl text-gray-600">Recently Added Books
+        </h1>
         {books && books?.length > 0 && (
           <Link href={`/book/${books[0]._id}`}>
             <h1 className="text-bg-blue underline">See more</h1>
@@ -150,7 +148,7 @@ const FeaturedBooks = () => {
         </svg>
       </button>
     </div>
-  );
+    );
 };
 
-export default FeaturedBooks;
+export default RecentlyBooks;
