@@ -13,7 +13,9 @@ const MainLayout = ({ children }) => {
       {
         path.includes("login") || path.includes("register") ? <></> : <Navbar></Navbar>
       }
-      {children}
+      <div className="bg-bg-gray">
+        {children}
+      </div>
       {
         path.includes("login") || path.includes("register") || path.includes("community") || path.includes("messenger") ? <></> : <Footer></Footer>
       }

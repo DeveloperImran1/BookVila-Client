@@ -1,4 +1,4 @@
-
+"use client"
 import { useState } from "react";
 import { Heart, Share2, Info, Star, ShoppingCart } from "lucide-react";
 import Modal from "react-modal";
@@ -6,8 +6,10 @@ import { PlusCircle, X } from 'lucide-react';
 import { motion } from "framer-motion";
 import { FaBook, FaPen, FaBuilding, FaBarcode } from "react-icons/fa";
 
-// Configure modal root element for accessibility
+// // Configure modal root element for accessibility
 Modal.setAppElement("#root");
+// Modal.setAppElement("#__next");
+
 
 // Placeholder data
 const initialQAs = [

@@ -12,10 +12,10 @@ const HomeContainer = () => {
         <div className=" ">
           <Banner></Banner>
          <FeaturedBooks/>
-         <RecentlyBooks/>
+         {/* <RecentlyBooks/>
          <BudgetFriendlyBooks/>
          <FamousWriter/>
-         <FamousPublisher/>
+         <FamousPublisher/> */}
         </div>
     );
 };
