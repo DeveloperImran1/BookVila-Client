@@ -13,31 +13,35 @@ const NewBooks = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [newBooks, setNewBooks] = useState([]);
 
-
+    const currentDateTime = new Date().getTime() - 2592000000;
 
     const { data = [], isLoading } = useQuery({
         queryKey: ["newBooks", search],
         queryFn: async () => {
             const res = await axiosPublic.get(`/getBooks?searchQuery=${search}`);
-            setTotalPages(Math.ceil(res?.data?.length / 12))
-            return res?.data;
+            const newPublishedBooks = res?.data?.filter(book => new Date(book?.updatedAt).getTime() > currentDateTime)
+            console.log(newPublishedBooks)
+            setTotalPages(Math.ceil(newPublishedBooks?.length / 12))
+            return newPublishedBooks;
         }
     })
 
+
+
     useEffect(() => {
-        if(page === 1){
+        if (page === 1) {
             setNewBooks(data?.slice(0, 12))
         }
-        else if(page === 2){
+        else if (page === 2) {
             setNewBooks(data?.slice(12, 24))
         }
-        else if(page === 3){
+        else if (page === 3) {
             setNewBooks(data?.slice(24, 36))
         }
-        else if(page === 2){
+        else if (page === 2) {
             setNewBooks(data?.slice(36, 48))
         }
-        else if(page === 2){
+        else if (page === 2) {
             setNewBooks(data?.slice(48, 60))
         }
     }, [totalPages, page, search, data])
@@ -47,8 +51,6 @@ const NewBooks = () => {
         setSearch(e.target.value)
     }
 
-    console.log(newBooks)
-    console.log(search)
 
     // Pagination handlers
     const handleNextPage = () => {

@@ -12,8 +12,8 @@ const HomeContainer = () => {
         <div className=" ">
           <Banner></Banner>
          <FeaturedBooks/>
-         {/* <RecentlyBooks/>
-         <BudgetFriendlyBooks/>
+          <RecentlyBooks/>
+       {/*  <BudgetFriendlyBooks/>
          <FamousWriter/>
          <FamousPublisher/> */}
         </div>
