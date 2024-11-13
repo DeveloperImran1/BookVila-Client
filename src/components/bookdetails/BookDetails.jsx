@@ -6,10 +6,8 @@ import { PlusCircle, X } from 'lucide-react';
 import { motion } from "framer-motion";
 import { FaBook, FaPen, FaBuilding, FaBarcode } from "react-icons/fa";
 
-// // Configure modal root element for accessibility
-Modal.setAppElement("#root");
-// Modal.setAppElement("#__next");
-
+// Configure modal root element for accessibility
+// Modal.setAppElement("#root");
 
 // Placeholder data
 const initialQAs = [

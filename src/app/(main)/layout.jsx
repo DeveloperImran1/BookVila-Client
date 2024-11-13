@@ -4,10 +4,13 @@ import Navbar from "@/components/shared/Navbar";
 import { usePathname } from "next/navigation";
 import TanStackProvider from "providers/TanstackProvider";
 import { useEffect } from "react";
+import Modal from "react-modal";
+
 
 const MainLayout = ({ children }) => {
   const path = usePathname();
 
+  
   return (
     <div>
       {
