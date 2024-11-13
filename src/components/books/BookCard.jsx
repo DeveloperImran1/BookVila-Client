@@ -18,9 +18,9 @@ const BooksCard = ({ book }) => {
   const newPrice = calculateDiscountedPrice(originalPrice, discountPercentage);
 
   function calculateAverageRating(ratings) {
-    if (ratings.length === 0) return 0; // Return 0 if there are no ratings
-    const total = ratings.reduce((sum, rating) => sum + rating, 0);
-    return (total / ratings.length).toFixed(1); // Calculate average and round to 1 decimal place
+    if (ratings?.length === 0) return 0; // Return 0 if there are no ratings
+    const total = ratings?.reduce((sum, rating) => sum + rating, 0);
+    return (total / ratings?.length)?.toFixed(1); // Calculate average and round to 1 decimal place
   }
 
   const ratings = book?.rating; // Array of ratings

@@ -5,9 +5,9 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { Range } from "react-range";
 import BooksCard from "../books/BookCard";
 import { useQuery } from "@tanstack/react-query";
-
-const MIN = 0;
-const MAX = 999;
+import { Slider } from "@nextui-org/react";
+import { Select, SelectItem } from "@nextui-org/react";
+import { debounce } from "lodash";
 
 const AllBook = () => {
   //   const [books, setBooks] = useState([]);
@@ -21,7 +21,30 @@ const AllBook = () => {
   const [searchAuthorQuery, setSearchAuthorQuery] = useState("");
   const [searchSubjectsQuery, setSearchSubjectsQuery] = useState("");
   const [searchCategoriesQuery, setSearchCategoriesQuery] = useState("");
-  const [priceRange, setPriceRange] = useState([MIN, MAX]);
+  // const [priceRange, setPriceRange] = useState([MIN, MAX]);
+  const [minimumPrice, setMinimumPrice] = useState(0);
+  const [maximumPrice, setMaximumPrice] = useState(1000);
+  const [debouncedMinPrice, setDebouncedMinPrice] = useState(minimumPrice);
+  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(maximumPrice); // স্লাইডার সক্রিয় কিনা তা ট্র্যাক করতে
+
+  useEffect(() => {
+    const handler = debounce(() => {
+      setDebouncedMinPrice(minimumPrice);
+      setDebouncedMaxPrice(maximumPrice);
+    }, 500); // ৫০০ মিলিসেকেন্ড অপেক্ষা করে আপডেট হবে
+
+    handler();
+    return () => handler.cancel();
+  }, [minimumPrice, maximumPrice]);
+  const handleSliderChange = (newValue) => {
+    setMinimumPrice(newValue[0]);
+    setMaximumPrice(newValue[1]);
+    setIsSliderActive(true); // স্লাইডার পরিবর্তন হচ্ছে সেটি জানাতে
+  };
+
+  const handleSliderRelease = () => {
+    setIsSliderActive(false); // স্লাইডার পরিবর্তন শেষ হলে ফ্লাগ বন্ধ
+  };
 
   const axiosPublic = useAxiosPublic();
 
@@ -257,10 +280,10 @@ const AllBook = () => {
       selectedCategories,
       selectedSubjects,
       page,
-      priceRange,
+      debouncedMinPrice,
+      debouncedMaxPrice,
     ],
     queryFn: async () => {
-      const [minPrice, maxPrice] = priceRange;
       const response = await axiosPublic.get("/books", {
         params: {
           searchQuery,
@@ -269,8 +292,8 @@ const AllBook = () => {
           subject: selectedSubjects.join(","),
           page,
           limit: 10,
-          minPrice,
-          maxPrice,
+          minimumPrice: debouncedMinPrice,
+          maximumPrice: debouncedMaxPrice,
         },
       });
       return response.data;
@@ -421,70 +444,28 @@ const AllBook = () => {
           </div>
 
           {/* filtering price */}
-          <div>
-            <h2>Price Range Filter</h2>
-            <Range
-              values={priceRange}
-              step={10}
-              min={MIN}
-              max={MAX}
-              onChange={handlePriceChange}
-              draggableTrack
-              renderTrack={({ props, children }) => (
-                <div
-                  {...props}
-                  style={{
-                    height: "6px",
-                    width: "70%",
-                    backgroundColor: "#ccc",
-                    margin: "50px 0",
-                    position: "relative",
-                  }}
-                >
-                  {children}
-                </div>
-              )}
-              renderThumb={({ props, index }) => (
-                <div
-                  {...props}
-                  style={{
-                    height: "30px",
-                    width: "30px",
-                    backgroundColor: "#999",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative",
-                    marginTop: "-30px", // নতুন এই padding যোগ করা হয়েছে
-                  }}
-                >
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      transform: "translateY(-50%)", // Center-aligns the text vertically
-                      fontSize: "12px",
-                      color: "#fff",
-                    }}
-                  >
-                    {priceRange[index]}
-                  </span>
-                </div>
-              )}
+          <div className="w-full">
+            <Slider
+              label="Price Range"
+              step={50}
+              minValue={0}
+              maxValue={1000}
+              defaultValue={[0, 1000]}
+              formatOptions={{ style: "currency", currency: "USD" }}
+              className="max-w-md"
+              onChange={handleSliderChange}
+              onAfterChange={handleSliderRelease} // মান পরিবর্তন শেষে ফ্লাগ বন্ধ
             />
           </div>
         </div>
 
         {/* Book List */}
         <div className="w-10/12">
-           
-            <ul className="grid grid-cols-3 gap-5">
-              {books?.books?.map((book) => (
-                <BooksCard key={book._id} book={book} />
-              ))}
-            </ul>
-          
+          <ul className="grid grid-cols-3 gap-5">
+            {books?.books?.map((book) => (
+              <BooksCard key={book._id} book={book} />
+            ))}
+          </ul>
         </div>
       </div>
       {/* Pagination */}
