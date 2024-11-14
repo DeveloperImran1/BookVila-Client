@@ -25,28 +25,35 @@ const AllBook = () => {
   const [minimumPrice, setMinimumPrice] = useState(0);
   const [maximumPrice, setMaximumPrice] = useState(1000);
   const [debouncedMinPrice, setDebouncedMinPrice] = useState(minimumPrice);
-  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(maximumPrice); // স্লাইডার সক্রিয় কিনা তা ট্র্যাক করতে
+  const [debouncedMaxPrice, setDebouncedMaxPrice] = useState(maximumPrice);
+  const [isSliderActive, setIsSliderActive] = useState(false);
+  const axiosPublic = useAxiosPublic();
 
   useEffect(() => {
     const handler = debounce(() => {
       setDebouncedMinPrice(minimumPrice);
       setDebouncedMaxPrice(maximumPrice);
-    }, 500); // ৫০০ মিলিসেকেন্ড অপেক্ষা করে আপডেট হবে
-
+    }, 500); // Wait 500 milliseconds before updating
     handler();
     return () => handler.cancel();
   }, [minimumPrice, maximumPrice]);
+
   const handleSliderChange = (newValue) => {
-    setMinimumPrice(newValue[0]);
-    setMaximumPrice(newValue[1]);
-    setIsSliderActive(true); // স্লাইডার পরিবর্তন হচ্ছে সেটি জানাতে
+    setDebouncedMinPrice(newValue[0]);
+    setDebouncedMaxPrice(newValue[1]);
   };
 
   const handleSliderRelease = () => {
-    setIsSliderActive(false); // স্লাইডার পরিবর্তন শেষ হলে ফ্লাগ বন্ধ
+    setIsSliderActive(false);
+    fetchData();
   };
 
-  const axiosPublic = useAxiosPublic();
+  const fetchData = useCallback(() => {
+    console.log(
+      `Fetching data for price range: ${debouncedMinPrice} - ${debouncedMaxPrice}`
+    );
+    // Call your API or fetch logic here using the debounced values
+  }, [debouncedMinPrice, debouncedMaxPrice]);
 
   // Search input change handlers with explicit casting
   const handleSearchAuthorChange = (e) =>
@@ -269,40 +276,36 @@ const AllBook = () => {
 
   // Memoize fetchBooks to prevent redefinition on every render
   const {
-    data: books = [],
+    data: books,
     isLoading,
-    error,
+    isError,
   } = useQuery({
     queryKey: [
       "books",
-      searchQuery,
+      debouncedMinPrice,
+      debouncedMaxPrice,
       selectedAuthors,
       selectedCategories,
       selectedSubjects,
-      page,
-      debouncedMinPrice,
-      debouncedMaxPrice,
     ],
     queryFn: async () => {
       const response = await axiosPublic.get("/books", {
         params: {
           searchQuery,
-          author: selectedAuthors.join(","),
-          category: selectedCategories.join(","),
-          subject: selectedSubjects.join(","),
+          authors: selectedAuthors,
+          categories: selectedCategories,
+          subjects: selectedSubjects,
+          minPrice: debouncedMinPrice,
+          maxPrice: debouncedMaxPrice,
           page,
-          limit: 10,
-          minimumPrice: debouncedMinPrice,
-          maximumPrice: debouncedMaxPrice,
         },
       });
       return response.data;
     },
-    keepPreviousData: true,
   });
-
+  console.log(books)
   if (isLoading) return <p>Loading books...</p>;
-  if (error) return <p>Error loading books: {error.message}</p>;
+  if (isError) return <p>Error loading books: {isError.message}</p>;
 
   // Filter authors based on search input
   const filteredAuthors = authors.filter(
@@ -341,154 +344,89 @@ const AllBook = () => {
     if (page > 1) setPage(page - 1);
   };
   return (
-    <div className="container mx-auto">
-      <h1>All Books</h1>
-      {/* Search Input */}
-      <div className="text-center">
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between mb-4">
         <input
           type="text"
+          placeholder="Search books..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by book name"
-          className="border-2 mb-4 px-5 py-2 rounded-lg"
+          className="p-2 border border-gray-300 rounded"
         />
       </div>
-      <div className="flex gap-8">
-        <div className="w-2/12 flex flex-col gap-6">
-          {/* Filter Checkboxes */}
-          <div>
-            <h3>Authors</h3>
-            <input
-              type="text"
-              placeholder="Search Authors"
-              value={searchAuthorQuery}
-              onChange={handleSearchAuthorChange} // Update search query
-              className="mb-2 p-2 border border-gray-300"
-            />
 
-            {/* Scrollable container for authors */}
-            <div className="flex flex-col max-h-[200px] overflow-y-auto">
-              {filteredAuthors.map((author) => (
-                <label key={author.bengali}>
-                  <input
-                    type="checkbox"
-                    onChange={() =>
-                      handleCheckboxChange(setSelectedAuthors, author.bengali)
-                    }
-                    checked={selectedAuthors.includes(author.bengali)}
-                  />
-                  {author.bengali}
-                </label>
-              ))}
-            </div>
-          </div>
+      <div className="flex gap-4 mb-4">
+        <Select
+          label="Authors"
+          value={searchAuthorQuery}
+          onChange={handleSearchAuthorChange}
+        >
+          {authors.map((author, index) => (
+            <SelectItem key={index} value={author.english}>
+              {author.english}
+            </SelectItem>
+          ))}
+        </Select>
 
-          {/* categories filtering  */}
-          <div>
-            <h3>Categories</h3>
-            <input
-              type="text"
-              placeholder="Search Category"
-              value={searchCategoriesQuery}
-              onChange={handleSearchCategoriesChange} // Update search query
-              className="mb-2 p-2 border border-gray-300"
-            />
+        <Select
+          label="Categories"
+          value={searchCategoriesQuery}
+          onChange={handleSearchCategoriesChange}
+        >
+          {categories.map((category, index) => (
+            <SelectItem key={index} value={category.english}>
+              {category.english}
+            </SelectItem>
+          ))}
+        </Select>
 
-            {/* Scrollable container for authors */}
-            <div className="flex flex-col max-h-[200px] overflow-y-auto">
-              {filteredCategories.map((category) => (
-                <label key={category.bengali}>
-                  <input
-                    type="checkbox"
-                    onChange={() =>
-                      handleCheckboxChange(
-                        setSelectedCategories,
-                        category.bengali
-                      )
-                    }
-                    checked={selectedCategories.includes(category.bengali)} // Update this line
-                  />
-                  {category.bengali}
-                </label>
-              ))}
-            </div>
-          </div>
+        <Select
+          label="Subjects"
+          value={searchSubjectsQuery}
+          onChange={handleSearchSubjectsChange}
+        >
+          {subjects.map((subject, index) => (
+            <SelectItem key={index} value={subject.english}>
+              {subject.english}
+            </SelectItem>
+          ))}
+        </Select>
+      </div>
 
-          {/* subject filtering  */}
-          <div>
-            <h3>Subjects</h3>
-            {/* Author Search Input */}
-            <input
-              type="text"
-              placeholder="Search Subjects"
-              value={searchSubjectsQuery}
-              onChange={handleSearchSubjectsChange} // Update search query
-              className="mb-2 p-2 border border-gray-300"
-            />
-
-            {/* Scrollable container for authors */}
-            <div className="flex flex-col max-h-[200px] overflow-y-auto">
-              {filteredSubjects.map((subject) => (
-                <label key={subject.bengali}>
-                  <input
-                    type="checkbox"
-                    onChange={() =>
-                      handleCheckboxChange(setSelectedSubjects, subject.bengali)
-                    }
-                    checked={selectedSubjects.includes(subject.bengali)}
-                  />
-                  {subject.bengali}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* filtering price */}
-          <div className="w-full">
-            <Slider
-              label="Price Range"
-              step={50}
-              minValue={0}
-              maxValue={1000}
-              defaultValue={[0, 1000]}
-              formatOptions={{ style: "currency", currency: "USD" }}
-              className="max-w-md"
-              onChange={handleSliderChange}
-              onAfterChange={handleSliderRelease} // মান পরিবর্তন শেষে ফ্লাগ বন্ধ
-            />
-          </div>
-        </div>
-
-        {/* Book List */}
-        <div className="w-10/12">
-          <ul className="grid grid-cols-3 gap-5">
-            {books?.books?.map((book) => (
-              <BooksCard key={book._id} book={book} />
-            ))}
-          </ul>
+      <div className="mb-4">
+        <Slider
+          aria-label="Price range"
+          value={[debouncedMinPrice, debouncedMaxPrice]}
+          onChange={handleSliderChange}
+          onChangeEnd={handleSliderRelease}
+          step={1}
+          min={0}
+          max={1000}
+        />
+        <div className="flex justify-between mt-2">
+          <span>{debouncedMinPrice}</span>
+          <span>{debouncedMaxPrice}</span>
         </div>
       </div>
-      {/* Pagination */}
 
-      <div className="flex justify-center items-center mt-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {books?.map((book) => (
+          <BooksCard key={book.id} book={book} />
+        ))}
+      </div>
+      <div className="mt-4">
+        {/* Pagination logic */}
         <button
-          onClick={handlePrevPage}
+          onClick={() => setPage(page - 1)}
           disabled={page === 1}
-          className={`px-4 py-2 border ${
-            page === 1 ? "bg-gray-200" : "bg-blue-500 text-white"
-          }`}
+          className="p-2 bg-blue-500 text-white rounded"
         >
           Previous
         </button>
-        <span className="px-4 py-2">
-          Page {page} of {totalPages}
-        </span>
         <button
-          onClick={handleNextPage}
+          onClick={() => setPage(page + 1)}
           disabled={page === totalPages}
-          className={`px-4 py-2 border ${
-            page === totalPages ? "bg-gray-200" : "bg-blue-500 text-white"
-          }`}
+          className="p-2 bg-blue-500 text-white rounded"
         >
           Next
         </button>
