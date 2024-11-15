@@ -1,8 +1,9 @@
+import ProfileUpdate from "@/components/profiles/ProfileUpdate/PorfileUpdate";
 
 const UserHome = () => {
     return (
         <div className="max-w-full bg-white">
-            User home page
+           <ProfileUpdate></ProfileUpdate>
         </div>
     );
 };
