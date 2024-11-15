@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import React, { useState } from 'react';
-
+import Swal from 'sweetalert2'
 function ProfileUpdate() {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -24,6 +24,21 @@ function ProfileUpdate() {
     e.preventDefault();
     // Submit form data or handle it as needed
     console.log('Form data submitted:', formData);
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: false,
+      timer: 1000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "Updated  successfully"
+    });
   };
 
   const handleProfilePicChange = (e) => {
@@ -164,9 +179,15 @@ function ProfileUpdate() {
         </div>
       <div  className='flex  justify-end'>
       <button
+         
           type="submit"
-          disabled={!formData.firstName || !formData.lastName || !formData.phoneNumber}
-          className="bg-bg-blue  text-white font-medium py-2 px-4 rounded-md mt-6 hover:bg-[#4ed9c4] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105"
+          disabled={!formData.firstName && !formData.lastName && !formData.phoneNumber}
+          className={`${
+            !formData.firstName && !formData.lastName && !formData.phoneNumber
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-bg-blue hover:bg-[#4ed9c4]'
+          } text-white font-medium py-2 px-4 rounded-md mt-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105`}
+        
         >
           Update
         </button>
