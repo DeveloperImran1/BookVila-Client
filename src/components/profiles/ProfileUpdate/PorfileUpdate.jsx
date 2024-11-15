@@ -1,8 +1,11 @@
 'use client'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 import Image from 'next/image';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2'
+import PasswordUpdate from '../PasswordUpdate';
 function ProfileUpdate() {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -37,7 +40,7 @@ function ProfileUpdate() {
     });
     Toast.fire({
       icon: "success",
-      title: "Updated  successfully"
+      title: "Updated successfully"
     });
   };
 
@@ -53,8 +56,15 @@ function ProfileUpdate() {
   };
 
   return (
+    <Tabs   >
+    <TabList>
+      <Tab><h2 className="text-xl font-bold">Personal Information</h2></Tab>
+      <Tab><h2 className="text-xl font-bold">Password </h2></Tab>
+    </TabList>
+
+    <TabPanel>
     <div className="  p-6 w-full max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold border-b-2 pb-2 border-[#2bc6f5] mb-6">Personal Information</h2>
+      
       <form onSubmit={handleSubmit}>
         <div className="mb-6  relative">
           <div className="w-36 h-36 mx-auto rounded-full overflow-hidden group">
@@ -194,6 +204,14 @@ function ProfileUpdate() {
       </div>
       </form>
     </div>
+    </TabPanel>
+    <TabPanel>
+      <div  className='flex justify-center'>
+        <PasswordUpdate></PasswordUpdate>
+      </div>
+    </TabPanel>
+  </Tabs>
+   
   );
 }
 
