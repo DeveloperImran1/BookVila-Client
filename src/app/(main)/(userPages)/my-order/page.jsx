@@ -1,10 +1,11 @@
+import { MyOrder } from "@/components/myOrder/MyOrder";
 
-const MyOrder = () => {
+const MyOrderPage = () => {
     return (
         <div>
-            My order page
+            <MyOrder></MyOrder>
         </div>
     );
 };
 
-export default MyOrder;
+export default MyOrderPage;

@@ -3,43 +3,28 @@ import { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Image from "next/image";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 
 const FamousPublisher = () => {
-   
     const swiperRef = useRef(null); // Reference to the Swiper component
-    const [writers, setWriters] = useState([]);
+    const axiosPublic = useAxiosPublic();
+
+    const { data: famousPublisher = [], isLoading } = useQuery({
+      queryKey: ["publisher"],
+      queryFn: async () => {
+        const res = await axiosPublic.get(`/getPublications`);
   
-    useEffect(() => {
-      const writersData = [
-        {
-          _id: "1",
-          image: "https://i.postimg.cc/NMhtt5LC/250px-Dhaka-Bordhoman-House-at-Bangla-academy-03678.jpg",
-          name: "বাংলা একাডেমি",
-        },
-        {
-          _id: "2",
-          image: "https://i.postimg.cc/XqJQDg3R/image.jpg",
-          name: "সমকালীন প্রকাশন",
-        },
-        {
-          _id: "3",
-          image: "https://i.postimg.cc/FFBZH3hK/hqdefault.jpg",
-          name: "বাতিঘর",
-        },
-        {
-          _id: "4",
-          image: "https://i.postimg.cc/FzM3gbKg/1816133.jpg",
-          name: "দে'জ পাবলিশং",
-        },
-        {
-          _id: "5",
-          image: "https://i.postimg.cc/kMBznWkj/2200162.jpg",
-          name: "মওলা ব্রাদার্স",
-        },
-      ];
+        return res?.data;
+      }
+    })
   
-      setWriters(writersData); // Set data in the state
-    }, []);
+    console.log("famousPublisher", famousPublisher)
+
+    
+  
+
   
     const prevSlider = () => {
       if (swiperRef.current) {
@@ -71,19 +56,21 @@ const FamousPublisher = () => {
           1024: { slidesPerView: 4 },
         }}
       >
-        {writers.map((writer) => (
-          <SwiperSlide key={writer._id}>
+        {famousPublisher.map((publisher) => (
+          <SwiperSlide key={publisher?._id}>
             <div className="rounded-md border-2 p-4 w-full space-y-3 bg-white">
               <figure className="flex justify-center items-center">
                 <Image
-                  src={writer?.image}
-                  alt={writer?.name}
+                  src={publisher?.photo || 'https://pathokpoint.com/_next/image?url=%2Fdefault%2Fpublisher.png&w=1920&q=75'}
+                  alt={publisher?.name?.[1]}
                   width={200}
                   height={200}
                   className="rounded-lg object-cover h-[200px] w-[200px] "
                 />
               </figure>
-              <h1 className="text-center font-semibold text-gray-700">{writer.name}</h1>
+              <h1 className="text-center">
+                <Link href={`/publisher/${publisher?._id}`} className="text-center w-full font-semibold text-gray-700 hover:underline">{publisher?.name?.[1]}</Link>
+              </h1>
             </div>
           </SwiperSlide>
         ))}

@@ -8,4 +8,8 @@ import axios from 'axios';
     }
 });
 
-export default  axiosSecure
+const useAxiosSecure = () => {
+    return axiosSecure;
+}
+
+export default useAxiosSecure;
