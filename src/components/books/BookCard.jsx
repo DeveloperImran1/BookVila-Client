@@ -1,13 +1,24 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./bookCard.css";
 import { FaCartShopping } from "react-icons/fa6";
 import Link from "next/link";
 import Image from "next/image";
 import { TbCurrencyTaka } from "react-icons/tb";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
+import useMyCartBooks from "@/hooks/useCartBooks";
 
 const BooksCard = ({ book }) => {
-  const [userRating, setUserRating] = useState("averageRating");
+  const [bookStatus, setBookStatus] = useState("");
+  const currentDateTime = new Date().getTime() - 2592000000;
+  const axiosPublic = useAxiosPublic();
+  const session = useSession();
+  const [favorutes, setFavorutes] = useState([]);
+  const [addToCart, setAddToCart] = useState([]);
+  const { data, refetch: addToCartRefetch, isLoading } = useMyCartBooks();
 
   // Calculate discounted price
   function calculateDiscountedPrice(price, discountPercentage) {
@@ -24,17 +35,112 @@ const BooksCard = ({ book }) => {
     return (total / ratings.length).toFixed(1); // Calculate average and round to 1 decimal place
   }
 
-  const ratings = book?.rating; // Array of ratings
-  const averageRating = calculateAverageRating(ratings);
-  //   setUserRating(averageRating)
+  useEffect(() => {
+    const newPublishedBooks = new Date(book?.updatedAt).getTime() > currentDateTime;
+
+    if (book?.discount) {
+      setBookStatus(`${book?.discount}% off`)
+    }
+    else if (newPublishedBooks) {
+      setBookStatus("New")
+    }
+
+  }, [book?.discount, currentDateTime, book])
+
+  const { data: favoruteBooks = [], refetch } = useQuery({
+    queryKey: ["featuredBooks", session?.data?.user?.email, book?._id],
+    queryFn: async () => {
+      const res = await axiosPublic.get(`/getMyFavorutes/${session?.data?.user?.email}`);
+      const favoruteArr = res?.data?.map(singleBook => singleBook?.books?._id)
+      setFavorutes(favoruteArr)
+      return res?.data;
+    }
+  })
+  
+
+
+  // add favorutes
+  const handleFavoruteAdded = async () => {
+    const result = await axiosPublic.get(`/getMyFavorutes/${session?.data?.user?.email}`);
+    const favoruteArr = result?.data?.map(singleBook => singleBook?.books?._id)
+    if (favoruteArr?.includes(book?._id)) {
+      return toast.error('You have already added 😍')
+    }
+    const obj = { userEmail: session?.data?.user?.email, books: book }
+    const res = await axiosPublic.post('/addFavoruteBook', obj)
+    if (res?.status === 200) {
+      toast.success('Successfully Added Favorutelit❤️')
+      refetch()
+    }
+    else {
+      toast.error('Something went wrong😢')
+
+    }
+  }
+
+  const { data: cartBooks = [], refetch:cartRefetch } = useQuery({
+    queryKey: ["cartBooks", session?.data?.user?.email, book?._id],
+    queryFn: async () => {
+      const res = await axiosPublic.get(`/getMyAddToCart/${session?.data?.user?.email}`);
+      const cartArr = res?.data?.map(singleBook => singleBook?.books?._id)
+      setAddToCart(cartArr)
+      return res?.data;
+    }
+  })
+  
+
+  // add add to cart
+  const handleAddtoCart = async () => {
+    const result = await axiosPublic.get(`/getMyAddToCart/${session?.data?.user?.email}`);
+    const cartArr = result?.data?.map(singleBook => singleBook?.books?._id)
+    if (cartArr?.includes(book?._id)) {
+      return toast.error('You have already added 😍')
+    }
+    const obj = { userEmail: session?.data?.user?.email, books: book }
+    const res = await axiosPublic.post('/addToCartBook', obj)
+    if (res?.status === 200) {
+      toast.success('Successfully Added Add To Cart')
+      addToCartRefetch()
+      cartRefetch()
+    }
+    else {
+      toast.error('Something went wrong😢')
+
+    }
+  }
+
 
   return (
     <article className="rounded-md border-2 p-4 w-full space-y-3 relative bg-white">
       <div className="clit-element absolute top-[-2px] left-0 z-50 overflow-hidden">
-        <p className="-rotate-[50deg] text-white top-3 left-1 font-semibold absolute ">
-          New
-        </p>
+        {
+          bookStatus === "New" ? <p className="-rotate-[50deg] text-white top-3 left-1 font-semibold absolute ">
+            {bookStatus}
+          </p> : <p className="-rotate-[50deg] text-white top-[9px] left-[-2px] font-semibold absolute ">
+            {bookStatus}
+          </p>
+        }
+
       </div>
+      <div
+        onClick={handleFavoruteAdded}
+        className="absolute top-[-2px] right-1 z-50 rounded-full p-2 hover:scale-150 duration-300 cursor-pointer"
+      >
+        <svg
+          width="19"
+          height="16"
+          viewBox="0 0 15 13"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12.6717 1.71722C13.5151 2.435 13.9637 3.35016 14.0175 4.46271C14.0714 5.57526 13.7125 6.51733 12.9409 7.28894L7.746 12.6722C7.56655 12.8517 7.36019 12.9414 7.12692 12.9414C6.89364 12.9414 6.68728 12.8517 6.50784 12.6722L1.31295 7.28894C0.541345 6.51733 0.182458 5.57526 0.236291 4.46271C0.290124 3.35016 0.738733 2.435 1.58212 1.71722C2.31783 1.08917 3.16122 0.820007 4.11227 0.909729C5.08126 0.981506 5.9067 1.36731 6.58859 2.06714L7.12692 2.60547L7.66525 2.06714C8.34713 1.36731 9.1636 0.981506 10.1146 0.909729C11.0836 0.820007 11.936 1.08917 12.6717 1.71722Z"
+            fill={favorutes?.includes(book?._id) ? "red" : "#00befd"} // Replace "Bright Cyan Blue" with a valid color
+            className=""
+          />
+        </svg>
+      </div>
+
 
       <div className="hover:scale-110 transition delay-900 cursor-pointer flex flex-col justify-center items-center">
         <Link href={`/book/${book?._id}`}>
@@ -52,19 +158,11 @@ const BooksCard = ({ book }) => {
         </Link>
       </div>
 
-      <div className="flex items-center justify-between gap-2">
-        <span className="rounded-full bg-[#ff4d6d] px-3 py-1 text-xs text-white">
-          {discountPercentage}% Off
-        </span>
-        <span className="rounded-full  bg-[#ff4d6d] px-3 py-1 text-xs text-white">
-          Best Seller
-        </span>
-      </div>
       <div className=" text-gray-600 space-x-2">
         <Link href={`/book/${book?._id}`} className="inline">
           <h1 className="text-[17px] hover:underline mt-2 inline">{book?.bookName[0]}</h1>
-        </Link>
-        <Link href={`/book/${book?._id}`} className="inline hover:underline">
+        </Link> 
+        <Link href={`/writer/${book?.authorInfo?.authorID}`} className="inline hover:underline">
           <small>by {book?.authorInfo?.name[0]}</small>
         </Link>
       </div>
@@ -96,7 +194,7 @@ const BooksCard = ({ book }) => {
             <TbCurrencyTaka size={22}></TbCurrencyTaka>
           </del>
         </div>
-        <button className="bg-secondary px-2 py-1 rounded-md text-white hover:bg-[#e0435e]">
+        <button onClick={handleAddtoCart} className={`${addToCart?.includes(book?._id) ? 'bg-secondary ': 'bg-primary'} px-2 py-1 rounded-md text-white hover:bg-[#e0435e]`}>
           Add to Cart
         </button>
       </div>

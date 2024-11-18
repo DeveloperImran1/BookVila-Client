@@ -86,7 +86,7 @@ const NewBooks = () => {
                 {/* all result is here */}
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-[38px] ">
                     {
-                        newBooks?.map((book, index) => <BooksCard key={index} book={book}></BooksCard>)
+                        newBooks?.map((book, index) => <BooksCard key={book?._id} book={book}></BooksCard>)
                     }
                 </div>
 

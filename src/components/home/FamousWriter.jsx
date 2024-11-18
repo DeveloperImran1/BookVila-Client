@@ -3,42 +3,25 @@ import { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
+import Link from "next/link";
 
 const FamousWriter = () => {
   const swiperRef = useRef(null); // Reference to the Swiper component
   const [writers, setWriters] = useState([]);
+  const axiosPublic = useAxiosPublic();
+  const { data: famousWriters = [], isLoading } = useQuery({
+    queryKey: ["writer"],
+    queryFn: async () => {
+      const res = await axiosPublic.get(`/getAllAuthors`);
 
-  useEffect(() => {
-    const writersData = [
-      {
-        _id: "1",
-        image: "https://i.postimg.cc/C5ZwRcK7/main-qimg-99eb055ce0df63ce8b7b68ee23e50a4d.webp",
-        name: "রবীন্দ্রনাথ ঠাকুর",
-      },
-      {
-        _id: "2",
-        image: "https://i.postimg.cc/1zntnRYw/image.jpg",
-        name: "জীবনানন্দ দাশ",
-      },
-      {
-        _id: "3",
-        image: "https://i.postimg.cc/Lsyj6D3m/image.jpg",
-        name: "কাজী নজরুল ইসলাম",
-      },
-      {
-        _id: "4",
-        image: "https://i.postimg.cc/CLY5XDb7/image.jpg",
-        name: "জয়নুল আবেদিন",
-      },
-      {
-        _id: "5",
-        image: "https://i.postimg.cc/4dV4FNdj/image.jpg",
-        name: "সুফিয়া কামাল",
-      },
-    ];
+      return res?.data;
+    }
+  })
 
-    setWriters(writersData); // Set data in the state
-  }, []);
+  console.log("famousWriters", famousWriters)
+
 
   const prevSlider = () => {
     if (swiperRef.current) {
@@ -51,6 +34,8 @@ const FamousWriter = () => {
       swiperRef.current.swiper.slideNext(); // Go to next slide
     }
   };
+
+
 
   return (
     <div className="container p-8 bg-white my-8 relative">
@@ -70,19 +55,21 @@ const FamousWriter = () => {
           1024: { slidesPerView: 4 },
         }}
       >
-        {writers.map((writer) => (
+        {famousWriters?.map((writer) => (
           <SwiperSlide key={writer._id}>
             <div className="rounded-md border-2 p-4 w-full space-y-3 bg-white">
               <figure className="flex justify-center items-center">
                 <Image
-                  src={writer?.image}
-                  alt={writer?.name}
+                  src={writer?.photo}
+                  alt={writer?.name[1]}
                   width={200}
                   height={200}
                   className="rounded-lg object-cover h-[200px] w-[200px] "
                 />
               </figure>
-              <h1 className="text-center font-semibold text-gray-700">{writer.name}</h1>
+              <h1 className="text-center">
+                <Link href={`/writer/${writer?.authorID}`} className="text-center w-full font-semibold text-gray-700 hover:underline">{writer.name[1]}</Link>
+              </h1>
             </div>
           </SwiperSlide>
         ))}

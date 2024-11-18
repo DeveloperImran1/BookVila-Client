@@ -8,16 +8,16 @@ import RecentlyBooks from "./RecentlyBooks";
 
 
 const HomeContainer = () => {
-    return (
-        <div className=" ">
-          <Banner></Banner>
-         <FeaturedBooks/>
-          <RecentlyBooks/>
-       {/*  <BudgetFriendlyBooks/>
-         <FamousWriter/>
-         <FamousPublisher/> */}
-        </div>
-    );
+  return (
+    <div className=" ">
+      <Banner></Banner>
+      <FeaturedBooks />
+      <RecentlyBooks />
+      <BudgetFriendlyBooks />
+      <FamousWriter />
+      <FamousPublisher />
+    </div>
+  );
 };
 
 export default HomeContainer;
