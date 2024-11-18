@@ -44,7 +44,7 @@ const PasswordUpdate = () => {
                 <div className="mt-4 ">
                     <label htmlFor="oldPass" className="block font-medium mb-1">Old Password</label>
                     <input
-                        type="tel"
+                        type="password"
                         id="oldPass"
                         name="oldPass"
                         placeholder="1700001111"
@@ -56,7 +56,7 @@ const PasswordUpdate = () => {
                 <div className="mt-4">
                     <label htmlFor="newPass" className="block font-medium mb-1">New Password</label>
                     <input
-                        type="tel"
+                        type="password"
                         id="newPass"
                         name="newPass"
                     
@@ -67,7 +67,7 @@ const PasswordUpdate = () => {
                 </div> <div className="mt-4">
                     <label htmlFor="confirmPass" className="block font-medium mb-1">Confirm Password</label>
                     <input
-                        type="tel"
+                        type="password"
                         id="confirmPass"
                         name="confirmPass"
                      

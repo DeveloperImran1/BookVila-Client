@@ -1,9 +1,11 @@
 import Login from "@/components/shared/Login";
+import SignInAndUp from "@/components/shared/SignInAndUp";
 
 const LoginPage = () => {
     return (
         <div>
-            <Login></Login>
+            {/* <Login></Login> */}
+            <SignInAndUp></SignInAndUp>
         </div>
     );
 };
