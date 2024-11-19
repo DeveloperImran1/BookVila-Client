@@ -30,7 +30,7 @@ export const authOptions = {
 
                 const res = await axios.post(`http://localhost:9000/getSingleUser`, userInfo)
                 const currentUser = res?.data;
-
+console.log("userInfo", userInfo, "currentUser", currentUser)
                 // User not found or password not match
                 if (!currentUser?.success) {
                     throw new Error(currentUser?.message);

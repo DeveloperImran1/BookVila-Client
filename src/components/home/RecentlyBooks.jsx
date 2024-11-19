@@ -1,33 +1,21 @@
-"use client";
+"use client"
 import { FaCartShopping } from "react-icons/fa6";
 import { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react"; // Import Swiper components
 import "swiper/css";
 import Link from "next/link";
 import Image from "next/image";
-import BooksCard from "../books/BookCard";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import BooksCard from "../books/BookCard";
 
-const FeaturedBooks = () => {
+const RecentlyBooks = () => {
+
   const [userRating, setUserRating] = useState(3);
-  const axiosPublic = useAxiosPublic()
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("")
-
-
-
-  const { data: featuredBooks = {}, isLoading } = useQuery({
-    queryKey: ["featuredBook"],
-    queryFn: async () => {
-      const res = await axiosPublic.get(`/getFeaturedBooks?subCategory=টপ ট্রেন্ডস&searchQuery=${search}&page=${page}`);
-      //  const res = await axiosPublic.get(`/getFeaturedBooks?subCategory=টপ ট্রেন্ডস&searchQuery=Humanity&page=1`);
-      return res?.data;
-    }
-  })
-  console.log(featuredBooks)
-
   const swiperRef = useRef(null); // Reference to the Swiper component
+  const axiosPublic = useAxiosPublic()
+  const currentDateTime = new Date().getTime() - 2592000000;
+  const [books, setBooks] = useState([])
 
   const prevSlider = () => {
     if (swiperRef.current) {
@@ -41,18 +29,33 @@ const FeaturedBooks = () => {
     }
   };
 
+  const { booksss = [], isPending } = useQuery({
+    queryKey: ["newBooksHome"],
+    queryFn: async () => {
+      const res = await axiosPublic.get(`/getBooks`);
+      const newPublishedBooks = res?.data?.filter(book => new Date(book?.updatedAt).getTime() > currentDateTime)
+      console.log("all books", res?.data)
+      setBooks(newPublishedBooks)
+      return res?.data;
+    }
+  })
+
+  if (isPending) {
+    return <p>Loading ......</p>
+  }
+
 
 
   return (
+
+
     <div className="container   ">
       <div className="bg-white my-8 p-4 relative">
         <div className="flex justify-between mb-6 font-semibold ">
-          <h1 className="text-2xl text-gray-600">Featured book</h1>
-          {/* {featuredBooks?.books?.length && books?.length > 0 && ( */}
-          <Link href={`/featured-books`}>
+          <h1 className="text-2xl text-gray-600">Recently Added Books</h1>
+          <Link href={`/new-books`}>
             <h1 className="text-bg-blue underline">See more</h1>
           </Link>
-          {/* // )}{" "} */}
         </div>
 
         {/* Swiper for carousel functionality */}
@@ -72,7 +75,7 @@ const FeaturedBooks = () => {
             },
           }}
         >
-          {featuredBooks?.books?.map((book) => (
+          {books?.map((book) => (
             <SwiperSlide key={book._id}>
               <BooksCard book={book}></BooksCard>
             </SwiperSlide>
@@ -112,4 +115,4 @@ const FeaturedBooks = () => {
   );
 };
 
-export default FeaturedBooks;
+export default RecentlyBooks;
