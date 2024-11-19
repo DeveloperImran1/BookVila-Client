@@ -46,11 +46,21 @@ const Review = () => {
           ></Image>
             </div>
         <div className="max-w-md">
-       <h1 className="mb-5 text-5xl font-bold">Hello there</h1>
       <p className="mb-5">
         Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
         quasi. In deleniti eaque aut repudiandae et a id nisi.
       </p>
+      <p>
+      <div className="rating rating-lg ">
+  <input type="radio" name="rating-9" className="rating-hidden bg-orange-500" />
+  <input type="radio" name="rating-9" className="mask mask-star-2 bg-orange-500" />
+  <input type="radio" name="rating-9" className="mask mask-star-2 bg-orange-500" defaultChecked />
+  <input type="radio" name="rating-9" className="mask mask-star-2 bg-orange-500" />
+  <input type="radio" name="rating-9" className="mask mask-star-2 bg-orange-500" />
+  <input type="radio" name="rating-9" className="mask mask-star-2 bg-orange-500" />
+</div>
+      </p>
+      <h1 className='text-6xl font-bold'>name</h1>
     </div>
         </div>
   </div>
