@@ -3,7 +3,9 @@ import "./globals.css";
 import AuthProvider from "@/services/AuthProvider";
 import TanStackProvider from "providers/TanstackProvider";
 import toast, { Toaster } from 'react-hot-toast';
+// import Modal from "react-modal";
 
+// Modal.setAppElement("#__next");
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

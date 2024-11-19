@@ -5,11 +5,14 @@ import Modal from "react-modal";
 import { PlusCircle, X } from 'lucide-react';
 import { motion } from "framer-motion";
 import { FaBook, FaPen, FaBuilding, FaBarcode } from "react-icons/fa";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
+import { PanoramaSharp } from "@mui/icons-material";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 
-// // Configure modal root element for accessibility
-Modal.setAppElement("#root");
-// Modal.setAppElement("#__next");
-
+// Configure modal root element for accessibility
+// Modal.setAppElement("#root");
 
 // Placeholder data
 const initialQAs = [
@@ -41,6 +44,11 @@ export default function BookDetails() {
   const [questionModalIsOpen, setQuestionModalIsOpen] = useState(false);
   const [replyingTo, setReplyingTo] = useState(null); // Track the question being replied to
   const [newReply, setNewReply] = useState(""); // State for the reply input
+  const axiosPublic=useAxiosPublic()
+  const pathname = usePathname();
+    const id = pathname?.split('/').pop();
+    console.log(id)
+ 
   
 // Question And Ans Form
   const handleSubmitQuestion = (e) => {
@@ -72,6 +80,16 @@ export default function BookDetails() {
     setReplyingTo(null); // Close the reply form after submission
   };
 
+  const { data: book = {}, 
+        refetch, } = useQuery({
+            queryKey: ['book', id],
+            queryFn: async () => {
+                const { data } = await axiosPublic.get(`/book/${id}`)
+                return data
+            }
+        })
+        console.log(book)
+
   // Initial Book Data
   const bookData = {
     title: ["ইতি স্মৃতিপক্ষ", "Iti Smritipakkha"],
@@ -92,8 +110,8 @@ export default function BookDetails() {
     pdfUrl: "https://drive.google.com/file/d/1DnTI5ohyr0MutrSUkt6DbxmhZSRC4k6w/preview"
   };
 
-  const discountedPrice = Math.round(bookData.price - (bookData.price * bookData.discount / 100));
-  const savings = bookData.price - discountedPrice;
+  const discountedPrice = Math.round(book?.price - (book?.price * book?.discount / 100));
+  const savings = book?.price - discountedPrice;
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -109,8 +127,8 @@ export default function BookDetails() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto border rounded shadow-lg p-6">
-      <div className="flex flex-col md:flex-row gap-8">
+    <div className="container mx-auto border  rounded shadow-lg  pt-16">
+      <div className="flex flex-col md:flex-row gap-8 bg-white">
         {/* Book Cover Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -121,28 +139,30 @@ export default function BookDetails() {
           <div className="relative aspect-[3/4] rounded-lg overflow-hidden">
             <div className="absolute top-4 -left-4 bg-red-500 px-3 rounded-full transform -rotate-45">
               <p className="text-white text-base">
-                <span className="font-bold">{bookData.discount}%</span> OFF
+                <span className="font-bold">{book?.discount}%</span> OFF
               </p>
             </div>
-            <img 
-              src={bookData.coverImage} 
-              alt={bookData.title[0]}
+            <Image
+              src={book?.coverImage} 
+              alt={book?.bookName[0]}
               className="w-full h-full object-cover"
+              height={200}
+              width={200}
             />
           </div>
         </motion.div>
 
         {/* Book Details Section */}
-        <div className="flex-1 space-y-6">
+        <div className="flex-1 space-y-6 p-4">
           <div>
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-2xl text-black font-bold">{bookData.title[0]}</h1>
-                <p className="text-gray-500">({bookData.title[1]})</p>
+                <h1 className="text-2xl text-black font-bold">{book?.bookName[0]}</h1>
+                <p className="text-gray-500">({book?.bookName[1]})</p>
               </div>
               <Info className="h-5 w-5 text-gray-500" title="Book information" />
             </div>
-            <p className="text-gray-500 mt-2">by {bookData.authorInfo.name[0]}</p>
+            <p className="text-gray-500 mt-2">by {book?.authorInfo.name[0]}</p>
           </div>
 
           <div className="flex items-center gap-4">
@@ -155,22 +175,22 @@ export default function BookDetails() {
               ))}
             </div>
             <div className="text-sm text-gray-500">
-              {bookData.ratings} Ratings | {bookData.reviews} Reviews
+              {book?.ratings} Ratings | {book?.reviews} Reviews
             </div>
           </div>
 
           <div className="space-y-2">
             <div className="flex items-baseline gap-2">
               <span className="text-2xl text-gray-600 font-bold">TK. {discountedPrice}</span>
-              <span className="text-lg text-gray-500 line-through">TK. {bookData.price}</span>
+              <span className="text-lg text-gray-500 line-through">TK. {book?.price}</span>
               <span className="text-green-600 text-sm">
-                You Save TK. {savings} ({bookData.discount}%)
+                You Save TK. {savings} ({book?.discount}%)
               </span>
             </div>
-            {bookData.stock > 0 ? (
+            {book?.stock > 0 ? (
               <div className="flex items-center gap-2 text-green-600">
                 <div className="h-2 w-2 rounded-full bg-green-600" />
-                In Stock (only {bookData.stock} copies left)
+                In Stock (only {book?.stock} copies left)
               </div>
             ) : (
               <div className="text-red-600">Out of Stock</div>
@@ -181,22 +201,22 @@ export default function BookDetails() {
             <div className="text-center">
               <FaBook className="text-lg mx-auto text-[#00befe8c]" />
               <h1 className="font-semibold">Book Length</h1>
-              <h4>{bookData.pages} Pages</h4>
+              <h4>{book?.pages} Pages</h4>
             </div>
             <div className="text-center">
               <FaPen className="text-lg mx-auto text-[#00befe8c]" />
               <h1 className="font-semibold">Edition</h1>
-              <h3>{bookData.edition}</h3>
+              <h3>{book?.edition}</h3>
             </div>
             <div className="text-center">
               <FaBuilding className="text-lg mx-auto text-[#00befe8c]" />
               <h1 className="font-semibold">Publication</h1>
-              <h2>{bookData.publisher[0]}</h2>
+              <h2>{book?.publisher[0]}</h2>
             </div>
             <div className="text-center">
               <FaBarcode className="text-lg mx-auto text-[#00befe8c]" />
-              <h1 className="font-semibold">ISBN</h1>
-              <div>{bookData.isbn}</div>
+              <h1 className="font-semibold">BookID</h1>
+              <div>{book?.bookID}</div>
             </div>
           </div>
 
@@ -237,7 +257,7 @@ export default function BookDetails() {
               <p className="absolute inset-0 flex items-center justify-center text-gray-500">Loading...</p>
             )}
             <iframe
-              src={bookData.pdfUrl}
+              src={book?.pdfUrl}
               title="PDF Preview"
               onLoad={handleIframeLoad}
               className="w-full h-full"
