@@ -35,7 +35,7 @@ const Sidebar = () => {
     return (
         <div
             position="left"
-            className="  flex flex-col justify-between  bg-white">
+            className="  flex flex-col justify-between  bg-white ">
             <div className="flex flex-col bg-white pt-[10px] pb-[50px] rounded-md justify-between items-center">
                 <div>
                     <Image height={676} width={1200}

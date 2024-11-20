@@ -6,11 +6,28 @@ import "swiper/css";
 import Link from "next/link";
 import Image from "next/image";
 import BooksCard from "../books/BookCard";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
 
 const BudgetFriendlyBooks = () => {
-    
-     
-    const [userRating, setUserRating] = useState(3);
+  const [userRating, setUserRating] = useState(3);
+
+
+  const axiosPublic = useAxiosPublic()
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("")
+
+
+
+  const { data: budjetFriendlyBooks = {}, isLoading } = useQuery({
+    queryKey: ["budgetFriendlydBook"],
+    queryFn: async () => {
+      const res = await axiosPublic.get(`/getBudgetFriendlyBooks?searchQuery=${search}&page=${page}`);
+
+      return res?.data;
+    }
+  })
+
   const swiperRef = useRef(null); // Reference to the Swiper component
 
   const prevSlider = () => {
@@ -26,74 +43,18 @@ const BudgetFriendlyBooks = () => {
   };
 
 
-  const books = [
-    {
-      _id: "1",
-      category: "Electronics",
-      color: "Black",
-      description: "High-quality wireless headphones with noise cancellation.",
-      image: "https://www.shutterstock.com/image-vector/3d-wireless-headphones-mockup-set-260nw-2130630635.jpg",
-      offer: 20,
-      price: 79.99,
-      title: "Wireless Headphones",
-      totalAvailable: 30,
-    },
-    {
-      _id: "2",
-      category: "Home Appliances",
-      color: "Silver",
-      description: "Energy-efficient smart vacuum cleaner.",
-      image: "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
-      offer: 15,
-      price: 199.99,
-      title: "Smart Vacuum Cleaner",
-      totalAvailable: 15,
-    },
-    {
-      _id: "3",
-      category: "Fashion",
-      color: "Blue",
-      description: "Stylish denim jacket for all occasions.",
-      image: "https://www.shutterstock.com/image-vector/3d-wireless-headphones-mockup-set-260nw-2130630635.jpg",
-      offer: 10,
-      price: 49.99,
-      title: "Denim Jacket",
-      totalAvailable: 25,
-    },
-    {
-      _id: "4",
-      category: "Fitness",
-      color: "Green",
-      description: "Durable yoga mat for all fitness levels.",
-      image: "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
-      offer: 5,
-      price: 29.99,
-      title: "Yoga Mat",
-      totalAvailable: 50,
-    },
-    {
-      _id: "5",
-      category: "book",
-      color: "Multi",
-      description: "A motivational book for personal growth.",
-      image: "https://img.drz.lazcdn.com/static/bd/p/70de89e7dfae0fdc030ed5c5006f93d2.jpg_720x720q80.jpg",
-      offer: 25,
-      price: 14.99,
-      title: "Motivational Book",
-      totalAvailable: 100,
-    },
-  ];
-    
-    return (
-        <div className="container p-8 bg-white relative my-8">
+  console.log("budjetFriendlyBooks", budjetFriendlyBooks)
+
+
+
+  return (
+    <div className="container p-8 bg-white relative my-8">
       <div className="flex justify-between mb-6 font-semibold">
         <h1 className="text-2xl text-gray-600">Budget Friendly Books
         </h1>
-        {books && books?.length > 0 && (
-          <Link href={`/book/${books[0]._id}`}>
+          <Link href={`/budget-frindly-books`}>
             <h1 className="text-bg-blue underline">See more</h1>
           </Link>
-        )}{" "}
       </div>
 
       {/* Swiper for carousel functionality */}
@@ -113,7 +74,7 @@ const BudgetFriendlyBooks = () => {
           },
         }}
       >
-        {books?.map((book) => (
+        {budjetFriendlyBooks?.books?.map((book) => (
           <SwiperSlide key={book._id}>
             <BooksCard book={book}></BooksCard>
           </SwiperSlide>
@@ -149,7 +110,7 @@ const BudgetFriendlyBooks = () => {
         </svg>
       </button>
     </div>
-    );
+  );
 };
 
 export default BudgetFriendlyBooks;

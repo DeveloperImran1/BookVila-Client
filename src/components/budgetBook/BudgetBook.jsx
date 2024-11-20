@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import BooksCard from "../books/BookCard";
 
-const FeaturedBooks = () => {
+const BudgetBook = () => {
     const axiosPublic = useAxiosPublic()
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
@@ -15,9 +15,9 @@ const FeaturedBooks = () => {
 
 
     const { data: featuredBooks = {}, isLoading } = useQuery({
-        queryKey: ["featuredBooks", page, search],
+        queryKey: ["budgetBook", page, search],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/getFeaturedBooks?subCategory=টপ ট্রেন্ডস&searchQuery=${search}&page=${page}`);
+            const res = await axiosPublic.get(`/getBudgetFriendlyBooks?searchQuery=${search}&page=${page}`);
             setTotalPages(Math.ceil(res?.data?.totalBooks / 12))
             return res?.data;
         }
@@ -97,4 +97,4 @@ const FeaturedBooks = () => {
     );
 };
 
-export default FeaturedBooks;
+export default BudgetBook;

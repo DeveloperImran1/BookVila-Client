@@ -1,8 +1,8 @@
-"use client"
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
 import { Heart, Share2, Info, Star, ShoppingCart } from "lucide-react";
 import Modal from "react-modal";
-import { PlusCircle, X } from 'lucide-react';
+import { PlusCircle, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { FaBook, FaPen, FaBuilding, FaBarcode } from "react-icons/fa";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { PanoramaSharp } from "@mui/icons-material";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import axios from "axios";
 
 // Configure modal root element for accessibility
 // Modal.setAppElement("#root");
@@ -23,7 +24,7 @@ const initialQAs = [
     questionedBy: "Hedayetullah",
     answeredBy: "SG Shamim Ahmed",
     questionDate: "28 Jul, 2024",
-    answerDate: "28 Jul, 2024"
+    answerDate: "28 Jul, 2024",
   },
   {
     id: "2",
@@ -32,11 +33,12 @@ const initialQAs = [
     questionedBy: "Md.Abu Siddique",
     answeredBy: "Md. Mahmud Alam",
     questionDate: "07 Oct, 2020",
-    answerDate: "07 Oct, 2020"
-  }
+    answerDate: "07 Oct, 2020",
+  },
 ];
 
 export default function BookDetails() {
+  const [book, setBook] = useState();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [qas, setQas] = useState(initialQAs);
@@ -44,13 +46,12 @@ export default function BookDetails() {
   const [questionModalIsOpen, setQuestionModalIsOpen] = useState(false);
   const [replyingTo, setReplyingTo] = useState(null); // Track the question being replied to
   const [newReply, setNewReply] = useState(""); // State for the reply input
-  const axiosPublic=useAxiosPublic()
+  const axiosPublic = useAxiosPublic();
   const pathname = usePathname();
-    const id = pathname?.split('/').pop();
-    console.log(id)
- 
-  
-// Question And Ans Form
+  const id = pathname?.split("/").pop();
+  console.log(id);
+
+  // Question And Ans Form
   const handleSubmitQuestion = (e) => {
     e.preventDefault();
     if (newQuestion.trim()) {
@@ -61,7 +62,7 @@ export default function BookDetails() {
         questionedBy: "Anonymous",
         answeredBy: "",
         questionDate: new Date().toLocaleDateString(),
-        answerDate: ""
+        answerDate: "",
       };
       setQas([newQA, ...qas]);
       setNewQuestion("");
@@ -72,7 +73,12 @@ export default function BookDetails() {
     setQas(
       qas.map((qa) =>
         qa.id === qaId
-          ? { ...qa, answer: newReply, answeredBy: "Admin", answerDate: new Date().toLocaleDateString() }
+          ? {
+              ...qa,
+              answer: newReply,
+              answeredBy: "Admin",
+              answerDate: new Date().toLocaleDateString(),
+            }
           : qa
       )
     );
@@ -80,43 +86,36 @@ export default function BookDetails() {
     setReplyingTo(null); // Close the reply form after submission
   };
 
-  const { data: book = {}, 
-        refetch, } = useQuery({
-            queryKey: ['book', id],
-            queryFn: async () => {
-                const { data } = await axiosPublic.get(`/book/${id}`)
-                return data
-            }
-        })
-        console.log(book)
-
-  // Initial Book Data
-  const bookData = {
-    title: ["ইতি স্মৃতিপক্ষ", "Iti Smritipakkha"],
-    publisher: ["অন্যধারা", "Onnodhara"],
-    category: ["সমকালীন উপন্যাস", "Contemporary Novel"],
-    price: 660,
-    discount: 25,
-    stock: 10,
-    edition: "5th Edition",
-    pages: 400,
-    isbn: "9789849598060",
-    ratings: 62,
-    reviews: 26,
-    coverImage: "https://i.ibb.co/2gcSdDv/pexels-thought-catalog-317580-904620.jpg",
-    authorInfo: {
-      name: ["সাদাত হোসাইন", "Sadat Hossain"]
+  const { data: questions = {}, refetch } = useQuery({
+    queryKey: ["questions"],
+    queryFn: async () => {
+      const { data } = await axiosPublic.get(`/question/${book.bookID}`);
+      console.log(data);
+      return data;
     },
-    pdfUrl: "https://drive.google.com/file/d/1DnTI5ohyr0MutrSUkt6DbxmhZSRC4k6w/preview"
-  };
+  });
+  console.log(questions[0]);
 
-  const discountedPrice = Math.round(book?.price - (book?.price * book?.discount / 100));
+  useEffect(() => {
+    const res = axios
+      .get(`http://localhost:9000/book/${id}`)
+      .then((res) => {
+        setBook(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [id]);
+  console.log(book);
+  const discountedPrice = Math.round(
+    book?.price - (book?.price * book?.discount) / 100
+  );
   const savings = book?.price - discountedPrice;
 
   const openModal = () => {
     setModalIsOpen(true);
   };
-  const openQuestionModal  = () => setQuestionModalIsOpen(true);
+  const openQuestionModal = () => setQuestionModalIsOpen(true);
   const closeModal = () => {
     setModalIsOpen(false);
     setIsLoading(true); // Reset loading state when modal closes
@@ -125,6 +124,10 @@ export default function BookDetails() {
   const handleIframeLoad = () => {
     setIsLoading(false);
   };
+
+  if (isLoading) {
+    <div>Loading ..... </div>;
+  }
 
   return (
     <div className="container mx-auto border  rounded shadow-lg  pt-16">
@@ -143,8 +146,8 @@ export default function BookDetails() {
               </p>
             </div>
             <Image
-              src={book?.coverImage} 
-              alt={book?.bookName[0]}
+              src={book?.coverImage}
+              alt={book?.bookName[0] || "Books"}
               className="w-full h-full object-cover"
               height={200}
               width={200}
@@ -157,10 +160,15 @@ export default function BookDetails() {
           <div>
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-2xl text-black font-bold">{book?.bookName[0]}</h1>
+                <h1 className="text-2xl text-black font-bold">
+                  {book?.bookName[0]}
+                </h1>
                 <p className="text-gray-500">({book?.bookName[1]})</p>
               </div>
-              <Info className="h-5 w-5 text-gray-500" title="Book information" />
+              <Info
+                className="h-5 w-5 text-gray-500"
+                title="Book information"
+              />
             </div>
             <p className="text-gray-500 mt-2">by {book?.authorInfo.name[0]}</p>
           </div>
@@ -170,7 +178,9 @@ export default function BookDetails() {
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-4 h-4 ${i < 4 ? "text-yellow-400" : "text-gray-400"}`}
+                  className={`w-4 h-4 ${
+                    i < 4 ? "text-yellow-400" : "text-gray-400"
+                  }`}
                 />
               ))}
             </div>
@@ -181,8 +191,12 @@ export default function BookDetails() {
 
           <div className="space-y-2">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl text-gray-600 font-bold">TK. {discountedPrice}</span>
-              <span className="text-lg text-gray-500 line-through">TK. {book?.price}</span>
+              <span className="text-2xl text-gray-600 font-bold">
+                TK. {discountedPrice}
+              </span>
+              <span className="text-lg text-gray-500 line-through">
+                TK. {book?.price}
+              </span>
               <span className="text-green-600 text-sm">
                 You Save TK. {savings} ({book?.discount}%)
               </span>
@@ -225,7 +239,10 @@ export default function BookDetails() {
               <ShoppingCart className="mr-2 h-4 w-4" />
               Add to Cart
             </button>
-            <button onClick={openModal} className="p-2 bg-slate-200 border rounded font-bold text-[#077aa0b7]">
+            <button
+              onClick={openModal}
+              className="p-2 bg-slate-200 border rounded font-bold text-[#077aa0b7]"
+            >
               একটু পড়ে দেখুন
             </button>
           </div>
@@ -251,10 +268,15 @@ export default function BookDetails() {
         overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-75"
       >
         <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl relative p-6">
-          <X className="absolute top-3 right-3 cursor-pointer text-gray-500" onClick={closeModal} />
+          <X
+            className="absolute top-3 right-3 cursor-pointer text-gray-500"
+            onClick={closeModal}
+          />
           <div className="relative h-[500px] w-full">
             {isLoading && (
-              <p className="absolute inset-0 flex items-center justify-center text-gray-500">Loading...</p>
+              <p className="absolute inset-0 flex items-center justify-center text-gray-500">
+                Loading...
+              </p>
             )}
             <iframe
               src={book?.pdfUrl}
@@ -266,37 +288,48 @@ export default function BookDetails() {
         </div>
       </Modal>
       <div className="flex justify-between border-b-2 py-4 mt-2 items-center mb-6">
-           <h2 className="text-2xl font-semibold">Product Q/A</h2>
-           <button onClick={openQuestionModal} className="flex items-center">
-             <PlusCircle className="mr-2 h-4 w-4" />
-             Ask a Question
-           </button>
-         </div>
-  {/* Q&A List */}
-  <div className="space-y-4">
-        {qas.map((qa) => (
-          <div key={qa.id} className="p-4 bg-gray-100 rounded shadow">
+        <h2 className="text-2xl font-semibold">Product Q/A</h2>
+        <button onClick={openQuestionModal} className="flex items-center">
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Ask a Question
+        </button>
+      </div>
+      {/* Q&A List */}
+      <div className="space-y-4">
+        {questions?.[0]?.questions?.map((qa) => (
+          <div key={qa.number} className="p-4 bg-gray-100 rounded shadow">
             <h3 className="font-semibold text-lg">{qa.question}</h3>
-            <p className="text-gray-600">Asked by: {qa.questionedBy} on {qa.questionDate}</p>
+            <p className="text-gray-600">
+              Asked by: {qa.questionedBy} on {qa.questionedDate}
+            </p>
             <div className="mt-2">
               {qa.answer ? (
                 <>
-                  <p className="text-gray-800">{qa.answer}</p>
-                  <p className="text-gray-500">Answered by: {qa.answeredBy} on {qa.answerDate}</p>
+                  <p className="text-gray-800">{qa.answer.response}</p>
+                  <p className="text-gray-500">
+                    Answered by: {qa.answer.answeredBy} on{" "}
+                    {qa.answer.answeredDate}
+                  </p>
                 </>
               ) : (
                 <p className="text-gray-500 italic">Awaiting answer...</p>
               )}
             </div>
 
-            {/* Reply Button */}
-            <button onClick={() => setReplyingTo(qa.id)} className="text-blue-500 mt-2">
+           
+            <button
+              onClick={() => setReplyingTo(qa.number)} // Set the question to reply to
+              className="text-blue-500 mt-2"
+            >
               Reply
             </button>
 
-            {/* Reply Form */}
-            {replyingTo === qa.id && (
-              <form onSubmit={(e) => handleReplySubmit(e, qa.id)} className="mt-4">
+         
+            {replyingTo === qa.number && (
+              <form
+                onSubmit={(e) => handleReplySubmit(e, qa.number)} // Submit reply for specific question
+                className="mt-4"
+              >
                 <input
                   type="text"
                   value={newReply}
@@ -304,7 +337,10 @@ export default function BookDetails() {
                   placeholder="Type your reply here..."
                   className="mb-2 w-full p-2 border rounded"
                 />
-                <button type="submit" className="w-full bg-green-500 text-white py-2 rounded">
+                <button
+                  type="submit"
+                  className="w-full bg-green-500 text-white py-2 rounded"
+                >
                   Submit Reply
                 </button>
               </form>
@@ -313,30 +349,37 @@ export default function BookDetails() {
         ))}
       </div>
 
-             {/* Question Section */}
-       <div className="w-full max-w-4xl mx-auto p-4">
-       
-        
-         <Modal   
-           className="fixed inset-0 bg-opacity-75 bg-gray-500 flex items-center justify-center"
-        overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-75"
-          isOpen={questionModalIsOpen} onRequestClose={() => setQuestionModalIsOpen(false)}>
-           <div className=" rounded-lg p-6 ">
-             <div className="flex justify-between items-center mb-4">
-               <h3 className="text-xl text-black font-semibold">Ask a Question</h3>
-               <button onClick={() => setQuestionModalIsOpen(false)}>
-                 <X className="h-6 text-red-500 font-extrabold w-6" />
-               </button>
-             </div>
-             <form onSubmit={handleSubmitQuestion}>
-               <input
+      {/* Question Section */}
+      <div className="w-full max-w-4xl mx-auto p-4">
+        <Modal
+          className="fixed inset-0 bg-opacity-75 bg-gray-500 flex items-center justify-center"
+          overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-75"
+          isOpen={questionModalIsOpen}
+          onRequestClose={() => setQuestionModalIsOpen(false)}
+        >
+          <div className=" rounded-lg p-6 ">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl text-black font-semibold">
+                Ask a Question
+              </h3>
+              <button onClick={() => setQuestionModalIsOpen(false)}>
+                <X className="h-6 text-red-500 font-extrabold w-6" />
+              </button>
+            </div>
+            <form onSubmit={handleSubmitQuestion}>
+              <input
                 type="text"
                 value={newQuestion}
                 onChange={(e) => setNewQuestion(e.target.value)}
                 placeholder="Type your question here..."
                 className="mb-4 w-full"
               />
-              <button type="submit" className=" btn text-yellow-50 text-lg  bg-[#00bffe]">Submit Question</button>
+              <button
+                type="submit"
+                className=" btn text-yellow-50 text-lg  bg-[#00bffe]"
+              >
+                Submit Question
+              </button>
             </form>
           </div>
         </Modal>
@@ -344,4 +387,3 @@ export default function BookDetails() {
     </div>
   );
 }
-
