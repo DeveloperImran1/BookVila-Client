@@ -16,7 +16,7 @@ const MainLayout = ({ children }) => {
       {
         path.includes("login") || path.includes("register") ? <></> : <Navbar></Navbar>
       }
-      <div className="bg-bg-gray">
+      <div className="bg-bg-gray pb-9">
         {children}
       </div>
       {

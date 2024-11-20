@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { removeCartBook } from "@/hooks/localStorage";
 
 const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, setTotalPrice, totalPrice, refetch }) => {
     const [singleBookTotal, setSingleBookTotal] = useState(1);
@@ -14,15 +15,20 @@ const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, se
     const [singleBookTotalPrice, setSingleBookTotalPrice] = useState(discountedPrice);
     const axiosPublic = useAxiosPublic()
 
+    // const handleDelete = async()=> {
+    //     const result = await axiosPublic.delete(`/deleteCartBook/${item?._id}`)
+    //     if(result?.data?.deletedCount){
+    //         refetch()
+    //         return toast.success("Removed this book from add to cart 😊")
+    //     }
+    //     else{
+    //         return toast.error("Something went wrong 😢")
+    //     }
+    // }
+
     const handleDelete = async()=> {
-        const result = await axiosPublic.delete(`/deleteCartBook/${item?._id}`)
-        if(result?.data?.deletedCount){
-            refetch()
-            return toast.success("Removed this book from add to cart 😊")
-        }
-        else{
-            return toast.error("Something went wrong 😢")
-        }
+        removeCartBook(item)
+        refetch()
     }
     return (
         <div className="flex justify-between">
