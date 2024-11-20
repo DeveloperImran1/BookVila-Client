@@ -31,7 +31,7 @@ const Login = () => {
         Swal.fire({
             position: "center",
             icon: "success",
-            title: "Successfully SignIn",
+            title: "Welcome to Book Vila",
             showConfirmButton: false,
             timer: 1500
         }).then(()=> router.push(callBackUrl || "/"))
@@ -90,8 +90,8 @@ const Login = () => {
     return (
         <div className="">
             <div
-                style={{ backgroundImage: `url('https://i.postimg.cc/j5F0kNnY/loginBG.jpg')` }}
-                className="bg-cover bg-center pb-16"
+                // style={{ backgroundImage: `url('https://i.postimg.cc/j5F0kNnY/loginBG.jpg')` }}
+                className="bg-bg-gray pb-16"
             >
                 <div className="container mx-auto flex flex-col md:flex-row text-white">
                     <div className="w-full md:w-1/2 my-5 md:mt-14 p-3">
@@ -292,111 +292,3 @@ const Login = () => {
 };
 
 export default Login;
-// 'use client'
-// import React, { useState, useEffect } from 'react';
-
-// const AuthForm = () => {
-//   const [isSignIn, setIsSignIn] = useState(true);
-
-//   useEffect(() => {
-//     const timer = setTimeout(() => {
-//       setIsSignIn(true);
-//     }, 200);
-//     return () => clearTimeout(timer);
-//   }, []);
-
-//   const toggle = () => {
-//     setIsSignIn(!isSignIn);
-//   };
-
-//   return (
-//     <div className="relative min-h-screen overflow-hidden bg-white">
-//       {/* Background curved shape - Matching the image exactly */}
-//       <div className="absolute top-0 right-0 h-screen w-[65%] bg-emerald-500 transform transition-transform duration-1000 ease-in-out rounded-l-[100px] z-0" />
-
-//       {/* Main content wrapper */}
-//       <div className="relative z-10 flex min-h-screen">
-//         {/* Left side with form */}
-//         <div className="w-[35%] flex items-center justify-center">
-//           <div className="w-full max-w-md p-8">
-//             {/* Sign Up Form */}
-//             <div className={`w-full bg-white rounded-3xl p-8 shadow-xl transform transition-transform duration-500 ease-in-out ${isSignIn ? 'scale-0' : 'scale-100'}`}>
-//               <div className="space-y-5">
-//                 <input 
-//                   type="text" 
-//                   placeholder="Username"
-//                   className="w-full px-4 py-3 bg-gray-100 rounded-lg text-gray-600 placeholder-gray-500 focus:outline-none"
-//                 />
-//                 <input 
-//                   type="email" 
-//                   placeholder="Email"
-//                   className="w-full px-4 py-3 bg-gray-100 rounded-lg text-gray-600 placeholder-gray-500 focus:outline-none"
-//                 />
-//                 <input 
-//                   type="password" 
-//                   placeholder="Password"
-//                   className="w-full px-4 py-3 bg-gray-100 rounded-lg text-gray-600 placeholder-gray-500 focus:outline-none"
-//                 />
-//                 <input 
-//                   type="password" 
-//                   placeholder="Confirm password"
-//                   className="w-full px-4 py-3 bg-gray-100 rounded-lg text-gray-600 placeholder-gray-500 focus:outline-none"
-//                 />
-//                 <button className="w-full py-3 rounded-lg bg-emerald-500 text-white text-lg font-semibold hover:bg-emerald-600 transition-colors">
-//                   Sign up
-//                 </button>
-//                 <p className="text-center text-sm text-gray-600">
-//                   Already have an account?{' '}
-//                   <button onClick={toggle} className="font-semibold text-emerald-500 hover:text-emerald-600">
-//                     Sign in here
-//                   </button>
-//                 </p>
-//               </div>
-//             </div>
-
-//             {/* Sign In Form */}
-//             <div className={`w-full bg-white rounded-3xl p-8 shadow-xl transform transition-transform duration-500 ease-in-out ${isSignIn ? 'scale-100' : 'scale-0'} absolute top-8 left-8`}>
-//               <div className="space-y-5">
-//                 <input 
-//                   type="text" 
-//                   placeholder="Username"
-//                   className="w-full px-4 py-3 bg-gray-100 rounded-lg text-gray-600 placeholder-gray-500 focus:outline-none"
-//                 />
-//                 <input 
-//                   type="password" 
-//                   placeholder="Password"
-//                   className="w-full px-4 py-3 bg-gray-100 rounded-lg text-gray-600 placeholder-gray-500 focus:outline-none"
-//                 />
-//                 <button className="w-full py-3 rounded-lg bg-emerald-500 text-white text-lg font-semibold hover:bg-emerald-600 transition-colors">
-//                   Sign in
-//                 </button>
-//                 <p className="text-center">
-//                   <button className="text-sm font-semibold text-emerald-500 hover:text-emerald-600">
-//                     Forgot password?
-//                   </button>
-//                 </p>
-//                 <p className="text-center text-sm text-gray-600">
-//                   Don't have an account?{' '}
-//                   <button onClick={toggle} className="font-semibold text-emerald-500 hover:text-emerald-600">
-//                     Sign up here
-//                   </button>
-//                 </p>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Right side with welcome text */}
-//         <div className="w-[65%] flex items-center justify-center">
-//           <div className={`text-center text-white transform transition-transform duration-1000 ${isSignIn ? 'translate-x-0' : '-translate-x-full'}`}>
-//             <h2 className="text-6xl font-extrabold whitespace-nowrap">
-//               {isSignIn ? 'Welcome Back' : 'Join with us'}
-//             </h2>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AuthForm;

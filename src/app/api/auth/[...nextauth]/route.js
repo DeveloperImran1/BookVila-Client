@@ -56,9 +56,9 @@ console.log("userInfo", userInfo, "currentUser", currentUser)
             const { email, name, image } = user;
 
 
+console.log("user is ", user, "account is", account, "profile is", profile)
 
-
-            if (account.provider === 'google' || account.provider === 'facebook') {
+            if (account?.provider === 'google' || account?.provider === 'facebook') {
                 try {
                     console.log("Google or facebood user info is", user, "Account is ", account, "profile is ", profile)
 
@@ -85,26 +85,22 @@ console.log("userInfo", userInfo, "currentUser", currentUser)
         },
         async jwt({ token, user }) {
             if (user) {
-                console.log("token is", token, "user is", user)
-                token.id = user?.user?._id;
-                token.name = user?.user?.name;
-                token.email = user?.user?.email;
-                token.photo = user?.user?.photo;
+                console.log("Assigning user to token:", user);
+                token.id = user.id || user.sub; // Use `sub` for Google users
+                token.name = user.name;
+                token.email = user.email;
+                token.photo = user.image; // Corrected property
             }
             return token;
         },
         async session({ session, token }) {
-            console.log("token is", token, "settion is", session)   // settion is {
-                // user: { name: undefined, email: undefined, image: undefined },
-                // expires: '2024-12-10T11:23:54.046Z'
-            //   }
-
+            console.log("Populating session with token data:", token);
             session.user.id = token.id;
             session.user.name = token.name;
             session.user.email = token.email;
-            session.user.photo = token.photo;
+            session.user.image = token.photo; // Adjusted to match `photo`
             return session;
-        }
+        },
     },
 
     pages: {

@@ -13,6 +13,7 @@ import { FiLogOut } from 'react-icons/fi';
 
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import Swal from 'sweetalert2';
+import useAuth from '@/hooks/useAuth';
 
 const Sidebar = () => {
     const [show, setShow] = useState(false)
@@ -20,6 +21,7 @@ const Sidebar = () => {
     const [books, setBooks] = useState(false)
     const [bookWriters, setBookWriters] = useState(false)
     const [bookPublications, setBookPublications] = useState(false)
+    const { data, isLoading, refetch, isPending } = useAuth();
 
     const session = useSession();
     const user = session?.data?.user;
@@ -39,7 +41,7 @@ const Sidebar = () => {
             <div className="flex flex-col bg-white pt-[10px] pb-[50px] rounded-md justify-between items-center">
                 <div>
                     <Image height={676} width={1200}
-                        src={user?.photo || "https://i.postimg.cc/xTmfVLXn/download-black-male-user-profile-icon-png-701751695035033bwdeymrpov.png"}
+                        src={data?.photo || "https://i.postimg.cc/xTmfVLXn/download-black-male-user-profile-icon-png-701751695035033bwdeymrpov.png"}
                         className="w-[100px] h-[100px] scale-100 text-white transition-all duration-200 hover:scale-110 rounded-full border-2 border-bg-gray p-1"
                         alt="logo"
                     />
