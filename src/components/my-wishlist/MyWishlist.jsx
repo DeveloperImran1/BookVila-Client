@@ -21,13 +21,7 @@ const MyWishlist = () => {
     return price - (price * discountPercentage) / 100;
   }
 
-  // const { data, refetch, isLoading } = useQuery({
-  //     queryKey: ['wishlist', email],
-  //     queryFn: async () => {
-  //         const result = await axiosPublic.get(`/getMyFavorutes/${email}`)
-  //         return result?.data;
-  //     }
-  // })
+
 
   useEffect(() => {
     const res = favoruteBookGet()
@@ -36,19 +30,6 @@ const MyWishlist = () => {
 
   console.log("My wishlist is", data)
 
-  // // add add to cart
-  // const handleDeleteWishlist = async (id) => {
-  //   const result = await axiosPublic.delete(`/deleteFavoruteBook/${id}`);
-  //   console.log(result)
-  //   if (result?.data?.deletedCount) {
-  //     toast.success('Successfully deleted')
-  //     refetch()
-  //   }
-  //   else {
-  //     toast.error('Something went wrong😢')
-
-  //   }
-  // }
 
   // add add to cart
   const handleDeleteWishlist = async (book) => {
@@ -59,28 +40,6 @@ const MyWishlist = () => {
     setData(res)
   }
 
-  // // add add to cart
-  // const handleAddtoCart = async (deletedId, book) => {
-  //   const result = await axiosPublic.get(`/getMyAddToCart/${session?.data?.user?.email}`);
-  //   const cartArr = result?.data?.map(singleBook => singleBook?.books?._id)
-  //   if (cartArr?.includes(book?._id)) {
-  //     return toast.error('You have already added 😍')
-  //   }
-  //   const obj = { userEmail: session?.data?.user?.email, books: book }
-  //   const res = await axiosPublic.post('/addToCartBook', obj)
-  //   if (res?.status === 200) {
-  //     const result = await axiosPublic.delete(`/deleteFavoruteBook/${deletedId}`);
-  //     if (result?.data?.deletedCount) {
-  //       toast.success('Successfully Added Your Cart😍')
-  //       refetch()
-  //     }
-
-  //   }
-  //   else {
-  //     toast.error('Something went wrong😢')
-
-  //   }
-  // }
 
   
 
@@ -89,17 +48,6 @@ const MyWishlist = () => {
 
     const obj = { userEmail: session?.data?.user?.email || 'demoEmail@gmail.com', books: book }
     setCartBook(obj)
-
-    // //delete in favorute list
-    // const books = favoruteBookGet();
-    // const currentBook = books.filter(b => b?.books?._id !== book?.books?._id);
-    // const stringBook = JSON.stringify(currentBook);
-    // localStorage.setItem('favoruteBook', stringBook);
-
-    // // refetch er kaj korbe 
-    // const res = favoruteBookGet()
-    // setData(res)
-   
   }
 
 

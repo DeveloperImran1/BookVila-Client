@@ -83,24 +83,40 @@ console.log("user is ", user, "account is", account, "profile is", profile)
 
             return true; // Allow normal sign-in for credentials
         },
-        async jwt({ token, user }) {
+        async jwt({ token, user, account }) {
+            console.log("JWT Callback - token:", token, "user:", user, "account:", account);
+    
+            // If the user exists (only set on first login)
             if (user) {
-                console.log("Assigning user to token:", user);
-                token.id = user.id || user.sub; // Use `sub` for Google users
-                token.name = user.name;
-                token.email = user.email;
-                token.photo = user.image; // Corrected property
+                if (account?.provider === 'google' || account?.provider === 'facebook') {
+                    // For Google or Facebook logins
+                    token.id = user.sub; // `sub` is the unique identifier for social logins
+                    token.name = user.name;
+                    token.email = user.email;
+                    token.photo = user.picture; // Use `picture` for Google/Facebook image
+                } else {
+                    // For email/password logins
+                    token.id = user.user._id;
+                    token.name = user.user.name;
+                    token.email = user.user.email;
+                    token.photo = user.user.photo;
+                }
             }
+    
             return token;
         },
+    
         async session({ session, token }) {
-            console.log("Populating session with token data:", token);
+            console.log("Session Callback - token:", token, "session:", session);
+    
+            // Populate the session with token data
             session.user.id = token.id;
             session.user.name = token.name;
             session.user.email = token.email;
-            session.user.image = token.photo; // Adjusted to match `photo`
+            session.user.photo = token.photo;
+    
             return session;
-        },
+        }
     },
 
     pages: {
@@ -111,3 +127,5 @@ console.log("user is ", user, "account is", account, "profile is", profile)
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
+
+

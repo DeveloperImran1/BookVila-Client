@@ -9,11 +9,11 @@ import 'swiper/css/pagination';
 // import { Button, Drawer, DrawerAction, DrawerContent, Skeleton, SkeletonLine } from 'keep-react'
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
-import { FiLogIn } from 'react-icons/fi';
-import { AiOutlinePhone } from 'react-icons/ai';
+import { FiLogIn, FiUsers } from 'react-icons/fi';
+import { AiOutlineBook, AiOutlinePhone } from 'react-icons/ai';
 import Image from "next/image";
 import Link from "next/link";
-import { FaUser, FaClipboardList, FaHeart, FaStar, FaSignOutAlt, FaInfoCircle, FaPhone } from 'react-icons/fa';
+import { FaUser, FaClipboardList, FaHeart, FaStar, FaSignOutAlt, FaInfoCircle, FaPhone, FaShoppingCart } from 'react-icons/fa';
 import { Button, Drawer, DrawerAction, DrawerContent, Skeleton, SkeletonLine } from 'keep-react'
 import { signOut, useSession } from "next-auth/react";
 import { IoCartSharp } from "react-icons/io5";
@@ -36,15 +36,15 @@ const Navbar = () => {
     console.log("auth valu is", auth)
     console.log(session)
     const router = useRouter();
-    const handleLogOut = async() => {
-       await signOut()
+    const handleLogOut = async () => {
+        await signOut()
         Swal.fire({
             position: "center",
             icon: "success",
             title: "Successfully Log Out",
             showConfirmButton: false,
             timer: 1500
-        }).then(()=> router.push("/login"))
+        }).then(() => router.push("/login"))
     }
 
     const boiShomogro = [
@@ -305,7 +305,7 @@ const Navbar = () => {
                                         <AiOutlinePhone></AiOutlinePhone>
                                     </Link>
                                     {
-                                        user ? <div onClick={()=> handleLogOut()} className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}>
+                                        user ? <div onClick={() => handleLogOut()} className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}>
                                             <p>Logout</p>
                                             <FiLogIn></FiLogIn>
                                         </div> : <div className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
@@ -369,7 +369,7 @@ const Navbar = () => {
                                         <FaHeart size={18}></FaHeart>
                                         <li className=" ">Wishlist</li>
                                     </Link>
-                                    <Link href={"/my-reviews"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                    <Link href={"/my-review"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                         <FaStar size={18}></FaStar>
                                         <li className=" ">My Reviews</li>
                                     </Link>
@@ -379,8 +379,29 @@ const Navbar = () => {
                                     </Link>
 
                                     {
+                                        auth?.data?.role === "admin" && <>
+                                            <Link href={"/all-user"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                <FiUsers size={18}></FiUsers>
+                                                <li className=" ">All User</li>
+                                            </Link>
+
+
+                                            <Link href={"/all-order"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                <FaShoppingCart size={18}></FaShoppingCart>
+                                                <li className=" ">Orders</li>
+                                            </Link>
+
+                                            <Link href={"/"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                <AiOutlineBook size={18}></AiOutlineBook>
+                                                <li className=" ">Add Boo</li>
+                                            </Link>
+
+                                        </>
+                                    }
+
+                                    {
                                         user ? <>
-                                            <div onClick={()=> handleLogOut()} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                            <div onClick={() => handleLogOut()} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                                 <FaSignOutAlt size={18}></FaSignOutAlt>
                                                 <li className=" ">Logout</li>
                                             </div>

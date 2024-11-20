@@ -1,5 +1,5 @@
 "use client"
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -14,6 +14,10 @@ import { FiLogOut } from 'react-icons/fi';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import Swal from 'sweetalert2';
 import useAuth from '@/hooks/useAuth';
+import { AiOutlineBook } from 'react-icons/ai';
+import { FiUsers } from 'react-icons/fi';
+import { FaShoppingCart } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
 const Sidebar = () => {
     const [show, setShow] = useState(false)
@@ -25,14 +29,19 @@ const Sidebar = () => {
 
     const session = useSession();
     const user = session?.data?.user;
-
+    const router = useRouter();
     console.log(session)
-    const handleLogOut = () => {
-        signOut()
-        Swal("Logout", "You have Login Out", "success");
-        navigate("/login")
-    }
 
+    const handleLogOut = async () => {
+        await signOut()
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Successfully Log Out",
+            showConfirmButton: false,
+            timer: 1500
+        }).then(() => router.push("/login"))
+    }
 
     return (
         <div
@@ -48,22 +57,38 @@ const Sidebar = () => {
                 </div>
                 <hr className="border-[1px] my-[18px] w-full" />
 
-                <Link href="" className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`} >
+                <Link href="/my-profile" className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`} >
                     <AiOutlineUser size={18} className="hover:text-bg-gray"></AiOutlineUser>
                     <p>My Profile</p>
                 </Link>
-                <Link href="" className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`} >
+                <Link href="/my-order" className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`} >
                     <BsBag size={18} className="hover:text-bg-gray"></BsBag>
                     <p>My Order</p>
                 </Link>
-                <Link href="" className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`} >
+                <Link href="/wishlist" className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`} >
                     <AiOutlineHeart size={18} className="hover:text-bg-gray"></AiOutlineHeart>
                     <p>Wishlist</p>
                 </Link>
-                <Link href="" className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`} >
+                <Link href="/my-review" className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`} >
                     <MdRateReview size={18} className="hover:text-bg-gray"></MdRateReview>
                     <p>My Reviews</p>
                 </Link>
+                {
+                    data?.role === "admin" && <>
+                        <Link href="/all-user" className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`} >
+                            <FiUsers size={18} className="hover:text-bg-gray"></FiUsers>
+                            <p>All User</p>
+                        </Link>
+                        <Link href="/all-order" className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`} >
+                            <FaShoppingCart size={18} className="hover:text-bg-gray"></FaShoppingCart>
+                            <p>Orders</p>
+                        </Link>
+                        <Link href="/" className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`} >
+                            <AiOutlineBook size={18} className="hover:text-bg-gray"></AiOutlineBook>
+                            <p>Add Book</p>
+                        </Link>
+                    </>
+                }
 
             </div>
 

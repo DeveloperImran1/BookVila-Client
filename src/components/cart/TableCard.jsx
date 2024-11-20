@@ -15,16 +15,6 @@ const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, se
     const [singleBookTotalPrice, setSingleBookTotalPrice] = useState(discountedPrice);
     const axiosPublic = useAxiosPublic()
 
-    // const handleDelete = async()=> {
-    //     const result = await axiosPublic.delete(`/deleteCartBook/${item?._id}`)
-    //     if(result?.data?.deletedCount){
-    //         refetch()
-    //         return toast.success("Removed this book from add to cart 😊")
-    //     }
-    //     else{
-    //         return toast.error("Something went wrong 😢")
-    //     }
-    // }
 
     const handleDelete = async()=> {
         removeCartBook(item)

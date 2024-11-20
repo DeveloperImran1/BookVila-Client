@@ -18,7 +18,7 @@ const SocialSignIn = () => {
         Swal.fire({
             position: "center",
             icon: "success",
-            title: "Welcome to EventSphere!",
+            title: "Welcome to Book Vila!",
             showConfirmButton: false,
             timer: 1500
         }).then(() => router.push("/"));

@@ -1,13 +1,16 @@
 "use client"
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+
 
 // import required modules
-import { Pagination } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+
+
 import { FaSearch } from "react-icons/fa";
 
 
@@ -200,7 +203,19 @@ const Banner = () => {
                 </div>
 
 
-                <Swiper pagination={true} modules={[Pagination]} className="mySwiper h-[250px] md:h-[340px] lg:h-[430px] w-full md:w-[70%] lg:w-[80%] ">
+                <Swiper 
+                //  spaceBetween={30}
+                 centeredSlides={true}
+                 autoplay={{
+                   delay: 2500,
+                   disableOnInteraction: false,
+                 }}
+                //  pagination={{
+                //    clickable: true,
+                //  }}
+                //  navigation={true}
+                 modules={[Autoplay]}
+                 className="mySwiper h-[250px] md:h-[340px] lg:h-[430px] w-full md:w-[70%] lg:w-[80%] ">
 
                     <SwiperSlide className=" rounded-md  ">
                         <Image className='h-full w-full' height={676} width={1200} src="https://i.postimg.cc/RhstS7fm/464131621-1724559988082883-6219848670324800565-n.jpg" alt="Banner" ></Image>
