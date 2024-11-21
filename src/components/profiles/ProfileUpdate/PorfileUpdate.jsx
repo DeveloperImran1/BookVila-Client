@@ -13,6 +13,7 @@ import { TbFidgetSpinner } from 'react-icons/tb';
 import { useSession } from 'next-auth/react';
 import useAxiosPublic from '@/hooks/useAxiosPublic';
 import { useQuery } from '@tanstack/react-query';
+import Loading from '@/components/shared/Loading';
 function ProfileUpdate() {
   const { data, isLoading, refetch, isPending } = useAuth();
   const [images, setImages] = useState({});
@@ -104,7 +105,7 @@ function ProfileUpdate() {
 
 
   if (isPending) {
-    return <p>Loading ......</p>
+    return <Loading></Loading>
   }
   return (
     <Tabs   >

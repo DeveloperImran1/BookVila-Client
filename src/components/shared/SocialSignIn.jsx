@@ -18,7 +18,7 @@ const SocialSignIn = () => {
         Swal.fire({
             position: "center",
             icon: "success",
-            title: "Welcome to EventSphere!",
+            title: "Welcome to Book Vila!",
             showConfirmButton: false,
             timer: 1500
         }).then(() => router.push("/"));
@@ -73,13 +73,7 @@ const SocialSignIn = () => {
                     <FaFacebook className="mr-2 w-5 h-5 text-blue-600" /> Facebook
                 </button>
                 
-                {/* Apple Sign Up Button */}
-                <button
-                    onClick={() => handleSocialLogin('google')}
-                    className="border w-full md:w-auto border-gray-300 hover:bg-slate-200 rounded-md px-4 py-2 flex items-center justify-center transition-all duration-200"
-                >
-                    <FaApple className="mr-2 w-5 h-5" /> Apple
-                </button>
+
             </div>
         </div>
     );
