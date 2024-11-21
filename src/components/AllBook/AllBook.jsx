@@ -5,6 +5,12 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { Range } from "react-range";
 import BooksCard from "../books/BookCard";
 import { useQuery } from "@tanstack/react-query";
+import Loading from "../shared/Loading";
+import BookCardSkelletion from "../books/BookCardSkelletion";
+import Image from "next/image";
+import { Button, Drawer, DrawerAction, DrawerContent, Skeleton, SkeletonLine } from 'keep-react'
+import { IoReorderThree } from "react-icons/io5";
+import { CiFilter } from "react-icons/ci";
 
 const MIN = 0;
 const MAX = 999;
@@ -278,7 +284,7 @@ const AllBook = () => {
     keepPreviousData: true,
   });
 
-  if (isLoading) return <p>Loading books...</p>;
+  // if (isLoading) return <Loading></Loading>
   if (error) return <p>Error loading books: {error.message}</p>;
 
   // Filter authors based on search input
@@ -318,199 +324,384 @@ const AllBook = () => {
     if (page > 1) setPage(page - 1);
   };
   return (
-    <div className="container mx-auto">
-      <h1>All Books</h1>
-      {/* Search Input */}
-      <div className="text-center">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by book name"
-          className="border-2 mb-4 px-5 py-2 rounded-lg"
-        />
-      </div>
-      <div className="flex gap-8">
-        <div className="w-2/12 flex flex-col gap-6">
-          {/* Filter Checkboxes */}
-          <div>
-            <h3>Authors</h3>
-            <input
-              type="text"
-              placeholder="Search Authors"
-              value={searchAuthorQuery}
-              onChange={handleSearchAuthorChange} // Update search query
-              className="mb-2 p-2 border border-gray-300"
-            />
+    <div className="container mx-auto ">
 
-            {/* Scrollable container for authors */}
-            <div className="flex flex-col max-h-[200px] overflow-y-auto">
-              {filteredAuthors.map((author) => (
-                <label key={author.bengali}>
-                  <input
-                    type="checkbox"
-                    onChange={() =>
-                      handleCheckboxChange(setSelectedAuthors, author.bengali)
-                    }
-                    checked={selectedAuthors.includes(author.bengali)}
-                  />
-                  {author.bengali}
-                </label>
-              ))}
-            </div>
+      <div className="">
+
+
+        <Drawer className="text-black border-2 mt-9 ">
+          <DrawerAction asChild>
+          <div className="flex justify-end">
+          <p className="bg-gray-300 hover:text-primary w-[37px] p-1 mt-4 mr-2 rounded-md lg:hidden">
+              <CiFilter size={28} />
+            </p>
           </div>
+          </DrawerAction>
 
-          {/* categories filtering  */}
-          <div>
-            <h3>Categories</h3>
-            <input
-              type="text"
-              placeholder="Search Category"
-              value={searchCategoriesQuery}
-              onChange={handleSearchCategoriesChange} // Update search query
-              className="mb-2 p-2 border border-gray-300"
-            />
-
-            {/* Scrollable container for authors */}
-            <div className="flex flex-col max-h-[200px] overflow-y-auto">
-              {filteredCategories.map((category) => (
-                <label key={category.bengali}>
+          <DrawerContent
+            position="left"
+            className="w-full max-w-[40%] md:max-w-full flex flex-col justify-between  h-[100vh] overflow-scroll"
+          >
+            <div className="flex flex-col bg-white pt-[10px] pb-[50px] rounded-md justify-between items-center">
+              <div className="flex flex-col gap-6 mt-[20px] md:mt-[33px] lg:mt-11">
+                {/* Filter Checkboxes */}
+                <div className="bg-white p-4 rounded">
+                  <h3 className="font-semibold">Authors</h3>
                   <input
-                    type="checkbox"
-                    onChange={() =>
-                      handleCheckboxChange(
-                        setSelectedCategories,
-                        category.bengali
-                      )
-                    }
-                    checked={selectedCategories.includes(category.bengali)} // Update this line
+                    type="text"
+                    placeholder="Search Authors"
+                    value={searchAuthorQuery}
+                    onChange={handleSearchAuthorChange} // Update search query
+                    className="mb-2 w-full p-2 border border-gray-300"
                   />
-                  {category.bengali}
-                </label>
-              ))}
-            </div>
-          </div>
 
-          {/* subject filtering  */}
-          <div>
-            <h3>Subjects</h3>
-            {/* Author Search Input */}
-            <input
-              type="text"
-              placeholder="Search Subjects"
-              value={searchSubjectsQuery}
-              onChange={handleSearchSubjectsChange} // Update search query
-              className="mb-2 p-2 border border-gray-300"
-            />
-
-            {/* Scrollable container for authors */}
-            <div className="flex flex-col max-h-[200px] overflow-y-auto">
-              {filteredSubjects.map((subject) => (
-                <label key={subject.bengali}>
-                  <input
-                    type="checkbox"
-                    onChange={() =>
-                      handleCheckboxChange(setSelectedSubjects, subject.bengali)
-                    }
-                    checked={selectedSubjects.includes(subject.bengali)}
-                  />
-                  {subject.bengali}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* filtering price */}
-          <div>
-            <h2>Price Range Filter</h2>
-            <Range
-              values={priceRange}
-              step={10}
-              min={MIN}
-              max={MAX}
-              onChange={handlePriceChange}
-              draggableTrack
-              renderTrack={({ props, children }) => (
-                <div
-                  {...props}
-                  style={{
-                    height: "6px",
-                    width: "70%",
-                    backgroundColor: "#ccc",
-                    margin: "50px 0",
-                    position: "relative",
-                  }}
-                >
-                  {children}
+                  {/* Scrollable container for authors */}
+                  <div className="flex flex-col max-h-[200px] overflow-y-auto">
+                    {filteredAuthors.map((author) => (
+                      <label key={author.bengali}>
+                        <input
+                          type="checkbox"
+                          onChange={() =>
+                            handleCheckboxChange(setSelectedAuthors, author.bengali)
+                          }
+                          checked={selectedAuthors.includes(author.bengali)}
+                        />
+                        {author.bengali}
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              )}
-              renderThumb={({ props, index }) => (
-                <div
-                  {...props}
-                  style={{
-                    height: "30px",
-                    width: "30px",
-                    backgroundColor: "#999",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative",
-                    marginTop: "-30px", // নতুন এই padding যোগ করা হয়েছে
-                  }}
-                >
-                  <span
+
+                {/* categories filtering  */}
+                <div className="bg-white p-4 rounded">
+                  <h3 className="font-semibold">Categories</h3>
+                  <input
+                    type="text"
+                    placeholder="Search Category"
+                    value={searchCategoriesQuery}
+                    onChange={handleSearchCategoriesChange} // Update search query
+                    className="mb-2 w-full p-2 border border-gray-300"
+                  />
+
+                  {/* Scrollable container for authors */}
+                  <div className="flex flex-col max-h-[200px] overflow-y-auto">
+                    {filteredCategories.map((category) => (
+                      <label key={category.bengali}>
+                        <input
+                          type="checkbox"
+                          onChange={() =>
+                            handleCheckboxChange(
+                              setSelectedCategories,
+                              category.bengali
+                            )
+                          }
+                          checked={selectedCategories.includes(category.bengali)} // Update this line
+                        />
+                        {category.bengali}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* subject filtering  */}
+                <div className="bg-white p-4 rounded">
+                  <h3 className="font-semibold">Subjects</h3>
+                  {/* Author Search Input */}
+                  <input
+                    type="text"
+                    placeholder="Search Subjects"
+                    value={searchSubjectsQuery}
+                    onChange={handleSearchSubjectsChange} // Update search query
+                    className="mb-2 w-full p-2 border border-gray-300"
+                  />
+
+                  {/* Scrollable container for authors */}
+                  <div className="flex flex-col max-h-[200px] overflow-y-auto">
+                    {filteredSubjects.map((subject) => (
+                      <label key={subject.bengali}>
+                        <input
+                          type="checkbox"
+                          onChange={() =>
+                            handleCheckboxChange(setSelectedSubjects, subject.bengali)
+                          }
+                          checked={selectedSubjects.includes(subject.bengali)}
+                        />
+                        {subject.bengali}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* filtering price */}
+                <div className="bg-white p-4 rounded">
+                  <h2 className="font-semibold">Price Range Filter</h2>
+                  <Range
+                    values={priceRange}
+                    step={10}
+                    min={MIN}
+                    max={MAX}
+                    onChange={handlePriceChange}
+                    draggableTrack
+                    renderTrack={({ props, children }) => (
+                      <div
+                        {...props}
+                        style={{
+                          height: "6px",
+                          width: "90%",
+                          backgroundColor: "#ccc",
+                          margin: "50px 0",
+                          position: "relative",
+                        }}
+                      >
+                        {children}
+                      </div>
+                    )}
+                    renderThumb={({ props, index }) => (
+                      <div
+                        {...props}
+                        style={{
+                          height: "30px",
+                          width: "30px",
+                          backgroundColor: "#999",
+                          borderRadius: "50%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          position: "relative",
+                          marginTop: "-30px", // নতুন এই padding যোগ করা হয়েছে
+                        }}
+                      >
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: "50%",
+                            transform: "translateY(-50%)", // Center-aligns the text vertically
+                            fontSize: "12px",
+                            color: "#fff",
+                          }}
+                        >
+                          {priceRange[index]}
+                        </span>
+                      </div>
+                    )}
+                  />
+                </div>
+              </div>
+
+            </div>
+
+
+
+          </DrawerContent>
+        </Drawer>
+
+
+        <div className="flex gap-5 ">
+          <div className="hidden lg:flex w-[20%]  flex-col gap-6 mt-[20px] md:mt-[33px] lg:mt-11">
+            {/* Filter Checkboxes */}
+            <div className="bg-white p-4 rounded">
+              <h3 className="font-semibold">Authors</h3>
+              <input
+                type="text"
+                placeholder="Search Authors"
+                value={searchAuthorQuery}
+                onChange={handleSearchAuthorChange} // Update search query
+                className="mb-2 w-full p-2 border border-gray-300"
+              />
+
+              {/* Scrollable container for authors */}
+              <div className="flex flex-col max-h-[200px] overflow-y-auto">
+                {filteredAuthors.map((author) => (
+                  <label key={author.bengali}>
+                    <input
+                      type="checkbox"
+                      onChange={() =>
+                        handleCheckboxChange(setSelectedAuthors, author.bengali)
+                      }
+                      checked={selectedAuthors.includes(author.bengali)}
+                    />
+                    {author.bengali}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* categories filtering  */}
+            <div className="bg-white p-4 rounded">
+              <h3 className="font-semibold">Categories</h3>
+              <input
+                type="text"
+                placeholder="Search Category"
+                value={searchCategoriesQuery}
+                onChange={handleSearchCategoriesChange} // Update search query
+                className="mb-2 w-full p-2 border border-gray-300"
+              />
+
+              {/* Scrollable container for authors */}
+              <div className="flex flex-col max-h-[200px] overflow-y-auto">
+                {filteredCategories.map((category) => (
+                  <label key={category.bengali}>
+                    <input
+                      type="checkbox"
+                      onChange={() =>
+                        handleCheckboxChange(
+                          setSelectedCategories,
+                          category.bengali
+                        )
+                      }
+                      checked={selectedCategories.includes(category.bengali)} // Update this line
+                    />
+                    {category.bengali}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* subject filtering  */}
+            <div className="bg-white p-4 rounded">
+              <h3 className="font-semibold">Subjects</h3>
+              {/* Author Search Input */}
+              <input
+                type="text"
+                placeholder="Search Subjects"
+                value={searchSubjectsQuery}
+                onChange={handleSearchSubjectsChange} // Update search query
+                className="mb-2 w-full p-2 border border-gray-300"
+              />
+
+              {/* Scrollable container for authors */}
+              <div className="flex flex-col max-h-[200px] overflow-y-auto">
+                {filteredSubjects.map((subject) => (
+                  <label key={subject.bengali}>
+                    <input
+                      type="checkbox"
+                      onChange={() =>
+                        handleCheckboxChange(setSelectedSubjects, subject.bengali)
+                      }
+                      checked={selectedSubjects.includes(subject.bengali)}
+                    />
+                    {subject.bengali}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* filtering price */}
+            <div className="bg-white p-4 rounded">
+              <h2 className="font-semibold">Price Range Filter</h2>
+              <Range
+                values={priceRange}
+                step={10}
+                min={MIN}
+                max={MAX}
+                onChange={handlePriceChange}
+                draggableTrack
+                renderTrack={({ props, children }) => (
+                  <div
+                    {...props}
                     style={{
-                      position: "absolute",
-                      top: "50%",
-                      transform: "translateY(-50%)", // Center-aligns the text vertically
-                      fontSize: "12px",
-                      color: "#fff",
+                      height: "6px",
+                      width: "90%",
+                      backgroundColor: "#ccc",
+                      margin: "50px 0",
+                      position: "relative",
                     }}
                   >
-                    {priceRange[index]}
-                  </span>
+                    {children}
+                  </div>
+                )}
+                renderThumb={({ props, index }) => (
+                  <div
+                    {...props}
+                    style={{
+                      height: "30px",
+                      width: "30px",
+                      backgroundColor: "#999",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      position: "relative",
+                      marginTop: "-30px", // নতুন এই padding যোগ করা হয়েছে
+                    }}
+                  >
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        transform: "translateY(-50%)", // Center-aligns the text vertically
+                        fontSize: "12px",
+                        color: "#fff",
+                      }}
+                    >
+                      {priceRange[index]}
+                    </span>
+                  </div>
+                )}
+              />
+            </div>
+          </div>
+
+          {/* Book List */}
+          <div className="w-full lg:w-[80%] bg-white p-5 mt-[20px] md:mt-[33px] lg:mt-11">
+            <div className="flex justify-between items-start">
+              <p className="text-[17px] font-semibold text-gray-600">Total Books: {books?.totalBooks || 0}</p>
+              {/* Search Input */}
+              <div className="text-center flex justify-center items-center">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search by book name"
+                  className="border-2 w-full mb-4 px-5 py-2 rounded-lg"
+                />
+              </div>
+            </div>
+
+            {
+              isLoading ? <div className="container bg-white">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
+                  {
+                    [1, 2, 3, 4].map((card, index) => <BookCardSkelletion key={index}></BookCardSkelletion>)
+                  }
                 </div>
-              )}
-            />
+              </div> : books?.books?.length < 1 ? <div className="flex flex-col items-center justify-center bg-white ">
+                <Image className="h-[300px] w-[300px] " height={676} width={1200} src="https://i.postimg.cc/PJX8X2QK/46524b382087d63a209441765be9eb5b-removebg-preview.png" alt="gift" />
+                <h3 className="text-[20px] font-semibold text-gray-500 mt-5 mb-8 ml-3">Your Filtering Book Not Available 🤔</h3>
+              </div> : <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
+                {
+                  books?.books?.map((book) => (
+                    <BooksCard key={book._id} book={book} />
+                  ))}
+              </ul>
+            }
+
+
           </div>
         </div>
+        {/* Pagination */}
 
-        {/* Book List */}
-        <div className="w-10/12">
-           
-            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
-              {books?.books?.map((book) => (
-                <BooksCard key={book._id} book={book} />
-              ))}
-            </ul>
-          
+        <div className="flex justify-center items-center mt-5 ">
+          <button
+            onClick={handlePrevPage}
+            disabled={page === 1}
+            className={`px-4 py-2 border ${page === 1 ? "bg-gray-200" : "bg-blue-500 text-white"
+              } cursor-pointer`}
+          >
+            Previous
+          </button>
+          <span className="px-4 py-2">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={page === totalPages}
+            className={`px-4 py-2 border ${page === totalPages ? "bg-gray-200" : "bg-blue-500 text-white"
+              } cursor-pointer`}
+          >
+            Next
+          </button>
         </div>
-      </div>
-      {/* Pagination */}
-
-      <div className="flex justify-center items-center mt-5">
-        <button
-          onClick={handlePrevPage}
-          disabled={page === 1}
-          className={`px-4 py-2 border ${
-            page === 1 ? "bg-gray-200" : "bg-blue-500 text-white"
-          }`}
-        >
-          Previous
-        </button>
-        <span className="px-4 py-2">
-          Page {page} of {totalPages}
-        </span>
-        <button
-          onClick={handleNextPage}
-          disabled={page === totalPages}
-          className={`px-4 py-2 border ${
-            page === totalPages ? "bg-gray-200" : "bg-blue-500 text-white"
-          }`}
-        >
-          Next
-        </button>
       </div>
     </div>
   );

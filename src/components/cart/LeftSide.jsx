@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import TableCard from "./TableCard";
 import { useSession } from "next-auth/react";
 import { cartBookGet } from "@/hooks/localStorage";
+import DataNotFound from "../shared/DataNotFound";
 
 const LeftSide = () => {
     const axiosPublic = useAxiosPublic();
@@ -27,8 +28,8 @@ const LeftSide = () => {
     const [data, setData] = useState([]);
     const session = useSession();
 
-    useEffect(()=> {
-        const res =cartBookGet()
+    useEffect(() => {
+        const res = cartBookGet()
         setData(res)
     }, [])
     console.log(data)
@@ -36,40 +37,40 @@ const LeftSide = () => {
         if (data) {
             let initialTotalBooks = 0;
             let initialTotalPrice = 0;
-    
+
             data.forEach((item) => {
                 const discountedPrice = calculateDiscountedPrice(item.books.price, item.books.discount);
                 initialTotalBooks += 1; // Assuming each item is 1 book initially
                 initialTotalPrice += discountedPrice;
             });
-    
+
             setTotalBook(initialTotalBooks);
             setTotalPrice(initialTotalPrice);
-      
+
         }
     }, [data]);
 
-    useEffect(()=> {
-        if(offerTotal > 1500){
+    useEffect(() => {
+        if (offerTotal > 1500) {
             setGrandTotal(totalPrice)
             setOfferTotal(totalPrice)
-        }else{
+        } else {
             setGrandTotal(totalPrice + delivery)
             setOfferTotal(totalPrice + delivery)
         }
-      
+
     }, [totalPrice, offerTotal])
-    
+
     // Calculate discounted price
     function calculateDiscountedPrice(price, discountPercentage) {
         return Math.round(price - (price * discountPercentage) / 100);
     }
 
-    const refetch = ()=> {
+    const refetch = () => {
         const res = cartBookGet()
         setData(res)
     }
-  
+
     // const handleOrder = async ()=> {
     //     const result = await axiosPublic.get(`/getMyAddToCart/${session?.data?.user?.email}`)
     //     return result?.data;
@@ -85,6 +86,9 @@ const LeftSide = () => {
                         <div className='bg-white w-full p-4 sm:p-6 md:p-7 lg:p-10'>
                             <h1 className="text-sm sm:text-xl font-inter font-semibold">My cart</h1>
                             <div className="mt-3 sm:mt-5 md:mt-6 lg:mt-8 overflow-scroll">
+                                {
+                                    data?.length < 1 && <div className="w-full "> <DataNotFound></DataNotFound> </div>
+                                }
                                 <table className='table table-px-0 border-t'>
                                     <tbody>
                                         {data?.map((item) => (
@@ -182,11 +186,11 @@ const LeftSide = () => {
                         <div className="mt-5">
                             <h3 className="font-medium text-sm">Promo code</h3>
                             <div className="mt-4 flex gap-2">
-                                <input onKeyUp={(e)=> {
-                                    if(e.target.value === "NEW YEAR 2025"){
+                                <input onKeyUp={(e) => {
+                                    if (e.target.value === "NEW YEAR 2025") {
                                         setGrandTotal(Math.round(offerTotal - (offerTotal * 10) / 100))
-                                        
-                                    }else{
+
+                                    } else {
                                         setGrandTotal(offerTotal)
                                     }
                                 }} className="min-w-0 w-full pl-4 h-11 border bg-[#f5f5f5] border-[rgb(226,226,226)] outline-none rounded-sm" type="text" />
