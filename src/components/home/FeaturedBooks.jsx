@@ -8,6 +8,7 @@ import Image from "next/image";
 import BooksCard from "../books/BookCard";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import BookCardSkelletion from "../books/BookCardSkelletion";
 
 const FeaturedBooks = () => {
   const [userRating, setUserRating] = useState(3);
@@ -42,7 +43,6 @@ const FeaturedBooks = () => {
   };
 
 
-
   return (
     <div className="container   ">
       <div className="bg-white my-8 p-4 relative">
@@ -72,11 +72,18 @@ const FeaturedBooks = () => {
             },
           }}
         >
-          {featuredBooks?.books?.map((book) => (
-            <SwiperSlide key={book._id}>
-              <BooksCard book={book}></BooksCard>
-            </SwiperSlide>
-          ))}
+          {isLoading ? <div className="container">
+            <div className="w-full mx-auto pl-6 py-4 bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+              {
+                [1, 2, 3, 4].map((card, index) => <BookCardSkelletion key={index}></BookCardSkelletion>)
+              }
+            </div>
+          </div> :
+            featuredBooks?.books?.map((book) => (
+              <SwiperSlide key={book._id}>
+                <BooksCard book={book}></BooksCard>
+              </SwiperSlide>
+            ))}
         </Swiper>
 
         {/* arrow left */}

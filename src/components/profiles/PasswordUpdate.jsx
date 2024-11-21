@@ -28,6 +28,7 @@ const PasswordUpdate = () => {
         if (formData?.newPass !== formData?.confirmPass) {
             return toast.error('Your Confirm Password is wrong😢')
         }
+      try{
         const result = await axiosPublic.put(`/updatePass/${email}`, formData)
         console.log(result)
 
@@ -39,6 +40,10 @@ const PasswordUpdate = () => {
         else {
             return toast.error('Your Credentials was wrong😢')
         }
+      }catch(error){
+        toast.error('Google or Facebook Password not need Updated😢')
+        e.target.reset()
+      }
     };
 
 
