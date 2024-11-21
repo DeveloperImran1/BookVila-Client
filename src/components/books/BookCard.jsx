@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import useMyCartBooks from "@/hooks/useCartBooks";
+import { cartBookGet, favoruteBookGet, setCartBook, setFavoruteBook } from "@/hooks/localStorage";
 
 const BooksCard = ({ book }) => {
   const [bookStatus, setBookStatus] = useState("");
@@ -17,8 +18,10 @@ const BooksCard = ({ book }) => {
   const axiosPublic = useAxiosPublic();
   const session = useSession();
   const [favorutes, setFavorutes] = useState([]);
+  const [favoruteBooks, setFavoruteBooks] = useState([]);
   const [addToCart, setAddToCart] = useState([]);
-  const { data, refetch: addToCartRefetch, isLoading } = useMyCartBooks();
+  const [cartBooks, setCartBooks] = useState([]);
+  const { data } = useMyCartBooks();
 
   // Calculate discounted price
   function calculateDiscountedPrice(price, discountPercentage) {
@@ -47,67 +50,105 @@ const BooksCard = ({ book }) => {
 
   }, [book?.discount, currentDateTime, book])
 
-  const { data: favoruteBooks = [], refetch } = useQuery({
-    queryKey: ["featuredBooks", session?.data?.user?.email, book?._id],
-    queryFn: async () => {
-      const res = await axiosPublic.get(`/getMyFavorutes/${session?.data?.user?.email}`);
-      const favoruteArr = res?.data?.map(singleBook => singleBook?.books?._id)
-      setFavorutes(favoruteArr)
-      return res?.data;
-    }
-  })
-  
+  // const { data: favoruteBooks = [], refetch } = useQuery({
+  //   queryKey: ["featuredBooks", session?.data?.user?.email, book?._id],
+  //   queryFn: async () => {
+  //     const res = await axiosPublic.get(`/getMyFavorutes/${session?.data?.user?.email}`);
+  //     const favoruteArr = res?.data?.map(singleBook => singleBook?.books?._id)
+  //     setFavorutes(favoruteArr)
+  //     return res?.data;
+  //   }
+  // })
+
+  useEffect(() => {
+    const res = favoruteBookGet()
+    const favoruteArr = res?.map(singleBook => singleBook?.books?._id)
+    setFavorutes(favoruteArr)
+    setFavoruteBooks(res)
+  }, [])
+
 
 
   // add favorutes
-  const handleFavoruteAdded = async () => {
-    const result = await axiosPublic.get(`/getMyFavorutes/${session?.data?.user?.email}`);
-    const favoruteArr = result?.data?.map(singleBook => singleBook?.books?._id)
-    if (favoruteArr?.includes(book?._id)) {
-      return toast.error('You have already added 😍')
-    }
-    const obj = { userEmail: session?.data?.user?.email, books: book }
-    const res = await axiosPublic.post('/addFavoruteBook', obj)
-    if (res?.status === 200) {
-      toast.success('Successfully Added Favorutelit❤️')
-      refetch()
-    }
-    else {
-      toast.error('Something went wrong😢')
+  // const handleFavoruteAdded = async () => {
+  //   const result = await axiosPublic.get(`/getMyFavorutes/${session?.data?.user?.email}`);
+  //   const favoruteArr = result?.data?.map(singleBook => singleBook?.books?._id)
+  //   if (favoruteArr?.includes(book?._id)) {
+  //     return toast.error('You have already added 😍')
+  //   }
+  //   const obj = { userEmail: session?.data?.user?.email, books: book }
+  //   const res = await axiosPublic.post('/addFavoruteBook', obj)
+  //   if (res?.status === 200) {
+  //     toast.success('Successfully Added Favorutelit❤️')
+  //     refetch()
+  //   }
+  //   else {
+  //     toast.error('Something went wrong😢')
 
-    }
+  //   }
+  // }
+  const handleFavoruteAdded = async () => {
+    const obj = { userEmail: session?.data?.user?.email || "demoEmail@gmail.com", books: book }
+    setFavoruteBook(obj)
+
+    // refetch er kaj korbe
+    const res = favoruteBookGet()
+    const favoruteArr = res?.map(singleBook => singleBook?.books?._id)
+    setFavorutes(favoruteArr)
+    setFavoruteBooks(res)
   }
 
-  const { data: cartBooks = [], refetch:cartRefetch } = useQuery({
-    queryKey: ["cartBooks", session?.data?.user?.email, book?._id],
-    queryFn: async () => {
-      const res = await axiosPublic.get(`/getMyAddToCart/${session?.data?.user?.email}`);
-      const cartArr = res?.data?.map(singleBook => singleBook?.books?._id)
-      setAddToCart(cartArr)
-      return res?.data;
-    }
-  })
-  
+  // const { data: cartBooks = [], refetch: cartRefetch } = useQuery({
+  //   queryKey: ["cartBooks", session?.data?.user?.email, book?._id],
+  //   queryFn: async () => {
+  //     const res = await axiosPublic.get(`/getMyAddToCart/${session?.data?.user?.email}`);
+  //     const cartArr = res?.data?.map(singleBook => singleBook?.books?._id)
+  //     setAddToCart(cartArr)
+  //     return res?.data;
+  //   }
+  // })
+
+  useEffect(() => {
+    const res = cartBookGet();
+    const cartArr = res?.map(singleBook => singleBook?.books?._id)
+    setAddToCart(cartArr)
+    setCartBooks(res)
+  }, [])
+
+
+  // // add add to cart
+  // const handleAddtoCart = async () => {
+  //   const result = await axiosPublic.get(`/getMyAddToCart/${session?.data?.user?.email}`);
+  //   const cartArr = result?.data?.map(singleBook => singleBook?.books?._id)
+  //   if (cartArr?.includes(book?._id)) {
+  //     return toast.error('You have already added 😍')
+  //   }
+  //   const obj = { userEmail: session?.data?.user?.email, books: book }
+  //   const res = await axiosPublic.post('/addToCartBook', obj)
+  //   if (res?.status === 200) {
+  //     toast.success('Successfully Added Add To Cart')
+  //     addToCartRefetch()
+  //     cartRefetch()
+  //   }
+  //   else {
+  //     toast.error('Something went wrong😢')
+
+  //   }
+  // }
+
 
   // add add to cart
   const handleAddtoCart = async () => {
-    const result = await axiosPublic.get(`/getMyAddToCart/${session?.data?.user?.email}`);
-    const cartArr = result?.data?.map(singleBook => singleBook?.books?._id)
-    if (cartArr?.includes(book?._id)) {
-      return toast.error('You have already added 😍')
-    }
-    const obj = { userEmail: session?.data?.user?.email, books: book }
-    const res = await axiosPublic.post('/addToCartBook', obj)
-    if (res?.status === 200) {
-      toast.success('Successfully Added Add To Cart')
-      addToCartRefetch()
-      cartRefetch()
-    }
-    else {
-      toast.error('Something went wrong😢')
+    const obj = { userEmail: session?.data?.user?.email || 'demoEmail@gmail.com', books: book }
+    setCartBook(obj)
 
-    }
+    // refetch 
+    const res = cartBookGet();
+    const cartArr = res?.map(singleBook => singleBook?.books?._id)
+    setAddToCart(cartArr)
+    setCartBooks(res)
   }
+
 
 
   return (
@@ -161,7 +202,7 @@ const BooksCard = ({ book }) => {
       <div className=" text-gray-600 space-x-2">
         <Link href={`/book/${book?._id}`} className="inline">
           <h1 className="text-[17px] hover:underline mt-2 inline">{book?.bookName[0]}</h1>
-        </Link> 
+        </Link>
         <Link href={`/writer/${book?.authorInfo?.authorID}`} className="inline hover:underline">
           <small>by {book?.authorInfo?.name[0]}</small>
         </Link>
@@ -194,7 +235,7 @@ const BooksCard = ({ book }) => {
             <TbCurrencyTaka size={22}></TbCurrencyTaka>
           </del>
         </div>
-        <button onClick={handleAddtoCart} className={`${addToCart?.includes(book?._id) ? 'bg-secondary ': 'bg-primary'} px-2 py-1 rounded-md text-white hover:bg-[#e0435e]`}>
+        <button onClick={handleAddtoCart} className={`${addToCart?.includes(book?._id) ? 'bg-secondary ' : 'bg-primary'} px-2 py-1 rounded-md text-white hover:bg-[#e0435e]`}>
           Add to Cart
         </button>
       </div>

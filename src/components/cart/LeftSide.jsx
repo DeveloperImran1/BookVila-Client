@@ -11,20 +11,26 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useEffect, useState } from "react";
 import TableCard from "./TableCard";
 import { useSession } from "next-auth/react";
+import { cartBookGet } from "@/hooks/localStorage";
 
 const LeftSide = () => {
     const axiosPublic = useAxiosPublic();
     const [favorutes, setFavorutes] = useState([]);
     const [addToCart, setAddToCart] = useState([]);
-    const { data, refetch } = useMyCartBooks();
+    // const { data, refetch } = useMyCartBooks();
     const [totalBook, setTotalBook] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [delivery, setDelivery] = useState(60);
 
     const [offerTotal, setOfferTotal] = useState(0);
     const [grandTotal, setGrandTotal] = useState(0);
+    const [data, setData] = useState([]);
     const session = useSession();
 
+    useEffect(()=> {
+        const res =cartBookGet()
+        setData(res)
+    }, [])
     console.log(data)
     useEffect(() => {
         if (data) {
@@ -59,6 +65,10 @@ const LeftSide = () => {
         return Math.round(price - (price * discountPercentage) / 100);
     }
 
+    const refetch = ()=> {
+        const res = cartBookGet()
+        setData(res)
+    }
   
     // const handleOrder = async ()=> {
     //     const result = await axiosPublic.get(`/getMyAddToCart/${session?.data?.user?.email}`)

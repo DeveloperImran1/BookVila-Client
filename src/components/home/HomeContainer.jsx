@@ -5,6 +5,7 @@ import FamousPublisher from "./FamousPublisher";
 import FamousWriter from "./FamousWriter";
 import FeaturedBooks from "./FeaturedBooks";
 import RecentlyBooks from "./RecentlyBooks";
+import Review from "./Review";
 
 
 const HomeContainer = () => {
@@ -16,6 +17,7 @@ const HomeContainer = () => {
       <BudgetFriendlyBooks />
       <FamousWriter />
       <FamousPublisher />
+      <Review></Review>
     </div>
   );
 };

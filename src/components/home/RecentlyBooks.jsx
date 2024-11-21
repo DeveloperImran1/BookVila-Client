@@ -8,6 +8,7 @@ import Image from "next/image";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import BooksCard from "../books/BookCard";
+import BookCardSkelletion from "../books/BookCardSkelletion";
 
 const RecentlyBooks = () => {
 
@@ -40,11 +41,6 @@ const RecentlyBooks = () => {
     }
   })
 
-  if (isPending) {
-    return <p>Loading ......</p>
-  }
-
-
 
   return (
 
@@ -75,7 +71,14 @@ const RecentlyBooks = () => {
             },
           }}
         >
-          {books?.map((book) => (
+          {isPending ? <div className="container">
+            <div className="w-full mx-auto pl-6 py-4 bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+              {
+                [1, 2, 3, 4].map((card, index) => <BookCardSkelletion key={index}></BookCardSkelletion>)
+              }
+            </div>
+          </div> :
+          books?.map((book) => (
             <SwiperSlide key={book._id}>
               <BooksCard book={book}></BooksCard>
             </SwiperSlide>

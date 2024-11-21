@@ -9,15 +9,18 @@ import 'swiper/css/pagination';
 // import { Button, Drawer, DrawerAction, DrawerContent, Skeleton, SkeletonLine } from 'keep-react'
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
-import { FiLogIn } from 'react-icons/fi';
-import { AiOutlinePhone } from 'react-icons/ai';
+import { FiLogIn, FiUsers } from 'react-icons/fi';
+import { AiOutlineBook, AiOutlinePhone } from 'react-icons/ai';
 import Image from "next/image";
 import Link from "next/link";
-import { FaUser, FaClipboardList, FaHeart, FaStar, FaSignOutAlt, FaInfoCircle, FaPhone } from 'react-icons/fa';
+import { FaUser, FaClipboardList, FaHeart, FaStar, FaSignOutAlt, FaInfoCircle, FaPhone, FaShoppingCart } from 'react-icons/fa';
 import { Button, Drawer, DrawerAction, DrawerContent, Skeleton, SkeletonLine } from 'keep-react'
 import { signOut, useSession } from "next-auth/react";
 import { IoCartSharp } from "react-icons/io5";
 import useMyCartBooks from "@/hooks/useCartBooks";
+import { IoBookSharp } from "react-icons/io5";
+import useAuth from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
     const [show, setShow] = useState(false)
@@ -29,12 +32,19 @@ const Navbar = () => {
 
     const session = useSession();
     const user = session?.data?.user;
-
+    const auth = useAuth();
+    console.log("auth valu is", auth)
     console.log(session)
-    const handleLogOut = () => {
-        signOut()
-        Swal ("Logout", "You have Login Out", "success");
-        navigate("/login")
+    const router = useRouter();
+    const handleLogOut = async () => {
+        await signOut()
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Successfully Log Out",
+            showConfirmButton: false,
+            timer: 1500
+        }).then(() => router.push("/login"))
     }
 
     const boiShomogro = [
@@ -144,7 +154,7 @@ const Navbar = () => {
         <div className="">
 
 
-            <div className="bg-[#ffffff]">
+            <div className="bg-[#ffffff] mt-1 mb-3">
                 <nav className="flex items-center justify-between container  text-black font-semibold ">
 
                     {/* drawer section  */}
@@ -152,7 +162,7 @@ const Navbar = () => {
 
                         <Drawer className="text-black border-2">
                             <DrawerAction asChild>
-                                <p className="bg-gray-300 p-1 rounded-md md:hidden">
+                                <p className="bg-gray-300 p-1 mr-2 rounded-md md:hidden">
                                     <IoReorderThree size={28} />
                                 </p>
                             </DrawerAction>
@@ -179,7 +189,7 @@ const Navbar = () => {
                                                 } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                                         >
                                             <p>Books</p>
-                                            {books ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                                            {books ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                         </Link>
 
                                         <ul className={`${books ? 'flex ' : 'hidden'
@@ -207,7 +217,7 @@ const Navbar = () => {
                                                 } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                                         >
                                             <p>Subjects</p>
-                                            {subject ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                                            {subject ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                         </Link>
 
                                         <ul className={`${subject ? 'flex ' : 'hidden'
@@ -235,7 +245,7 @@ const Navbar = () => {
                                                 } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                                         >
                                             <p>Writers</p>
-                                            {bookWriters ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                                            {bookWriters ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                         </Link>
 
                                         <ul className={`${bookWriters ? 'flex ' : 'hidden'
@@ -263,7 +273,7 @@ const Navbar = () => {
                                                 } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                                         >
                                             <p>Publications</p>
-                                            {bookPublications ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                                            {bookPublications ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                         </Link>
 
                                         <ul className={`${bookPublications ? 'flex ' : 'hidden'
@@ -289,64 +299,64 @@ const Navbar = () => {
                                 <div className="flex flex-col">
                                     <hr className="border-[1px] my-[18px] w-full" />
 
-                                    <Link href="" className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                                    <Link href="/about-us" className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                                     >
                                         <p>Contact Us</p>
                                         <AiOutlinePhone></AiOutlinePhone>
                                     </Link>
                                     {
-                                        user ? <div onClick={handleLogOut} className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}>
+                                        user ? <div onClick={() => handleLogOut()} className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}>
                                             <p>Logout</p>
                                             <FiLogIn></FiLogIn>
-                                        </div> :  <div className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
-                                    >
-                                        <p>Login</p>
-                                        <FiLogIn></FiLogIn>
-                                    </div>
+                                        </div> : <div className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                                        >
+                                            <p>Login</p>
+                                            <FiLogIn></FiLogIn>
+                                        </div>
                                     }
-                               
-                                  
+
+
                                 </div>
                             </DrawerContent>
                         </Drawer>
 
 
-                        <Link href="/"> <Image height={676} width={1200} src="https://i.ibb.co.com/SfNwSrp/Whats-App-Image-2024-10-10-at-11-12-02-PM-removebg-preview-1.png" className="w-[60px] h-[60px] scale-100 text-white transition-all duration-200 hover:scale-110 " alt="logo" /></Link>
+                        <Link href="/"> <Image height={676} width={1200} src="https://i.postimg.cc/d0Q1LPVR/Bookvila-removebg-preview.png" className="w-full h-[60px] scale-100 text-white transition-all duration-200 hover:scale-110 " alt="logo" /></Link>
                     </div>
 
 
                     <div className="flex items-center justify-between gap-16">
                         <ul className="hidden md:flex items-center justify-between gap-7">
-                            <li className="group flex  cursor-pointer flex-col">
+                            <Link href="/" className="group flex  cursor-pointer flex-col">
                                 Home <span className="mt-[2px] h-[3px] w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
-                            </li>
-                            <li className="group flex  cursor-pointer flex-col">
-                                Pages <span className="mt-[2px] h-[3px]  w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
-                            </li>
-                            <li className="group flex  cursor-pointer flex-col">
-                                Products <span className="mt-[2px] h-[3px]  w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
-                            </li>
-                            <li className="group flex  cursor-pointer flex-col">
-                                Contact  <span className="mt-[2px] h-[3px]  w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
-                            </li>
-
+                            </Link>
+                            <Link href="/all-book" className="group flex  cursor-pointer flex-col">
+                                All Book <span className="mt-[2px] h-[3px] w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
+                            </Link>
+                            <Link href="/about-us" className="group flex  cursor-pointer flex-col">
+                                About Us <span className="mt-[2px] h-[3px] w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
+                            </Link>
 
                             <Link href="/cart" className="bg-bg-color relative rounded-full p-2 hover:scale-105 duration-200 cursor-pointer">
-                              <IoCartSharp size={23}></IoCartSharp>
-                              <p className="bg-red-500 px-[3px] py-[-3px] text-sm text-white rounded-full absolute right-0 top-0">
-                                {
-                                    isLoading ? "0" : data?.length
-                                }
-                                
+                                <IoCartSharp size={23}></IoCartSharp>
+                                <p className="bg-red-500 px-[3px] py-[-3px] text-sm text-white rounded-full absolute right-0 top-0">
+                                    {
+                                        isLoading ? "0" : data?.length
+                                    }
+
                                 </p>
                             </Link>
                         </ul>
-                        <div onClick={() => setShow(!show)} className="flex items-center border-2 rounded-[32px] relative cursor-pointer">
+                        <div onClick={() => setShow(!show)} className="flex items-center border-2 rounded-[32px] relative cursor-pointer text-gray-600">
                             <button className="rounded-full transition-all duration-300 hover:scale-90">
-                                <Image height={676} width={1200} src={`${user?.photo || 'https://static.vecteezy.com/system/resources/previews/013/042/571/original/default-avatar-profile-icon-social-media-user-photo-in-flat-style-vector.jpg'}`} alt="user" className="h-[50px] w-[50px] rounded-full " />
+                                <Image height={676} width={1200} src={`${auth?.data?.photo || 'https://i.postimg.cc/xTmfVLXn/download-black-male-user-profile-icon-png-701751695035033bwdeymrpov.png'}`} alt="user" className="h-[50px] w-[50px] rounded-full " />
                             </button>
-                            <div className={`${show ? 'right-0 top-[50px] visible' : 'right-0 top-[90px]  invisible'}  absolute z-50  bg-white rounded-2xl py-2 px-4 w-[190px] transition-all my-transition`}>
+                            <div className={`${show ? 'right-0 top-[50px] visible' : 'right-0 top-[90px]  invisible'}  absolute z-50  bg-white rounded-xl py-2 px-4 w-[190px] transition-all my-transition`}>
                                 <ul>
+                                    <Link href={"/all-book"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                        <IoBookSharp size={18}></IoBookSharp>
+                                        <li className=" ">All Book</li>
+                                    </Link>
                                     <Link href={"/my-profile"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                         <FaUser size={18}></FaUser>
                                         <li className=" ">My Profile</li>
@@ -359,23 +369,39 @@ const Navbar = () => {
                                         <FaHeart size={18}></FaHeart>
                                         <li className=" ">Wishlist</li>
                                     </Link>
-                                    <Link href={"/my-reviews"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                    <Link href={"/my-review"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                         <FaStar size={18}></FaStar>
                                         <li className=" ">My Reviews</li>
                                     </Link>
-                                    <Link href={""} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                    <Link href={"/about-us"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                         <FaInfoCircle size={18}></FaInfoCircle>
                                         <li className=" ">About Us</li>
                                     </Link>
-                                    <Link href={""} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                        <FaPhone size={18}></FaPhone>
-                                        <li className=" ">Contact Us</li>
-                                    </Link>
 
+                                    {
+                                        auth?.data?.role === "admin" && <>
+                                            <Link href={"/all-user"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                <FiUsers size={18}></FiUsers>
+                                                <li className=" ">All User</li>
+                                            </Link>
+
+
+                                            <Link href={"/all-order"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                <FaShoppingCart size={18}></FaShoppingCart>
+                                                <li className=" ">Orders</li>
+                                            </Link>
+
+                                            <Link href={"/"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                <AiOutlineBook size={18}></AiOutlineBook>
+                                                <li className=" ">Add Boo</li>
+                                            </Link>
+
+                                        </>
+                                    }
 
                                     {
                                         user ? <>
-                                            <div onClick={handleLogOut} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                            <div onClick={() => handleLogOut()} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                                 <FaSignOutAlt size={18}></FaSignOutAlt>
                                                 <li className=" ">Logout</li>
                                             </div>
