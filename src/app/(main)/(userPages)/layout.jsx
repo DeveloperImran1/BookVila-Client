@@ -10,7 +10,7 @@ const layout = ({ children }) => {
 
             <Sidebar></Sidebar>
             </div>
-            <div className="md:w-[80%]">
+            <div className="md:w-[80%] bg-white">
                 {children}
             </div>
         </div>
