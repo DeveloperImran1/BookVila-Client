@@ -9,14 +9,14 @@ import toast from "react-hot-toast";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { removeCartBook } from "@/hooks/localStorage";
 
-const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, setTotalPrice, totalPrice, refetch }) => {
+const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, setTotalPrice, totalPrice, refetch, quantity, onQuantityChange }) => {
     const [singleBookTotal, setSingleBookTotal] = useState(1);
     const discountedPrice = calculateDiscountedPrice(item?.books?.price, item?.books?.discount);
     const [singleBookTotalPrice, setSingleBookTotalPrice] = useState(discountedPrice);
     const axiosPublic = useAxiosPublic()
 
 
-    const handleDelete = async()=> {
+    const handleDelete = async () => {
         removeCartBook(item)
         refetch()
     }
@@ -97,10 +97,13 @@ const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, se
                                             setSingleBookTotalPrice(newTotal * discountedPrice);
                                             setTotalBook(totalBook - 1);
                                             setTotalPrice(totalPrice - priceReduction);
+
+                                            //aita sudho single book er quantity pawer jonno left side component a
+                                            onQuantityChange(item?.books?._id, quantity - 1);
                                             return newTotal;
                                         });
                                     }
-                                    else{
+                                    else {
                                         toast.error("Sorry! Unavailable in stock 😢")
                                     }
                                 }}
@@ -110,19 +113,22 @@ const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, se
                             {/* <input className="text-center bg-slate-200 rounded text-xs w-[42px] h-[30px] mx-1 outline-none border-none"  value="1" /> */}
                             <p className="flex flex-col items-center justify-center bg-slate-200 rounded w-[42px] h-[30px] mx-1 outline-none border-none">{singleBookTotal}</p>
                             <button onClick={() => {
-                            if(item?.books?.stock > singleBookTotal){
-                                setSingleBookTotal((prevTotal) => {
-                                    const newTotal = prevTotal + 1;
-                                    const priceIncrease = discountedPrice;
-                                    setSingleBookTotalPrice(newTotal * discountedPrice);
-                                    setTotalBook(totalBook + 1);
-                                    setTotalPrice(totalPrice + priceIncrease);
-                                    return newTotal;
-                                });
-                            }
-                            else{
-                                toast.error("Sorry! Unavailable in stock 😢")
-                            }
+                                if (item?.books?.stock > singleBookTotal) {
+                                    setSingleBookTotal((prevTotal) => {
+                                        const newTotal = prevTotal + 1;
+                                        const priceIncrease = discountedPrice;
+                                        setSingleBookTotalPrice(newTotal * discountedPrice);
+                                        setTotalBook(totalBook + 1);
+                                        setTotalPrice(totalPrice + priceIncrease);
+
+                                        //aita sudho single book er quantity pawer jonno left side component a
+                                        onQuantityChange(item?.books?._id, quantity + 1);
+                                        return newTotal;
+                                    });
+                                }
+                                else {
+                                    toast.error("Sorry! Unavailable in stock 😢")
+                                }
                             }} className='btn btn-xs bg-slate-200 rounded w-[30px] h-[30px]'>
                                 <LuPlus />
                             </button>

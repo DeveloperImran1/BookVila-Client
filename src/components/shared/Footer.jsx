@@ -77,7 +77,7 @@ const handleNewsletterSubmit= ()=>{
                 <Image height={676} width={1200} src="https://i.postimg.cc/d0Q1LPVR/Bookvila-removebg-preview.png" alt="logo"
                      className="w-[120px] h-[60px] "/>
 
-                <p className="text-[0.9rem] text-center text-gray-600">&copy; 2024 <Link href={"https://developerimran-portfolio.netlify.app/"} target="_blank" className="font-bold hover:text-primary hover:underline">EventSphare Team</Link>. All Rights
+                <p className="text-[0.9rem] text-center text-gray-600">&copy; 2024 <Link href={"https://developerimran-portfolio.netlify.app/"} target="_blank" className="font-bold hover:text-primary hover:underline">Book Vila Team</Link>. All Rights
                     Reserved. </p>
 
                 <div className="flex items-center gap-[10px] text-text">

@@ -21,10 +21,39 @@ import { MdOutlineArrowForwardIos } from "react-icons/md";
 import Link from 'next/link';
 import Image from 'next/image';
 import { BiSolidOffer } from "react-icons/bi";
+import { useQuery } from '@tanstack/react-query';
+import useAxiosPublic from '@/hooks/useAxiosPublic';
 
 
 const Banner = () => {
     const [selectCategory, setSelectCategory] = useState(null)
+    const axiosPublic = useAxiosPublic();
+
+    const { data: writers = [] } = useQuery({
+        queryKey: ["sidebarWriter"],
+        queryFn: async () => {
+            const res = await axiosPublic.get(`/getAllAuthors`);
+            const writerArr = await res?.data?.map(singleWriter => {
+                const writer = { authorID: singleWriter?.authorID, name: singleWriter?.name?.[1] }
+                return writer;
+            })
+            return writerArr;
+        }
+    })
+
+    const { data: publications = [] } = useQuery({
+        queryKey: ["sidebarPublisher"],
+        queryFn: async () => {
+            const res = await axiosPublic.get(`/getPublications`);
+            const customizePublisherArr = await res?.data?.map(singlePublication => {
+                const writer = { publicationID: singlePublication?._id, name: singlePublication?.name?.[1] }
+                return writer;
+            })
+            return customizePublisherArr;
+        }
+    })
+
+    console.log(publications)
 
 
     const boiShomogro = [
@@ -78,53 +107,53 @@ const Banner = () => {
         "ভৌগোলিক গবেষণা"
     ];
 
-    // লেখকের নামের অ্যারে
-    const writers = [
-        "হুমায়ুন আহমেদ",
-        "জহির রায়হান",
-        "রবীন্দ্রনাথ ঠাকুর",
-        "কাজী নজরুল ইসলাম",
-        "আবুল বাশার",
-        "সৈয়দ মুজতবা আলী",
-        "সুনীল গঙ্গোপাধ্যায়",
-        "আবুল মনসুর আহমদ",
-        "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-        "মুহম্মদ জাফর ইকবাল",
-        "শীর্ষেন্দু মুখোপাধ্যায়",
-        "আনিসুল হক",
-        "আহমদ ছফা",
-        "অনীশ দাস অপু",
-        "বেগম রোকেয়া",
-        "ফয়েজ আহমেদ",
-        "মীর মশাররফ হোসেন",
-        "তসলিমা নাসরিন",
-        "জাকির তালুকদার",
-        "প্রেমচাঁদ"
-    ];
+    // // লেখকের নামের অ্যারে
+    // const writers = [
+    //     "হুমায়ুন আহমেদ",
+    //     "জহির রায়হান",
+    //     "রবীন্দ্রনাথ ঠাকুর",
+    //     "কাজী নজরুল ইসলাম",
+    //     "আবুল বাশার",
+    //     "সৈয়দ মুজতবা আলী",
+    //     "সুনীল গঙ্গোপাধ্যায়",
+    //     "আবুল মনসুর আহমদ",
+    //     "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
+    //     "মুহম্মদ জাফর ইকবাল",
+    //     "শীর্ষেন্দু মুখোপাধ্যায়",
+    //     "আনিসুল হক",
+    //     "আহমদ ছফা",
+    //     "অনীশ দাস অপু",
+    //     "বেগম রোকেয়া",
+    //     "ফয়েজ আহমেদ",
+    //     "মীর মশাররফ হোসেন",
+    //     "তসলিমা নাসরিন",
+    //     "জাকির তালুকদার",
+    //     "প্রেমচাঁদ"
+    // ];
 
-    // প্রকাশনীর নামের অ্যারে
-    const publications = [
-        "প্রথমা প্রকাশন",
-        "অন্যপ্রকাশ",
-        "আনন্দ পাবলিশার্স",
-        "বাংলা একাডেমি",
-        "বিদ্যাপ্রকাশ",
-        "ইত্যাদি গ্রন্থ প্রকাশ",
-        "কাকলী প্রকাশনী",
-        "পাঠক সমাবেশ",
-        "মাওলা ব্রাদার্স",
-        "সাহিত্য প্রকাশ",
-        "অনন্যা প্রকাশনী",
-        "অন্তর্জলী প্রকাশন",
-        "বঙ্গপ্রকাশ",
-        "সৃজনশীল প্রকাশনী",
-        "সম্প্রতি প্রকাশনী",
-        "জ্ঞানভবন প্রকাশনী",
-        "বিশ্বসাহিত্য কেন্দ্র",
-        "শিখা প্রকাশনী",
-        "বর্ণমালা প্রকাশনী",
-        "সাহিত্য সংসদ"
-    ];
+    // // প্রকাশনীর নামের অ্যারে
+    // const publications = [
+    //     "প্রথমা প্রকাশন",
+    //     "অন্যপ্রকাশ",
+    //     "আনন্দ পাবলিশার্স",
+    //     "বাংলা একাডেমি",
+    //     "বিদ্যাপ্রকাশ",
+    //     "ইত্যাদি গ্রন্থ প্রকাশ",
+    //     "কাকলী প্রকাশনী",
+    //     "পাঠক সমাবেশ",
+    //     "মাওলা ব্রাদার্স",
+    //     "সাহিত্য প্রকাশ",
+    //     "অনন্যা প্রকাশনী",
+    //     "অন্তর্জলী প্রকাশন",
+    //     "বঙ্গপ্রকাশ",
+    //     "সৃজনশীল প্রকাশনী",
+    //     "সম্প্রতি প্রকাশনী",
+    //     "জ্ঞানভবন প্রকাশনী",
+    //     "বিশ্বসাহিত্য কেন্দ্র",
+    //     "শিখা প্রকাশনী",
+    //     "বর্ণমালা প্রকাশনী",
+    //     "সাহিত্য সংসদ"
+    // ];
 
 
 
@@ -185,11 +214,11 @@ const Banner = () => {
                                             selectCategory === "subjects" ? subjects?.map((book, index) => <Link href={"#"} key={index} className="py-3 px-3 font-normal w-[250px] hover:text-[#00bffe] hover:underline">
                                                 {book}
                                             </Link>) :
-                                                selectCategory === "writers" ? writers?.map((book, index) => <Link href={"#"} key={index} className="py-3 px-3 font-normal w-[250px] hover:text-[#00bffe] hover:underline">
-                                                    {book}
+                                                selectCategory === "writers" ? writers?.map((book, index) => <Link href={`/writer/${book?.authorID}`} key={index} className="py-3 px-3 font-normal w-[250px] hover:text-[#00bffe] hover:underline">
+                                                    {book?.name}
                                                 </Link>) :
-                                                    selectCategory === "publications" ? publications?.map((book, index) => <Link href={"#"} key={index} className="py-3 px-3 font-normal w-[250px] hover:text-[#00bffe] hover:underline">
-                                                        {book}
+                                                    selectCategory === "publications" ? publications?.map((book, index) => <Link href={`/publisher/${book?.publicationID}`} key={index} className="py-3 px-3 font-normal w-[250px] hover:text-[#00bffe] hover:underline">
+                                                        {book?.name}
                                                     </Link>) : ""
                                     }
 
@@ -203,19 +232,19 @@ const Banner = () => {
                 </div>
 
 
-                <Swiper 
-                //  spaceBetween={30}
-                 centeredSlides={true}
-                 autoplay={{
-                   delay: 2500,
-                   disableOnInteraction: false,
-                 }}
-                //  pagination={{
-                //    clickable: true,
-                //  }}
-                //  navigation={true}
-                 modules={[Autoplay]}
-                 className="mySwiper h-[250px] md:h-[340px] lg:h-[430px] w-full md:w-[70%] lg:w-[80%] ">
+                <Swiper
+                    //  spaceBetween={30}
+                    centeredSlides={true}
+                    autoplay={{
+                        delay: 2500,
+                        disableOnInteraction: false,
+                    }}
+                    //  pagination={{
+                    //    clickable: true,
+                    //  }}
+                    //  navigation={true}
+                    modules={[Autoplay]}
+                    className="mySwiper h-[250px] md:h-[340px] lg:h-[430px] w-full md:w-[70%] lg:w-[80%] ">
 
                     <SwiperSlide className=" rounded-md  ">
                         <Image className='h-full w-full' height={676} width={1200} src="https://i.postimg.cc/RhstS7fm/464131621-1724559988082883-6219848670324800565-n.jpg" alt="Banner" ></Image>

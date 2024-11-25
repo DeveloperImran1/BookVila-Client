@@ -13,12 +13,13 @@ import { TbFidgetSpinner } from "react-icons/tb";
 
 import { formatDistanceToNow } from 'date-fns';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import toast from "react-hot-toast";
 
-const ReviewPage = ({ book }) => {
+const ReviewPage = ({ book, refetch }) => {
 
     const totalRating = book?.rating?.reduce(((prevRating, sum) => prevRating + sum), 0)
     const sumOfRating = parseInt(totalRating / book?.rating?.length);
-    const [userRating, setUserRating] = useState(1);
+    const [userRating, setUserRating] = useState(5);
     const [loading, setLoading] = useState(false);
     const [showAll, setShowAll] = useState(true);
 
@@ -82,13 +83,24 @@ const ReviewPage = ({ book }) => {
         // const res = await axiosPublic.post(`/`);
 
         console.log("reviewObj ", reviewObj)
-        setLoading(false)
+        const res = await axiosPublic.post(`/addNewReview/${book?._id}`, reviewObj)
+        if (res?.status === 200) {
+            toast.success("Thank you for your review❤️")
+            setLoading(false)
+            refetch()
+            e.target.reset();
+        }
+        else {
+            toast.error("Something went wrong😢")
+            setLoading(false)
+        }
+
 
     };
 
 
 
-
+ 
 
     return (
         <div>
@@ -181,11 +193,8 @@ const ReviewPage = ({ book }) => {
                         {
                             myReview?.length < 1 && <div className="flex flex-col items-center justify-center ">
                                 <Image className="h-[270px] w-[280px] " height={676} width={1200} src="https://i.postimg.cc/pVj1rn9D/360-F-106646110-Lv-Qrtj1uxmnse1g-GOIFv7-Gh-WSXFv-Z3lk-removebg-preview.png" alt="gift" />
-                                <h3 className="text-[20px] font-semibold text-gray-500 my-5 ml-3">You Have Not Review Any Book 🤔</h3>
-                                <Link href="/all-book"
-                                    className="px-3 md:px-5 lg:px-6 py-1 md:py-2 lg:py-3 text-lg bg-[#fe5857] text-white rounded-lg  transition mb-11">
-                                    Give a Review
-                                </Link>
+                                <h3 className="text-[20px] font-semibold text-gray-500 my-5 ml-3">This book have not any review 🤔</h3>
+                            
                             </div>
                         }
                     </div>
@@ -268,11 +277,14 @@ const ReviewPage = ({ book }) => {
                     }
                 </div>
 
-                <div className='w-full flex justify-center items-center'>
-                    <button onClick={() => setShowAll(!showAll)} className='bg-primary text-white px-4 py-2  rounded-lg my-6 '>
-                        Show All
-                    </button>
-                </div>
+                {
+                    myReview?.length > 4 && <div className='w-full flex justify-center items-center'>
+                        <button onClick={() => setShowAll(!showAll)} className='bg-primary text-white px-4 py-2  rounded-lg my-6 '>
+                            {showAll ? 'Show All' : 'Hide'}
+                        </button>
+                    </div>
+                }
+
             </div>
         </div>
     );

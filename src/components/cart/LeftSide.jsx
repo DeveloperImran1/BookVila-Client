@@ -13,6 +13,9 @@ import TableCard from "./TableCard";
 import { useSession } from "next-auth/react";
 import { cartBookGet } from "@/hooks/localStorage";
 import DataNotFound from "../shared/DataNotFound";
+import useAuth from "@/hooks/useAuth";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const LeftSide = () => {
     const axiosPublic = useAxiosPublic();
@@ -27,7 +30,12 @@ const LeftSide = () => {
     const [grandTotal, setGrandTotal] = useState(0);
     const [data, setData] = useState([]);
     const session = useSession();
+    const auth = useAuth();
 
+    // every book er quantity er jonno
+    const [quantities, setQuantities] = useState({}); // To track quantities for each product
+
+    const router = useRouter();
     useEffect(() => {
         const res = cartBookGet()
         setData(res)
@@ -71,10 +79,47 @@ const LeftSide = () => {
         setData(res)
     }
 
-    // const handleOrder = async ()=> {
-    //     const result = await axiosPublic.get(`/getMyAddToCart/${session?.data?.user?.email}`)
-    //     return result?.data;
-    // }
+
+    // Function to handle quantity changes
+    const handleQuantityChange = (bookId, quantity) => {
+        setQuantities((prev) => ({
+            ...prev,
+            [bookId]: quantity,
+        }));
+    };
+
+    const handleCheckout = async () => {
+        if (!auth?.data) {
+            return toast.error("Please! Before Login now😢").then(router?.push('/login'))
+        }
+        const itemsArr = data.map((item) => ({
+            bookId: item?.books?._id,
+            bookPhoto: item?.books?.coverImage,
+            name: item?.books?.bookName?.[0],
+            quantity: quantities[item?.books?._id] || 1, // Use the quantity from state or default to 1
+            totalPrice: calculateDiscountedPrice(item?.books?.price, item?.books?.discount) * (quantities[item?.books?._id] || 1)
+        }));
+
+        const orderObj = {
+            user: {
+                userId: auth?.data?._id,
+                name: auth?.data?.name,
+                email: auth?.data?.email,
+                phoneNumber: auth?.data?.phone,
+            },
+            items: itemsArr,
+            totalPayment: grandTotal
+        };
+
+        const res = await axiosPublic.post('/createNewOrder', orderObj);
+        console.log(res)
+        if (res?.status === 200) {
+            toast.success("Your order is pending👏 Please fillup delivery address")
+        }
+        else {
+            toast.error("Sorry! something went wrong 😢")
+        }
+    };
 
 
     return (
@@ -93,7 +138,18 @@ const LeftSide = () => {
                                     <tbody>
                                         {data?.map((item) => (
                                             <tr key={item?._id}>
-                                                <TableCard item={item} calculateDiscountedPrice={calculateDiscountedPrice} setTotalBook={setTotalBook} totalBook={totalBook} setTotalPrice={setTotalPrice} totalPrice={totalPrice} refetch={refetch} ></TableCard>
+                                                <TableCard
+                                                    item={item}
+                                                    calculateDiscountedPrice={calculateDiscountedPrice} setTotalBook={setTotalBook}
+                                                    totalBook={totalBook}
+                                                    setTotalPrice={setTotalPrice}
+                                                    totalPrice={totalPrice}
+                                                    refetch={refetch}
+                                                    // Every book er quantity newer jonno
+                                                    quantity={quantities[item?.books?._id] || 1} // Pass quantity from state
+                                                    onQuantityChange={handleQuantityChange} // Pass handler function
+
+                                                ></TableCard>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -200,7 +256,7 @@ const LeftSide = () => {
 
 
                         {/* Order summary  */}
-                        <button className="mt-14 btn hover:bg-primary/55 text-white bg-primary w-full">
+                        <button onClick={handleCheckout} className="mt-14 btn hover:bg-primary/55 text-white bg-primary w-full">
                             <div className="flex gap-x-1 items-center">
                                 <span>Checkout</span>
                                 <HiArrowNarrowRight className="text-base" />
