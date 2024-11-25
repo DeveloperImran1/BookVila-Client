@@ -51,31 +51,31 @@ const Navbar = () => {
     }
 
 
-    const { data: writers = []} = useQuery({
-      queryKey: ["sidebarWriter"],
-      queryFn: async () => {
-        const res = await axiosPublic.get(`/getAllAuthors`);
-        const writerArr = await res?.data?.map(singleWriter => {
-           const writer = {authorID: singleWriter?.authorID, name: singleWriter?.name?.[1]}
-           return writer;
-        })
-        return writerArr;
-      }
+    const { data: writers = [] } = useQuery({
+        queryKey: ["sidebarWriter"],
+        queryFn: async () => {
+            const res = await axiosPublic.get(`/getAllAuthors`);
+            const writerArr = await res?.data?.map(singleWriter => {
+                const writer = { authorID: singleWriter?.authorID, name: singleWriter?.name?.[1] }
+                return writer;
+            })
+            return writerArr;
+        }
     })
-  
+
     const { data: publications = [] } = useQuery({
         queryKey: ["sidebarPublisher"],
         queryFn: async () => {
-          const res = await axiosPublic.get(`/getPublications`);
-          const customizePublisherArr = await res?.data?.map(singlePublication => {
-            const writer = {publicationID: singlePublication?._id, name: singlePublication?.name?.[1]}
-            return writer;
-         })
-          return customizePublisherArr;
+            const res = await axiosPublic.get(`/getPublications`);
+            const customizePublisherArr = await res?.data?.map(singlePublication => {
+                const writer = { publicationID: singlePublication?._id, name: singlePublication?.name?.[1] }
+                return writer;
+            })
+            return customizePublisherArr;
         }
-      })
+    })
 
-      console.log(publications)
+    console.log(publications)
 
     const boiShomogro = [
         "মহাকালের কণ্ঠ",
@@ -377,76 +377,88 @@ const Navbar = () => {
                                 </p>
                             </Link>
                         </ul>
-                        <div onClick={() => setShow(!show)} className="flex items-center border-2 rounded-[32px] relative cursor-pointer text-gray-600">
-                            <button className="rounded-full transition-all duration-300 hover:scale-90">
-                                <Image height={676} width={1200} src={`${auth?.data?.photo || 'https://i.postimg.cc/xTmfVLXn/download-black-male-user-profile-icon-png-701751695035033bwdeymrpov.png'}`} alt="user" className="h-[50px] w-[50px] rounded-full " />
-                            </button>
-                            <div className={`${show ? 'right-0 top-[50px] visible' : 'right-0 top-[90px]  invisible'}  absolute z-50  bg-white rounded-xl py-2 px-4 w-[190px] transition-all my-transition`}>
-                                <ul>
-                                    <Link href={"/all-book"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                        <IoBookSharp size={18}></IoBookSharp>
-                                        <li className=" ">All Book</li>
-                                    </Link>
-                                    <Link href={"/my-profile"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                        <FaUser size={18}></FaUser>
-                                        <li className=" ">My Profile</li>
-                                    </Link>
-                                    <Link href={"/my-order"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                        <FaClipboardList size={18}></FaClipboardList>
-                                        <li className=" ">My Order</li>
-                                    </Link>
-                                    <Link href={"/wishlist"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                        <FaHeart size={18}></FaHeart>
-                                        <li className=" ">Wishlist</li>
-                                    </Link>
-                                    <Link href={"/my-review"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                        <FaStar size={18}></FaStar>
-                                        <li className=" ">My Reviews</li>
-                                    </Link>
-                                    <Link href={"/about-us"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                        <FaInfoCircle size={18}></FaInfoCircle>
-                                        <li className=" ">About Us</li>
-                                    </Link>
 
+                        <div className="flex justify-center items-center gap-5">
+                            <Link href="/cart" className="block md:hidden bg-bg-color relative rounded-full p-2 hover:scale-105 duration-200 cursor-pointer">
+                                <IoCartSharp size={23}></IoCartSharp>
+                                <p className="bg-red-500 px-[3px] py-[-3px] text-sm text-white rounded-full absolute right-0 top-0">
                                     {
-                                        auth?.data?.role === "admin" && <>
-                                            <Link href={"/all-user"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                                <FiUsers size={18}></FiUsers>
-                                                <li className=" ">All User</li>
-                                            </Link>
-
-
-                                            <Link href={"/all-order"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                                <FaShoppingCart size={18}></FaShoppingCart>
-                                                <li className=" ">Orders</li>
-                                            </Link>
-
-                                            <Link href={"/"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                                <AiOutlineBook size={18}></AiOutlineBook>
-                                                <li className=" ">Add Boo</li>
-                                            </Link>
-
-                                        </>
+                                        isLoading ? "0" : data?.length
                                     }
 
-                                    {
-                                        user ? <>
-                                            <div onClick={() => handleLogOut()} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                                <FaSignOutAlt size={18}></FaSignOutAlt>
-                                                <li className=" ">Logout</li>
-                                            </div>
+                                </p>
+                            </Link>
+                            <div onClick={() => setShow(!show)} className="flex items-center border-2 rounded-[32px] relative cursor-pointer text-gray-600">
+                                <button className="rounded-full transition-all duration-300 hover:scale-90">
+                                    <Image height={676} width={1200} src={`${auth?.data?.photo || 'https://i.postimg.cc/xTmfVLXn/download-black-male-user-profile-icon-png-701751695035033bwdeymrpov.png'}`} alt="user" className="h-[50px] w-[50px] rounded-full " />
+                                </button>
+                                <div className={`${show ? 'right-0 top-[50px] visible' : 'right-0 top-[90px]  invisible'}  absolute z-50  bg-white rounded-xl py-2 px-4 w-[190px] transition-all my-transition`}>
+                                    <ul>
+                                        <Link href={"/all-book"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                            <IoBookSharp size={18}></IoBookSharp>
+                                            <li className=" ">All Book</li>
+                                        </Link>
+                                        <Link href={"/my-profile"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                            <FaUser size={18}></FaUser>
+                                            <li className=" ">My Profile</li>
+                                        </Link>
+                                        <Link href={"/my-order"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                            <FaClipboardList size={18}></FaClipboardList>
+                                            <li className=" ">My Order</li>
+                                        </Link>
+                                        <Link href={"/wishlist"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                            <FaHeart size={18}></FaHeart>
+                                            <li className=" ">Wishlist</li>
+                                        </Link>
+                                        <Link href={"/my-review"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                            <FaStar size={18}></FaStar>
+                                            <li className=" ">My Reviews</li>
+                                        </Link>
+                                        <Link href={"/about-us"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                            <FaInfoCircle size={18}></FaInfoCircle>
+                                            <li className=" ">About Us</li>
+                                        </Link>
+
+                                        {
+                                            auth?.data?.role === "admin" && <>
+                                                <Link href={"/all-user"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                    <FiUsers size={18}></FiUsers>
+                                                    <li className=" ">All User</li>
+                                                </Link>
 
 
-                                        </> : <>
-                                            <Link href={"/login"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                                <FaStar size={18}></FaStar>
-                                                <li className=" ">Login</li>
-                                            </Link>
+                                                <Link href={"/all-order"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                    <FaShoppingCart size={18}></FaShoppingCart>
+                                                    <li className=" ">Orders</li>
+                                                </Link>
+
+                                                <Link href={"/"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                    <AiOutlineBook size={18}></AiOutlineBook>
+                                                    <li className=" ">Add Boo</li>
+                                                </Link>
+
+                                            </>
+                                        }
+
+                                        {
+                                            user ? <>
+                                                <div onClick={() => handleLogOut()} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                    <FaSignOutAlt size={18}></FaSignOutAlt>
+                                                    <li className=" ">Logout</li>
+                                                </div>
 
 
-                                        </>
-                                    }
-                                </ul>
+                                            </> : <>
+                                                <Link href={"/login"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                    <FaStar size={18}></FaStar>
+                                                    <li className=" ">Login</li>
+                                                </Link>
+
+
+                                            </>
+                                        }
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>

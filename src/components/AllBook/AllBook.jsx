@@ -340,7 +340,7 @@ const AllBook = () => {
 
           <DrawerContent
             position="left"
-            className="w-full max-w-[40%] md:max-w-full flex flex-col justify-between  h-[100vh] overflow-scroll"
+            className="w-[60%] md:max-w-[40%]  flex flex-col justify-between  h-[100vh] overflow-scroll"
           >
             <div className="flex flex-col bg-white pt-[10px] pb-[50px] rounded-md justify-between items-center">
               <div className="flex flex-col gap-6 mt-[20px] md:mt-[33px] lg:mt-11">
