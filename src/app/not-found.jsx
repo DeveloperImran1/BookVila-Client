@@ -7,20 +7,17 @@ export default function Custom404() {
     <div className="h-screen flex flex-col justify-center items-center bg-gray-100 text-center p-4">
       <title>Page Not Found</title>
       <Image
-        src="https://i.postimg.cc/13mPhCRL/softcodeon.gif"
+        src="https://i.postimg.cc/T1ksTbhv/Screenshot-7-removebg-preview.png"
         alt="404 gif"
         width={400}
         height={400}
-        className="mb-4"
+        className="mb-4 mx:h-[300px] mx:w-[400px] "
       />
       <h1 className="text-4xl font-bold mb-4">
-        Whoops, We can`t seem to find the resource you`re looking for.
+        Whoops, Page Not Found😒
       </h1>
-      <p className="text-lg mb-6">
-        Please check that the website address is spelled correctly. Or,
-      </p>
-      <Link href="/" 
-        className="px-6 py-3 text-lg bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition">
+      <Link href="/"
+        className="px-6 py-3 text-lg bg-bg-blue text-white rounded-lg hover:bg-bg-blue transition">
         Go to Homepage
       </Link>
     </div>

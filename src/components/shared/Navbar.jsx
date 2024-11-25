@@ -9,13 +9,20 @@ import 'swiper/css/pagination';
 // import { Button, Drawer, DrawerAction, DrawerContent, Skeleton, SkeletonLine } from 'keep-react'
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
-import { FiLogIn } from 'react-icons/fi';
-import { AiOutlinePhone } from 'react-icons/ai';
+import { FiLogIn, FiUsers } from 'react-icons/fi';
+import { AiOutlineBook, AiOutlinePhone } from 'react-icons/ai';
 import Image from "next/image";
 import Link from "next/link";
-import { FaUser, FaClipboardList, FaHeart, FaStar, FaSignOutAlt, FaInfoCircle, FaPhone } from 'react-icons/fa';
+import { FaUser, FaClipboardList, FaHeart, FaStar, FaSignOutAlt, FaInfoCircle, FaPhone, FaShoppingCart } from 'react-icons/fa';
 import { Button, Drawer, DrawerAction, DrawerContent, Skeleton, SkeletonLine } from 'keep-react'
 import { signOut, useSession } from "next-auth/react";
+import { IoCartSharp } from "react-icons/io5";
+import useMyCartBooks from "@/hooks/useCartBooks";
+import { IoBookSharp } from "react-icons/io5";
+import useAuth from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
 
 const Navbar = () => {
     const [show, setShow] = useState(false)
@@ -23,16 +30,52 @@ const Navbar = () => {
     const [books, setBooks] = useState(false)
     const [bookWriters, setBookWriters] = useState(false)
     const [bookPublications, setBookPublications] = useState(false)
+    const { data, refetch, isLoading } = useMyCartBooks();
 
+    const axiosPublic = useAxiosPublic();
     const session = useSession();
     const user = session?.data?.user;
-
+    const auth = useAuth();
+    console.log("auth valu is", auth)
     console.log(session)
-    const handleLogOut = () => {
-        signOut()
-        Swal ("Logout", "You have Login Out", "success");
-        navigate("/login")
+    const router = useRouter();
+    const handleLogOut = async () => {
+        await signOut()
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Successfully Log Out",
+            showConfirmButton: false,
+            timer: 1500
+        }).then(() => router.push("/login"))
     }
+
+
+    const { data: writers = []} = useQuery({
+      queryKey: ["sidebarWriter"],
+      queryFn: async () => {
+        const res = await axiosPublic.get(`/getAllAuthors`);
+        const writerArr = await res?.data?.map(singleWriter => {
+           const writer = {authorID: singleWriter?.authorID, name: singleWriter?.name?.[1]}
+           return writer;
+        })
+        return writerArr;
+      }
+    })
+  
+    const { data: publications = [] } = useQuery({
+        queryKey: ["sidebarPublisher"],
+        queryFn: async () => {
+          const res = await axiosPublic.get(`/getPublications`);
+          const customizePublisherArr = await res?.data?.map(singlePublication => {
+            const writer = {publicationID: singlePublication?._id, name: singlePublication?.name?.[1]}
+            return writer;
+         })
+          return customizePublisherArr;
+        }
+      })
+
+      console.log(publications)
 
     const boiShomogro = [
         "মহাকালের কণ্ঠ",
@@ -86,52 +129,52 @@ const Navbar = () => {
     ];
 
     // লেখকের নামের অ্যারে
-    const writers = [
-        "হুমায়ুন আহমেদ",
-        "জহির রায়হান",
-        "রবীন্দ্রনাথ ঠাকুর",
-        "কাজী নজরুল ইসলাম",
-        "আবুল বাশার",
-        "সৈয়দ মুজতবা আলী",
-        "সুনীল গঙ্গোপাধ্যায়",
-        "আবুল মনসুর আহমদ",
-        "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-        "মুহম্মদ জাফর ইকবাল",
-        "শীর্ষেন্দু মুখোপাধ্যায়",
-        "আনিসুল হক",
-        "আহমদ ছফা",
-        "অনীশ দাস অপু",
-        "বেগম রোকেয়া",
-        "ফয়েজ আহমেদ",
-        "মীর মশাররফ হোসেন",
-        "তসলিমা নাসরিন",
-        "জাকির তালুকদার",
-        "প্রেমচাঁদ"
-    ];
+    // const writers = [
+    //     "হুমায়ুন আহমেদ",
+    //     "জহির রায়হান",
+    //     "রবীন্দ্রনাথ ঠাকুর",
+    //     "কাজী নজরুল ইসলাম",
+    //     "আবুল বাশার",
+    //     "সৈয়দ মুজতবা আলী",
+    //     "সুনীল গঙ্গোপাধ্যায়",
+    //     "আবুল মনসুর আহমদ",
+    //     "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
+    //     "মুহম্মদ জাফর ইকবাল",
+    //     "শীর্ষেন্দু মুখোপাধ্যায়",
+    //     "আনিসুল হক",
+    //     "আহমদ ছফা",
+    //     "অনীশ দাস অপু",
+    //     "বেগম রোকেয়া",
+    //     "ফয়েজ আহমেদ",
+    //     "মীর মশাররফ হোসেন",
+    //     "তসলিমা নাসরিন",
+    //     "জাকির তালুকদার",
+    //     "প্রেমচাঁদ"
+    // ];
 
     // প্রকাশনীর নামের অ্যারে
-    const publications = [
-        "প্রথমা প্রকাশন",
-        "অন্যপ্রকাশ",
-        "আনন্দ পাবলিশার্স",
-        "বাংলা একাডেমি",
-        "বিদ্যাপ্রকাশ",
-        "ইত্যাদি গ্রন্থ প্রকাশ",
-        "কাকলী প্রকাশনী",
-        "পাঠক সমাবেশ",
-        "মাওলা ব্রাদার্স",
-        "সাহিত্য প্রকাশ",
-        "অনন্যা প্রকাশনী",
-        "অন্তর্জলী প্রকাশন",
-        "বঙ্গপ্রকাশ",
-        "সৃজনশীল প্রকাশনী",
-        "সম্প্রতি প্রকাশনী",
-        "জ্ঞানভবন প্রকাশনী",
-        "বিশ্বসাহিত্য কেন্দ্র",
-        "শিখা প্রকাশনী",
-        "বর্ণমালা প্রকাশনী",
-        "সাহিত্য সংসদ"
-    ];
+    // const publications = [
+    //     "প্রথমা প্রকাশন",
+    //     "অন্যপ্রকাশ",
+    //     "আনন্দ পাবলিশার্স",
+    //     "বাংলা একাডেমি",
+    //     "বিদ্যাপ্রকাশ",
+    //     "ইত্যাদি গ্রন্থ প্রকাশ",
+    //     "কাকলী প্রকাশনী",
+    //     "পাঠক সমাবেশ",
+    //     "মাওলা ব্রাদার্স",
+    //     "সাহিত্য প্রকাশ",
+    //     "অনন্যা প্রকাশনী",
+    //     "অন্তর্জলী প্রকাশন",
+    //     "বঙ্গপ্রকাশ",
+    //     "সৃজনশীল প্রকাশনী",
+    //     "সম্প্রতি প্রকাশনী",
+    //     "জ্ঞানভবন প্রকাশনী",
+    //     "বিশ্বসাহিত্য কেন্দ্র",
+    //     "শিখা প্রকাশনী",
+    //     "বর্ণমালা প্রকাশনী",
+    //     "সাহিত্য সংসদ"
+    // ];
 
 
 
@@ -141,7 +184,7 @@ const Navbar = () => {
         <div className="">
 
 
-            <div className="bg-[#ffffff]">
+            <div className="bg-[#ffffff] mt-1 mb-3">
                 <nav className="flex items-center justify-between container  text-black font-semibold ">
 
                     {/* drawer section  */}
@@ -149,7 +192,7 @@ const Navbar = () => {
 
                         <Drawer className="text-black border-2">
                             <DrawerAction asChild>
-                                <p className="bg-gray-300 p-1 rounded-md md:hidden">
+                                <p className="bg-gray-300 p-1 mr-2 rounded-md md:hidden">
                                     <IoReorderThree size={28} />
                                 </p>
                             </DrawerAction>
@@ -176,7 +219,7 @@ const Navbar = () => {
                                                 } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                                         >
                                             <p>Books</p>
-                                            {books ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                                            {books ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                         </Link>
 
                                         <ul className={`${books ? 'flex ' : 'hidden'
@@ -204,7 +247,7 @@ const Navbar = () => {
                                                 } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                                         >
                                             <p>Subjects</p>
-                                            {subject ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                                            {subject ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                         </Link>
 
                                         <ul className={`${subject ? 'flex ' : 'hidden'
@@ -232,18 +275,18 @@ const Navbar = () => {
                                                 } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                                         >
                                             <p>Writers</p>
-                                            {bookWriters ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                                            {bookWriters ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                         </Link>
 
                                         <ul className={`${bookWriters ? 'flex ' : 'hidden'
                                             } py-2 flex-col ml-4 text-sm text-gray-700 dark:text-gray-200 h-[200px] overflow-auto `} aria-labelledby="multiLevelDropdownButton">
 
-                                            {writers?.map((sub, index) => (
-                                                <Link href=""
+                                            {writers?.map((writer, index) => (
+                                                <Link href={`/writer/${writer?.authorID}`}
                                                     key={index}
                                                     className="py-2 px-3 font-semibold w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
                                                 >
-                                                    <p>{sub}</p>
+                                                    <p>{writer?.name}</p>
                                                 </Link>
                                             ))}
 
@@ -260,18 +303,18 @@ const Navbar = () => {
                                                 } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                                         >
                                             <p>Publications</p>
-                                            {bookPublications ? <IoIosArrowDown /> : <IoIosArrowUp />}
+                                            {bookPublications ? <IoIosArrowUp /> : <IoIosArrowDown />}
                                         </Link>
 
                                         <ul className={`${bookPublications ? 'flex ' : 'hidden'
                                             } py-2 flex-col ml-4 text-sm text-gray-700 dark:text-gray-200 h-[200px] overflow-auto `} aria-labelledby="multiLevelDropdownButton">
 
-                                            {publications?.map((sub, index) => (
-                                                <Link href=""
+                                            {publications?.map((singlePub, index) => (
+                                                <Link href={`/publisher/${singlePub?.publicationID}`}
                                                     key={index}
                                                     className="py-2 px-3 font-semibold w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
                                                 >
-                                                    <p>{sub}</p>
+                                                    <p>{singlePub?.name}</p>
                                                 </Link>
                                             ))}
 
@@ -286,65 +329,64 @@ const Navbar = () => {
                                 <div className="flex flex-col">
                                     <hr className="border-[1px] my-[18px] w-full" />
 
-                                    <Link href="" className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                                    <Link href="/about-us" className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                                     >
                                         <p>Contact Us</p>
                                         <AiOutlinePhone></AiOutlinePhone>
                                     </Link>
                                     {
-                                        user ? <div onClick={handleLogOut} className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}>
+                                        user ? <div onClick={() => handleLogOut()} className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}>
                                             <p>Logout</p>
                                             <FiLogIn></FiLogIn>
-                                        </div> :  <div className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
-                                    >
-                                        <p>Login</p>
-                                        <FiLogIn></FiLogIn>
-                                    </div>
+                                        </div> : <div className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                                        >
+                                            <p>Login</p>
+                                            <FiLogIn></FiLogIn>
+                                        </div>
                                     }
-                               
-                                  
+
+
                                 </div>
                             </DrawerContent>
                         </Drawer>
 
 
-                        <Link href="/"> <Image height={676} width={1200} src="https://i.ibb.co.com/SfNwSrp/Whats-App-Image-2024-10-10-at-11-12-02-PM-removebg-preview-1.png" className="w-[60px] h-[60px] scale-100 text-white transition-all duration-200 hover:scale-110 " alt="logo" /></Link>
+                        <Link href="/"> <Image height={676} width={1200} src="https://i.postimg.cc/d0Q1LPVR/Bookvila-removebg-preview.png" className="w-full h-[60px] scale-100 text-white transition-all duration-200 hover:scale-110 " alt="logo" /></Link>
                     </div>
 
 
                     <div className="flex items-center justify-between gap-16">
                         <ul className="hidden md:flex items-center justify-between gap-7">
-                            <li className="group flex  cursor-pointer flex-col">
+                            <Link href="/" className="group flex  cursor-pointer flex-col">
                                 Home <span className="mt-[2px] h-[3px] w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
-                            </li>
-                            <li className="group flex  cursor-pointer flex-col">
-                                Pages <span className="mt-[2px] h-[3px]  w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
-                            </li>
-                            <li className="group flex  cursor-pointer flex-col">
-                                Products <span className="mt-[2px] h-[3px]  w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
-                            </li>
-                            <li className="group flex  cursor-pointer flex-col">
-                                Contact  <span className="mt-[2px] h-[3px]  w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
-                            </li>
+                            </Link>
+                            <Link href="/all-book" className="group flex  cursor-pointer flex-col">
+                                All Book <span className="mt-[2px] h-[3px] w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
+                            </Link>
+                            <Link href="/about-us" className="group flex  cursor-pointer flex-col">
+                                About Us <span className="mt-[2px] h-[3px] w-[0px] rounded-full bg-bg-blue transition-all duration-300 group-hover:w-full"></span>
+                            </Link>
 
+                            <Link href="/cart" className="bg-bg-color relative rounded-full p-2 hover:scale-105 duration-200 cursor-pointer">
+                                <IoCartSharp size={23}></IoCartSharp>
+                                <p className="bg-red-500 px-[3px] py-[-3px] text-sm text-white rounded-full absolute right-0 top-0">
+                                    {
+                                        isLoading ? "0" : data?.length
+                                    }
 
-                            <li className="bg-bg-color rounded-full p-2 hover:scale-105">
-                                <svg width="15.750000" height="13.552734" viewBox="0 0 15.75 13.5527" fill="none" xmlns="http://www.w3.org/2000/svg" >
-                                    <desc>
-                                        Created with Pixso.
-                                    </desc>
-                                    <defs />
-                                    <path id="Vector" d="M4.21 0C3.45 0 2.75 0.19 2.1 0.57C1.46 0.95 0.95 1.46 0.57 2.1C0.19 2.75 0 3.45 0 4.21C0 4.86 0.23 5.53 0.7 6.22C0.92 6.56 1.15 6.83 1.38 7.04L7.87 13.55L14.57 6.83C14.74 6.65 14.91 6.45 15.06 6.24C15.26 5.94 15.42 5.64 15.53 5.34C15.67 4.95 15.75 4.58 15.75 4.21C15.75 3.45 15.56 2.75 15.17 2.1C14.79 1.46 14.28 0.95 13.64 0.57C12.99 0.19 12.29 0 11.53 0C10.17 0 8.95 0.55 7.87 1.65C6.79 0.55 5.57 0 4.21 0ZM4.21 1.12C4.6 1.12 5 1.21 5.43 1.38C5.77 1.51 6.11 1.69 6.46 1.93C6.71 2.1 6.95 2.29 7.18 2.49L7.45 2.75L7.87 3.23L8.29 2.75L8.56 2.49C8.79 2.29 9.03 2.1 9.28 1.93C9.63 1.69 9.97 1.51 10.31 1.38C10.74 1.21 11.14 1.12 11.53 1.12C12.09 1.12 12.61 1.26 13.08 1.54C13.56 1.82 13.93 2.2 14.21 2.68C14.48 3.15 14.62 3.66 14.62 4.21C14.62 4.47 14.53 4.78 14.34 5.13C14.21 5.39 14.05 5.65 13.85 5.92L13.57 6.25L7.87 11.95L2.17 6.25L2 6.08C1.87 5.91 1.75 5.75 1.63 5.58C1.48 5.36 1.36 5.14 1.28 4.92C1.17 4.66 1.12 4.42 1.12 4.21C1.12 3.66 1.26 3.15 1.53 2.68C1.81 2.2 2.18 1.82 2.66 1.54C3.13 1.26 3.65 1.12 4.21 1.12Z" fill="#000000" fill-opacity="1.000000" fill-rule="nonzero" />
-                                </svg>
-
-                            </li>
+                                </p>
+                            </Link>
                         </ul>
-                        <div onClick={() => setShow(!show)} className="flex items-center border-2 rounded-[32px] relative cursor-pointer">
+                        <div onClick={() => setShow(!show)} className="flex items-center border-2 rounded-[32px] relative cursor-pointer text-gray-600">
                             <button className="rounded-full transition-all duration-300 hover:scale-90">
-                                <Image height={676} width={1200} src={`${user?.photo || 'https://static.vecteezy.com/system/resources/previews/013/042/571/original/default-avatar-profile-icon-social-media-user-photo-in-flat-style-vector.jpg'}`} alt="user" className="h-[50px] w-[50px] rounded-full " />
+                                <Image height={676} width={1200} src={`${auth?.data?.photo || 'https://i.postimg.cc/xTmfVLXn/download-black-male-user-profile-icon-png-701751695035033bwdeymrpov.png'}`} alt="user" className="h-[50px] w-[50px] rounded-full " />
                             </button>
-                            <div className={`${show ? 'right-0 top-[50px] visible' : 'right-0 top-[90px]  invisible'}  absolute z-50  bg-white rounded-2xl py-2 px-4 w-[190px] transition-all my-transition`}>
+                            <div className={`${show ? 'right-0 top-[50px] visible' : 'right-0 top-[90px]  invisible'}  absolute z-50  bg-white rounded-xl py-2 px-4 w-[190px] transition-all my-transition`}>
                                 <ul>
+                                    <Link href={"/all-book"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                        <IoBookSharp size={18}></IoBookSharp>
+                                        <li className=" ">All Book</li>
+                                    </Link>
                                     <Link href={"/my-profile"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                         <FaUser size={18}></FaUser>
                                         <li className=" ">My Profile</li>
@@ -357,23 +399,39 @@ const Navbar = () => {
                                         <FaHeart size={18}></FaHeart>
                                         <li className=" ">Wishlist</li>
                                     </Link>
-                                    <Link href={"/my-reviews"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                    <Link href={"/my-review"} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                         <FaStar size={18}></FaStar>
                                         <li className=" ">My Reviews</li>
                                     </Link>
-                                    <Link href={""} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                    <Link href={"/about-us"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                         <FaInfoCircle size={18}></FaInfoCircle>
                                         <li className=" ">About Us</li>
                                     </Link>
-                                    <Link href={""} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
-                                        <FaPhone size={18}></FaPhone>
-                                        <li className=" ">Contact Us</li>
-                                    </Link>
 
+                                    {
+                                        auth?.data?.role === "admin" && <>
+                                            <Link href={"/all-user"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                <FiUsers size={18}></FiUsers>
+                                                <li className=" ">All User</li>
+                                            </Link>
+
+
+                                            <Link href={"/all-order"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                <FaShoppingCart size={18}></FaShoppingCart>
+                                                <li className=" ">Orders</li>
+                                            </Link>
+
+                                            <Link href={"/"} className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                                <AiOutlineBook size={18}></AiOutlineBook>
+                                                <li className=" ">Add Boo</li>
+                                            </Link>
+
+                                        </>
+                                    }
 
                                     {
                                         user ? <>
-                                            <div onClick={handleLogOut} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
+                                            <div onClick={() => handleLogOut()} className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white ">
                                                 <FaSignOutAlt size={18}></FaSignOutAlt>
                                                 <li className=" ">Logout</li>
                                             </div>

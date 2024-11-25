@@ -2,10 +2,14 @@
 import axios from 'axios';
 
  const axiosSecure = axios.create({
-    baseURL: 'http://localhost:9000',
+    baseURL: 'https://book-vila-server.vercel.app',
     headers: {
         Authorization: `Bearer ${localStorage?.getItem('token')}` 
     }
 });
 
-export default  axiosSecure
+const useAxiosSecure = () => {
+    return axiosSecure;
+}
+
+export default useAxiosSecure;

@@ -28,9 +28,9 @@ export const authOptions = {
                     throw new Error("Email and password are required");
                 }
 
-                const res = await axios.post(`http://localhost:9000/getSingleUser`, userInfo)
+                const res = await axios.post(`https://book-vila-server.vercel.app/getSingleUser`, userInfo)
                 const currentUser = res?.data;
-
+console.log("userInfo", userInfo, "currentUser", currentUser)
                 // User not found or password not match
                 if (!currentUser?.success) {
                     throw new Error(currentUser?.message);
@@ -56,9 +56,9 @@ export const authOptions = {
             const { email, name, image } = user;
 
 
+console.log("user is ", user, "account is", account, "profile is", profile)
 
-
-            if (account.provider === 'google' || account.provider === 'facebook') {
+            if (account?.provider === 'google' || account?.provider === 'facebook') {
                 try {
                     console.log("Google or facebood user info is", user, "Account is ", account, "profile is ", profile)
 
@@ -69,7 +69,7 @@ export const authOptions = {
                       }
                   
                       console.log("newUser", newUser)
-                      const resp = await axios.post('http://localhost:9000/addeNewUser', newUser)
+                      const resp = await axios.post('https://book-vila-server.vercel.app/addeNewUser', newUser)
                       console.log("SignUp korar por responce is ", resp)
 
                    
@@ -83,26 +83,38 @@ export const authOptions = {
 
             return true; // Allow normal sign-in for credentials
         },
-        async jwt({ token, user }) {
+        async jwt({ token, user, account }) {
+            console.log("JWT Callback - token:", token, "user:", user, "account:", account);
+    
+            // If the user exists (only set on first login)
             if (user) {
-                console.log("token is", token, "user is", user)
-                token.id = user?.user?._id;
-                token.name = user?.user?.name;
-                token.email = user?.user?.email;
-                token.photo = user?.user?.photo;
+                if (account?.provider === 'google' || account?.provider === 'facebook') {
+                    // For Google or Facebook logins
+                    token.id = user.sub; // `sub` is the unique identifier for social logins
+                    token.name = user.name;
+                    token.email = user.email;
+                    token.photo = user.picture; // Use `picture` for Google/Facebook image
+                } else {
+                    // For email/password logins
+                    token.id = user.user._id;
+                    token.name = user.user.name;
+                    token.email = user.user.email;
+                    token.photo = user.user.photo;
+                }
             }
+    
             return token;
         },
+    
         async session({ session, token }) {
-            console.log("token is", token, "settion is", session)   // settion is {
-                // user: { name: undefined, email: undefined, image: undefined },
-                // expires: '2024-12-10T11:23:54.046Z'
-            //   }
-
+            console.log("Session Callback - token:", token, "session:", session);
+    
+            // Populate the session with token data
             session.user.id = token.id;
             session.user.name = token.name;
             session.user.email = token.email;
             session.user.photo = token.photo;
+    
             return session;
         }
     },
@@ -115,3 +127,5 @@ export const authOptions = {
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
+
+
