@@ -9,14 +9,14 @@ import toast from "react-hot-toast";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { removeCartBook } from "@/hooks/localStorage";
 
-const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, setTotalPrice, totalPrice, refetch }) => {
+const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, setTotalPrice, totalPrice, refetch, quantity, onQuantityChange }) => {
     const [singleBookTotal, setSingleBookTotal] = useState(1);
     const discountedPrice = calculateDiscountedPrice(item?.books?.price, item?.books?.discount);
     const [singleBookTotalPrice, setSingleBookTotalPrice] = useState(discountedPrice);
     const axiosPublic = useAxiosPublic()
 
 
-    const handleDelete = async()=> {
+    const handleDelete = async () => {
         removeCartBook(item)
         refetch()
     }
@@ -25,13 +25,13 @@ const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, se
             <td className='px-0 md:px-4 py-3'>
                 <div className="w-full">
                     <div className="flex w-full overflow-hidden">
-                        <Link href={`/book/${item?._id}`} >
+                        <Link href={`/book/${item?.books?._id}`} >
                             <div className="h-full w-16 sm:min-w-24 sm:w-24 hover:opacity-80 relative rounded">
                                 <Image width={500} height={5000} className='object-contain rounded absolute h-full w-full inset-0 text-transparent' src={item?.books?.coverImage || "https://pathokpoint.com/_next/image?url=%2Fdefault%2Fbook.png&w=384&q=75"} alt="" />
                             </div>
                         </Link>
                         <div className="flex flex-col ml-3">
-                            <Link href={`/book/${item?._id}`}>
+                            <Link href={`/book/${item?.books?._id}`}>
                                 <h1 className='font-semibold hover:underline'>{item?.books?.bookName?.[0]}<span className='ml-1 text-xs text-[rgb(54,55,57)] font-normal text-opacity-100'>({item?.books?.format}) </span> </h1>
                             </Link>
                             <h3 className="flex gap-x-1 items-center mt-1.5 text-xs text-[rgb(120,121,123)] font-bn">by <Link href={`/writer/${item?.books?.authorInfo?.authorID}`} className="hover:underline">{item?.books?.authorInfo?.name?.[0]}</Link></h3>
@@ -97,10 +97,13 @@ const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, se
                                             setSingleBookTotalPrice(newTotal * discountedPrice);
                                             setTotalBook(totalBook - 1);
                                             setTotalPrice(totalPrice - priceReduction);
+
+                                            //aita sudho single book er quantity pawer jonno left side component a
+                                            onQuantityChange(item?.books?._id, quantity - 1);
                                             return newTotal;
                                         });
                                     }
-                                    else{
+                                    else {
                                         toast.error("Sorry! Unavailable in stock 😢")
                                     }
                                 }}
@@ -110,19 +113,22 @@ const TableCard = ({ item, calculateDiscountedPrice, setTotalBook, totalBook, se
                             {/* <input className="text-center bg-slate-200 rounded text-xs w-[42px] h-[30px] mx-1 outline-none border-none"  value="1" /> */}
                             <p className="flex flex-col items-center justify-center bg-slate-200 rounded w-[42px] h-[30px] mx-1 outline-none border-none">{singleBookTotal}</p>
                             <button onClick={() => {
-                            if(item?.books?.stock > singleBookTotal){
-                                setSingleBookTotal((prevTotal) => {
-                                    const newTotal = prevTotal + 1;
-                                    const priceIncrease = discountedPrice;
-                                    setSingleBookTotalPrice(newTotal * discountedPrice);
-                                    setTotalBook(totalBook + 1);
-                                    setTotalPrice(totalPrice + priceIncrease);
-                                    return newTotal;
-                                });
-                            }
-                            else{
-                                toast.error("Sorry! Unavailable in stock 😢")
-                            }
+                                if (item?.books?.stock > singleBookTotal) {
+                                    setSingleBookTotal((prevTotal) => {
+                                        const newTotal = prevTotal + 1;
+                                        const priceIncrease = discountedPrice;
+                                        setSingleBookTotalPrice(newTotal * discountedPrice);
+                                        setTotalBook(totalBook + 1);
+                                        setTotalPrice(totalPrice + priceIncrease);
+
+                                        //aita sudho single book er quantity pawer jonno left side component a
+                                        onQuantityChange(item?.books?._id, quantity + 1);
+                                        return newTotal;
+                                    });
+                                }
+                                else {
+                                    toast.error("Sorry! Unavailable in stock 😢")
+                                }
                             }} className='btn btn-xs bg-slate-200 rounded w-[30px] h-[30px]'>
                                 <LuPlus />
                             </button>

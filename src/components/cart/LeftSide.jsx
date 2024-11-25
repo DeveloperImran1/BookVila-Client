@@ -12,6 +12,10 @@ import { useEffect, useState } from "react";
 import TableCard from "./TableCard";
 import { useSession } from "next-auth/react";
 import { cartBookGet } from "@/hooks/localStorage";
+import DataNotFound from "../shared/DataNotFound";
+import useAuth from "@/hooks/useAuth";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const LeftSide = () => {
     const axiosPublic = useAxiosPublic();
@@ -26,9 +30,14 @@ const LeftSide = () => {
     const [grandTotal, setGrandTotal] = useState(0);
     const [data, setData] = useState([]);
     const session = useSession();
+    const auth = useAuth();
 
-    useEffect(()=> {
-        const res =cartBookGet()
+    // every book er quantity er jonno
+    const [quantities, setQuantities] = useState({}); // To track quantities for each product
+
+    const router = useRouter();
+    useEffect(() => {
+        const res = cartBookGet()
         setData(res)
     }, [])
     console.log(data)
@@ -36,44 +45,81 @@ const LeftSide = () => {
         if (data) {
             let initialTotalBooks = 0;
             let initialTotalPrice = 0;
-    
+
             data.forEach((item) => {
                 const discountedPrice = calculateDiscountedPrice(item.books.price, item.books.discount);
                 initialTotalBooks += 1; // Assuming each item is 1 book initially
                 initialTotalPrice += discountedPrice;
             });
-    
+
             setTotalBook(initialTotalBooks);
             setTotalPrice(initialTotalPrice);
-      
+
         }
     }, [data]);
 
-    useEffect(()=> {
-        if(offerTotal > 1500){
+    useEffect(() => {
+        if (offerTotal > 1500) {
             setGrandTotal(totalPrice)
             setOfferTotal(totalPrice)
-        }else{
+        } else {
             setGrandTotal(totalPrice + delivery)
             setOfferTotal(totalPrice + delivery)
         }
-      
+
     }, [totalPrice, offerTotal])
-    
+
     // Calculate discounted price
     function calculateDiscountedPrice(price, discountPercentage) {
         return Math.round(price - (price * discountPercentage) / 100);
     }
 
-    const refetch = ()=> {
+    const refetch = () => {
         const res = cartBookGet()
         setData(res)
     }
-  
-    // const handleOrder = async ()=> {
-    //     const result = await axiosPublic.get(`/getMyAddToCart/${session?.data?.user?.email}`)
-    //     return result?.data;
-    // }
+
+
+    // Function to handle quantity changes
+    const handleQuantityChange = (bookId, quantity) => {
+        setQuantities((prev) => ({
+            ...prev,
+            [bookId]: quantity,
+        }));
+    };
+
+    const handleCheckout = async () => {
+        if (!auth?.data) {
+            return toast.error("Please! Before Login now😢").then(router?.push('/login'))
+        }
+        const itemsArr = data.map((item) => ({
+            bookId: item?.books?._id,
+            bookPhoto: item?.books?.coverImage,
+            name: item?.books?.bookName?.[0],
+            quantity: quantities[item?.books?._id] || 1, // Use the quantity from state or default to 1
+            totalPrice: calculateDiscountedPrice(item?.books?.price, item?.books?.discount) * (quantities[item?.books?._id] || 1)
+        }));
+
+        const orderObj = {
+            user: {
+                userId: auth?.data?._id,
+                name: auth?.data?.name,
+                email: auth?.data?.email,
+                phoneNumber: auth?.data?.phone,
+            },
+            items: itemsArr,
+            totalPayment: grandTotal
+        };
+
+        const res = await axiosPublic.post('/createNewOrder', orderObj);
+        console.log(res)
+        if (res?.status === 200) {
+            toast.success("Your order is pending👏 Please fillup delivery address")
+        }
+        else {
+            toast.error("Sorry! something went wrong 😢")
+        }
+    };
 
 
     return (
@@ -85,11 +131,25 @@ const LeftSide = () => {
                         <div className='bg-white w-full p-4 sm:p-6 md:p-7 lg:p-10'>
                             <h1 className="text-sm sm:text-xl font-inter font-semibold">My cart</h1>
                             <div className="mt-3 sm:mt-5 md:mt-6 lg:mt-8 overflow-scroll">
+                                {
+                                    data?.length < 1 && <div className="w-full "> <DataNotFound></DataNotFound> </div>
+                                }
                                 <table className='table table-px-0 border-t'>
                                     <tbody>
                                         {data?.map((item) => (
                                             <tr key={item?._id}>
-                                                <TableCard item={item} calculateDiscountedPrice={calculateDiscountedPrice} setTotalBook={setTotalBook} totalBook={totalBook} setTotalPrice={setTotalPrice} totalPrice={totalPrice} refetch={refetch} ></TableCard>
+                                                <TableCard
+                                                    item={item}
+                                                    calculateDiscountedPrice={calculateDiscountedPrice} setTotalBook={setTotalBook}
+                                                    totalBook={totalBook}
+                                                    setTotalPrice={setTotalPrice}
+                                                    totalPrice={totalPrice}
+                                                    refetch={refetch}
+                                                    // Every book er quantity newer jonno
+                                                    quantity={quantities[item?.books?._id] || 1} // Pass quantity from state
+                                                    onQuantityChange={handleQuantityChange} // Pass handler function
+
+                                                ></TableCard>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -182,11 +242,11 @@ const LeftSide = () => {
                         <div className="mt-5">
                             <h3 className="font-medium text-sm">Promo code</h3>
                             <div className="mt-4 flex gap-2">
-                                <input onKeyUp={(e)=> {
-                                    if(e.target.value === "NEW YEAR 2025"){
+                                <input onKeyUp={(e) => {
+                                    if (e.target.value === "NEW YEAR 2025") {
                                         setGrandTotal(Math.round(offerTotal - (offerTotal * 10) / 100))
-                                        
-                                    }else{
+
+                                    } else {
                                         setGrandTotal(offerTotal)
                                     }
                                 }} className="min-w-0 w-full pl-4 h-11 border bg-[#f5f5f5] border-[rgb(226,226,226)] outline-none rounded-sm" type="text" />
@@ -196,7 +256,7 @@ const LeftSide = () => {
 
 
                         {/* Order summary  */}
-                        <button className="mt-14 btn hover:bg-primary/55 text-white bg-primary w-full">
+                        <button onClick={handleCheckout} className="mt-14 btn hover:bg-primary/55 text-white bg-primary w-full">
                             <div className="flex gap-x-1 items-center">
                                 <span>Checkout</span>
                                 <HiArrowNarrowRight className="text-base" />

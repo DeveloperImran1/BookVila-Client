@@ -21,6 +21,8 @@ import useMyCartBooks from "@/hooks/useCartBooks";
 import { IoBookSharp } from "react-icons/io5";
 import useAuth from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
 
 const Navbar = () => {
     const [show, setShow] = useState(false)
@@ -30,6 +32,7 @@ const Navbar = () => {
     const [bookPublications, setBookPublications] = useState(false)
     const { data, refetch, isLoading } = useMyCartBooks();
 
+    const axiosPublic = useAxiosPublic();
     const session = useSession();
     const user = session?.data?.user;
     const auth = useAuth();
@@ -46,6 +49,33 @@ const Navbar = () => {
             timer: 1500
         }).then(() => router.push("/login"))
     }
+
+
+    const { data: writers = []} = useQuery({
+      queryKey: ["sidebarWriter"],
+      queryFn: async () => {
+        const res = await axiosPublic.get(`/getAllAuthors`);
+        const writerArr = await res?.data?.map(singleWriter => {
+           const writer = {authorID: singleWriter?.authorID, name: singleWriter?.name?.[1]}
+           return writer;
+        })
+        return writerArr;
+      }
+    })
+  
+    const { data: publications = [] } = useQuery({
+        queryKey: ["sidebarPublisher"],
+        queryFn: async () => {
+          const res = await axiosPublic.get(`/getPublications`);
+          const customizePublisherArr = await res?.data?.map(singlePublication => {
+            const writer = {publicationID: singlePublication?._id, name: singlePublication?.name?.[1]}
+            return writer;
+         })
+          return customizePublisherArr;
+        }
+      })
+
+      console.log(publications)
 
     const boiShomogro = [
         "মহাকালের কণ্ঠ",
@@ -99,52 +129,52 @@ const Navbar = () => {
     ];
 
     // লেখকের নামের অ্যারে
-    const writers = [
-        "হুমায়ুন আহমেদ",
-        "জহির রায়হান",
-        "রবীন্দ্রনাথ ঠাকুর",
-        "কাজী নজরুল ইসলাম",
-        "আবুল বাশার",
-        "সৈয়দ মুজতবা আলী",
-        "সুনীল গঙ্গোপাধ্যায়",
-        "আবুল মনসুর আহমদ",
-        "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-        "মুহম্মদ জাফর ইকবাল",
-        "শীর্ষেন্দু মুখোপাধ্যায়",
-        "আনিসুল হক",
-        "আহমদ ছফা",
-        "অনীশ দাস অপু",
-        "বেগম রোকেয়া",
-        "ফয়েজ আহমেদ",
-        "মীর মশাররফ হোসেন",
-        "তসলিমা নাসরিন",
-        "জাকির তালুকদার",
-        "প্রেমচাঁদ"
-    ];
+    // const writers = [
+    //     "হুমায়ুন আহমেদ",
+    //     "জহির রায়হান",
+    //     "রবীন্দ্রনাথ ঠাকুর",
+    //     "কাজী নজরুল ইসলাম",
+    //     "আবুল বাশার",
+    //     "সৈয়দ মুজতবা আলী",
+    //     "সুনীল গঙ্গোপাধ্যায়",
+    //     "আবুল মনসুর আহমদ",
+    //     "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
+    //     "মুহম্মদ জাফর ইকবাল",
+    //     "শীর্ষেন্দু মুখোপাধ্যায়",
+    //     "আনিসুল হক",
+    //     "আহমদ ছফা",
+    //     "অনীশ দাস অপু",
+    //     "বেগম রোকেয়া",
+    //     "ফয়েজ আহমেদ",
+    //     "মীর মশাররফ হোসেন",
+    //     "তসলিমা নাসরিন",
+    //     "জাকির তালুকদার",
+    //     "প্রেমচাঁদ"
+    // ];
 
     // প্রকাশনীর নামের অ্যারে
-    const publications = [
-        "প্রথমা প্রকাশন",
-        "অন্যপ্রকাশ",
-        "আনন্দ পাবলিশার্স",
-        "বাংলা একাডেমি",
-        "বিদ্যাপ্রকাশ",
-        "ইত্যাদি গ্রন্থ প্রকাশ",
-        "কাকলী প্রকাশনী",
-        "পাঠক সমাবেশ",
-        "মাওলা ব্রাদার্স",
-        "সাহিত্য প্রকাশ",
-        "অনন্যা প্রকাশনী",
-        "অন্তর্জলী প্রকাশন",
-        "বঙ্গপ্রকাশ",
-        "সৃজনশীল প্রকাশনী",
-        "সম্প্রতি প্রকাশনী",
-        "জ্ঞানভবন প্রকাশনী",
-        "বিশ্বসাহিত্য কেন্দ্র",
-        "শিখা প্রকাশনী",
-        "বর্ণমালা প্রকাশনী",
-        "সাহিত্য সংসদ"
-    ];
+    // const publications = [
+    //     "প্রথমা প্রকাশন",
+    //     "অন্যপ্রকাশ",
+    //     "আনন্দ পাবলিশার্স",
+    //     "বাংলা একাডেমি",
+    //     "বিদ্যাপ্রকাশ",
+    //     "ইত্যাদি গ্রন্থ প্রকাশ",
+    //     "কাকলী প্রকাশনী",
+    //     "পাঠক সমাবেশ",
+    //     "মাওলা ব্রাদার্স",
+    //     "সাহিত্য প্রকাশ",
+    //     "অনন্যা প্রকাশনী",
+    //     "অন্তর্জলী প্রকাশন",
+    //     "বঙ্গপ্রকাশ",
+    //     "সৃজনশীল প্রকাশনী",
+    //     "সম্প্রতি প্রকাশনী",
+    //     "জ্ঞানভবন প্রকাশনী",
+    //     "বিশ্বসাহিত্য কেন্দ্র",
+    //     "শিখা প্রকাশনী",
+    //     "বর্ণমালা প্রকাশনী",
+    //     "সাহিত্য সংসদ"
+    // ];
 
 
 
@@ -251,12 +281,12 @@ const Navbar = () => {
                                         <ul className={`${bookWriters ? 'flex ' : 'hidden'
                                             } py-2 flex-col ml-4 text-sm text-gray-700 dark:text-gray-200 h-[200px] overflow-auto `} aria-labelledby="multiLevelDropdownButton">
 
-                                            {writers?.map((sub, index) => (
-                                                <Link href=""
+                                            {writers?.map((writer, index) => (
+                                                <Link href={`/writer/${writer?.authorID}`}
                                                     key={index}
                                                     className="py-2 px-3 font-semibold w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
                                                 >
-                                                    <p>{sub}</p>
+                                                    <p>{writer?.name}</p>
                                                 </Link>
                                             ))}
 
@@ -279,12 +309,12 @@ const Navbar = () => {
                                         <ul className={`${bookPublications ? 'flex ' : 'hidden'
                                             } py-2 flex-col ml-4 text-sm text-gray-700 dark:text-gray-200 h-[200px] overflow-auto `} aria-labelledby="multiLevelDropdownButton">
 
-                                            {publications?.map((sub, index) => (
-                                                <Link href=""
+                                            {publications?.map((singlePub, index) => (
+                                                <Link href={`/publisher/${singlePub?.publicationID}`}
                                                     key={index}
                                                     className="py-2 px-3 font-semibold w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
                                                 >
-                                                    <p>{sub}</p>
+                                                    <p>{singlePub?.name}</p>
                                                 </Link>
                                             ))}
 
