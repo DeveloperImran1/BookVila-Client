@@ -67,7 +67,7 @@ const LeftSide = () => {
             setOfferTotal(totalPrice + delivery)
         }
 
-    }, [totalPrice, offerTotal])
+    }, [totalPrice, offerTotal, delivery])
 
     // Calculate discounted price
     function calculateDiscountedPrice(price, discountPercentage) {
