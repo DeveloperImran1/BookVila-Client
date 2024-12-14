@@ -63,9 +63,6 @@ Detailed information about the book, author, reviews, and price.
 - **Checkout Page:**
 Event and user management, sales monitoring, and detailed platform analytics.
 
-- **Event Detail Page:**
-Interactive maps for seat selection, ticket purchase, and social sharing.
-
 - **Payment and Checkout:**
 Secure and user-friendly payment process.
 
