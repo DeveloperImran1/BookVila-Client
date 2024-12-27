@@ -28,7 +28,7 @@ export const authOptions = {
                     throw new Error("Email and password are required");
                 }
 
-                const res = await axios.post(`https://book-vila-server.vercel.app/getSingleUser`, userInfo)
+                const res = await axios.post(`http://localhost:9000/getSingleUser`, userInfo)
                 const currentUser = res?.data;
 console.log("userInfo", userInfo, "currentUser", currentUser)
                 // User not found or password not match
@@ -69,7 +69,7 @@ console.log("user is ", user, "account is", account, "profile is", profile)
                       }
                   
                       console.log("newUser", newUser)
-                      const resp = await axios.post('https://book-vila-server.vercel.app/addeNewUser', newUser)
+                      const resp = await axios.post('http://localhost:9000/addeNewUser', newUser)
                       console.log("SignUp korar por responce is ", resp)
 
                    
