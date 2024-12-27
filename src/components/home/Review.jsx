@@ -48,8 +48,8 @@ const Review = () => {
       >
 
         {
-          reviews?.map(review => (
-            <SwiperSlide>
+          reviews?.map((review, index) => (
+            <SwiperSlide key={index}>
               <div
                 className="hero h-full "
                 style={{
