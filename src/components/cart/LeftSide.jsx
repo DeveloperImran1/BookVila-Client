@@ -88,6 +88,14 @@ const LeftSide = () => {
         }));
     };
 
+    // order er jonno unique id generate:
+    function generateUniqueId() {
+        const randomPart = Math.random().toString(36).substring(2, 10); // Random string
+        const timestampPart = Date.now().toString(36); // Current timestamp in base 36
+        return `${randomPart}-${timestampPart}`; // Combine both parts
+      }
+      
+  
     const handleCheckout = async () => {
         if (!auth?.data) {
             return toast.error("Please! Before Login now😢").then(router?.push('/login'))
@@ -100,7 +108,12 @@ const LeftSide = () => {
             totalPrice: calculateDiscountedPrice(item?.books?.price, item?.books?.discount) * (quantities[item?.books?._id] || 1)
         }));
 
+        const uniqueId = generateUniqueId();
+      
+        console.log("new unique id: ", uniqueId)
+
         const orderObj = {
+            orderId: uniqueId,
             user: {
                 userId: auth?.data?._id,
                 name: auth?.data?.name,
@@ -114,7 +127,7 @@ const LeftSide = () => {
         const res = await axiosPublic.post('/createNewOrder', orderObj);
         console.log(res)
         if (res?.status === 200) {
-            toast.success("Your order is pending👏 Please fillup delivery address")
+            toast.success("Your order is pending👏 Please fillup delivery address").then(router.push(`/checkout/${res.data.orderId}`))
         }
         else {
             toast.error("Sorry! something went wrong 😢")
@@ -258,7 +271,7 @@ const LeftSide = () => {
                         {/* Order summary  */}
                         <button onClick={handleCheckout} className="mt-14 btn hover:bg-primary/55 text-white bg-primary w-full">
                             <div className="flex gap-x-1 items-center">
-                                <span>Checkout</span>
+                                <span>Payment</span>
                                 <HiArrowNarrowRight className="text-base" />
                             </div>
                         </button>
