@@ -5,6 +5,7 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 
 const AddBookForm = () => {
@@ -29,7 +30,6 @@ const AddBookForm = () => {
     // image upload in cloudinary
     if (images?.name) {
       try {
-        console.log("images is", images);
         const data = await uploadCloudinary(images);
         setLinks(data?.url);
         return data?.url;
@@ -118,6 +118,7 @@ const AddBookForm = () => {
     });
 
     const imageUrl = await imageUploadFunc();
+    console.log("subject is ", formDataObject?.subjectBangla);
 
     const bookData = {
       bookName: [
@@ -173,10 +174,24 @@ const AddBookForm = () => {
       ],
       publicationID: formDataObject?.publicationID,
     };
-    console.log(bookData);
+
+    try {
+      const res = await axiosPublic.post("/addNewBook", bookData);
+      console.log(res);
+      if (res?.status) {
+        setLoading(false);
+        toast.success("Successfully added 😍");
+      } else {
+        setLoading(false);
+        toast.error("Something went wrong 😢");
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error("Something went wrong 😢");
+    }
   };
 
-  const categories = {
+  const subCategories = {
     Bangla: [
       "মহাকালের কণ্ঠ",
       "গোয়েন্দা কাহিনী সমগ্র",
@@ -254,7 +269,7 @@ const AddBookForm = () => {
     ],
   };
 
-  const subCategories = {
+  const categories = {
     Bangla: [
       "মাস্ট রিড কালেকশন",
       "সেলফ ডেভেলপমেন্ট",
@@ -305,7 +320,7 @@ const AddBookForm = () => {
     <div className="bg-white p-4 ">
       <p className="text-[17px] font-semibold mb-6">Add New Book</p>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* book image upload  */}
 
         <div className="mb-6  relative">
@@ -443,7 +458,8 @@ const AddBookForm = () => {
             name={`hardCoverPrice`}
             value={formData[`hardCoverPrice`]}
             onChange={handleChange}
-            type="text"
+            type="number"
+            onWheel={(e) => e.target.blur()}
             placeholder={`Hard Cover Price`}
           />
         </div>
@@ -455,7 +471,8 @@ const AddBookForm = () => {
             name={`ebookPrice`}
             value={formData[`ebookPrice`]}
             onChange={handleChange}
-            type="text"
+            type="number"
+            onWheel={(e) => e.target.blur()}
             placeholder={`Ebook Price`}
           />
         </div>
@@ -572,7 +589,6 @@ const AddBookForm = () => {
         {/* Text Fields */}
         {[
           "Edition English",
-          "Publication Date",
           "Format Bangla",
           "Binding Bangla",
           "Country Bangla",
@@ -594,11 +610,25 @@ const AddBookForm = () => {
           </div>
         ))}
 
+        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+          <label className="block font-medium">Publication Date</label>
+          <input
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            name="publicationdate"
+            value={formData.publicationdate}
+            onChange={handleChange}
+            type="text"
+            placeholder="month-date-year"
+          />
+        </div>
+
         <div className="flex  justify-end">
           <button
             type="submit"
             className={`bg-bg-blue hover:bg-[#4ed9c4]
-                          text-white font-medium py-2 px-4 rounded-md mt-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105`}
+                          text-white font-medium py-2 px-4 rounded-md mt-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105 ${
+                            loading && "cursor-not-allowed"
+                          }`}
           >
             {loading ? (
               <p className="flex flex-col justify-center items-center">
