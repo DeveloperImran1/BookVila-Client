@@ -276,7 +276,8 @@ const AllBook = () => {
           maxPrice,
         },
       });
-      setTotalPages(parseInt(books?.totalBooks) / 12);
+      console.log(books?.totalPages);
+      setTotalPages(parseInt(books?.totalPages));
       return response.data;
     },
     keepPreviousData: true,
@@ -704,7 +705,7 @@ const AllBook = () => {
             Previous
           </button>
           <span className="px-4 py-2">
-            Page {page} of {totalPages}
+            Page {page} of {Math.ceil(totalPages)}
           </span>
           <button
             onClick={handleNextPage}

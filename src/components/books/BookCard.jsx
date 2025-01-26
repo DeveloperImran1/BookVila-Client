@@ -1,16 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
-import "./bookCard.css";
-import { FaCartShopping } from "react-icons/fa6";
-import Link from "next/link";
-import Image from "next/image";
-import { TbCurrencyTaka } from "react-icons/tb";
+import {
+  cartBookGet,
+  favoruteBookGet,
+  setCartBook,
+  setFavoruteBook,
+} from "@/hooks/localStorage";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
-import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-import toast from "react-hot-toast";
 import useMyCartBooks from "@/hooks/useCartBooks";
-import { cartBookGet, favoruteBookGet, setCartBook, setFavoruteBook } from "@/hooks/localStorage";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { TbCurrencyTaka } from "react-icons/tb";
+import "./bookCard.css";
 
 const BooksCard = ({ book }) => {
   const [bookStatus, setBookStatus] = useState("");
@@ -39,16 +41,15 @@ const BooksCard = ({ book }) => {
   }
 
   useEffect(() => {
-    const newPublishedBooks = new Date(book?.updatedAt).getTime() > currentDateTime;
+    const newPublishedBooks =
+      new Date(book?.updatedAt).getTime() > currentDateTime;
 
     if (book?.discount) {
-      setBookStatus(`${book?.discount}% off`)
+      setBookStatus(`${book?.discount}% off`);
+    } else if (newPublishedBooks) {
+      setBookStatus("New");
     }
-    else if (newPublishedBooks) {
-      setBookStatus("New")
-    }
-
-  }, [book?.discount, currentDateTime, book])
+  }, [book?.discount, currentDateTime, book]);
 
   // const { data: favoruteBooks = [], refetch } = useQuery({
   //   queryKey: ["featuredBooks", session?.data?.user?.email, book?._id],
@@ -61,13 +62,11 @@ const BooksCard = ({ book }) => {
   // })
 
   useEffect(() => {
-    const res = favoruteBookGet()
-    const favoruteArr = res?.map(singleBook => singleBook?.books?._id)
-    setFavorutes(favoruteArr)
-    setFavoruteBooks(res)
-  }, [])
-
-
+    const res = favoruteBookGet();
+    const favoruteArr = res?.map((singleBook) => singleBook?.books?._id);
+    setFavorutes(favoruteArr);
+    setFavoruteBooks(res);
+  }, []);
 
   // add favorutes
   // const handleFavoruteAdded = async () => {
@@ -88,15 +87,18 @@ const BooksCard = ({ book }) => {
   //   }
   // }
   const handleFavoruteAdded = async () => {
-    const obj = { userEmail: session?.data?.user?.email || "demoEmail@gmail.com", books: book }
-    setFavoruteBook(obj)
+    const obj = {
+      userEmail: session?.data?.user?.email || "demoEmail@gmail.com",
+      books: book,
+    };
+    setFavoruteBook(obj);
 
     // refetch er kaj korbe
-    const res = favoruteBookGet()
-    const favoruteArr = res?.map(singleBook => singleBook?.books?._id)
-    setFavorutes(favoruteArr)
-    setFavoruteBooks(res)
-  }
+    const res = favoruteBookGet();
+    const favoruteArr = res?.map((singleBook) => singleBook?.books?._id);
+    setFavorutes(favoruteArr);
+    setFavoruteBooks(res);
+  };
 
   // const { data: cartBooks = [], refetch: cartRefetch } = useQuery({
   //   queryKey: ["cartBooks", session?.data?.user?.email, book?._id],
@@ -110,11 +112,10 @@ const BooksCard = ({ book }) => {
 
   useEffect(() => {
     const res = cartBookGet();
-    const cartArr = res?.map(singleBook => singleBook?.books?._id)
-    setAddToCart(cartArr)
-    setCartBooks(res)
-  }, [])
-
+    const cartArr = res?.map((singleBook) => singleBook?.books?._id);
+    setAddToCart(cartArr);
+    setCartBooks(res);
+  }, []);
 
   // // add add to cart
   // const handleAddtoCart = async () => {
@@ -136,32 +137,33 @@ const BooksCard = ({ book }) => {
   //   }
   // }
 
-
   // add add to cart
   const handleAddtoCart = async () => {
-    const obj = { userEmail: session?.data?.user?.email || 'demoEmail@gmail.com', books: book }
-    setCartBook(obj)
+    const obj = {
+      userEmail: session?.data?.user?.email || "demoEmail@gmail.com",
+      books: book,
+    };
+    setCartBook(obj);
 
-    // refetch 
+    // refetch
     const res = cartBookGet();
-    const cartArr = res?.map(singleBook => singleBook?.books?._id)
-    setAddToCart(cartArr)
-    setCartBooks(res)
-  }
-
-
+    const cartArr = res?.map((singleBook) => singleBook?.books?._id);
+    setAddToCart(cartArr);
+    setCartBooks(res);
+  };
 
   return (
     <article className="rounded-md border-2 p-4 w-full space-y-3 relative bg-white">
       <div className="clit-element absolute top-[-2px] left-0 z-50 overflow-hidden">
-        {
-          bookStatus === "New" ? <p className="-rotate-[50deg] text-white top-3 left-1 font-semibold absolute ">
-            {bookStatus}
-          </p> : <p className="-rotate-[50deg] text-white top-[9px] left-[-2px] font-semibold absolute ">
+        {bookStatus === "New" ? (
+          <p className="-rotate-[50deg] text-white top-3 left-1 font-semibold absolute ">
             {bookStatus}
           </p>
-        }
-
+        ) : (
+          <p className="-rotate-[50deg] text-white top-[9px] left-[-2px] font-semibold absolute ">
+            {bookStatus}
+          </p>
+        )}
       </div>
       <div
         onClick={handleFavoruteAdded}
@@ -182,28 +184,31 @@ const BooksCard = ({ book }) => {
         </svg>
       </div>
 
-
       <div className="hover:scale-110 transition delay-900 cursor-pointer flex flex-col justify-center items-center">
         <Link href={`/book/${book?._id}`}>
-
           <Image
             height={676}
             width={1200}
             src={
-              book?.coverImage || "https://i.ibb.co/x6jR8ny/Link-prod16-png.png"
+              book?.coverImage ||
+              "https://cdn-icons-png.flaticon.com/512/5078/5078727.png"
             }
             alt="book"
             className="w-[180px] h-[210px] my-4 rounded-md"
           />
-
         </Link>
       </div>
 
       <div className=" text-gray-600 space-x-2">
         <Link href={`/book/${book?._id}`} className="inline">
-          <h1 className="text-[17px] hover:underline mt-2 inline">{book?.bookName[0]}</h1>
+          <h1 className="text-[17px] hover:underline mt-2 inline">
+            {book?.bookName[0]}
+          </h1>
         </Link>
-        <Link href={`/writer/${book?.authorInfo?.authorID}`} className="inline hover:underline">
+        <Link
+          href={`/writer/${book?.authorInfo?.authorID}`}
+          className="inline hover:underline"
+        >
           <small>by {book?.authorInfo?.name[0]}</small>
         </Link>
       </div>
@@ -235,12 +240,16 @@ const BooksCard = ({ book }) => {
             <TbCurrencyTaka size={22}></TbCurrencyTaka>
           </del>
         </div>
-        <button onClick={handleAddtoCart} className={`${addToCart?.includes(book?._id) ? 'bg-secondary ' : 'bg-primary'} px-2 py-1 rounded-md text-white hover:bg-[#e0435e]`}>
+        <button
+          onClick={handleAddtoCart}
+          className={`${
+            addToCart?.includes(book?._id) ? "bg-secondary " : "bg-primary"
+          } px-2 py-1 rounded-md text-white hover:bg-[#e0435e]`}
+        >
           Add to Cart
         </button>
       </div>
     </article>
-
   );
 };
 

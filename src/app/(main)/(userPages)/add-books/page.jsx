@@ -181,6 +181,7 @@ const AddBookForm = () => {
       if (res?.status) {
         setLoading(false);
         toast.success("Successfully added 😍");
+        e.target.reset;
       } else {
         setLoading(false);
         toast.error("Something went wrong 😢");
