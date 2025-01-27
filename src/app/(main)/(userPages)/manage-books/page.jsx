@@ -1,6 +1,7 @@
 "use client";
 
 import BookEditModal from "@/components/Modals/BookEditModal";
+import Loading from "@/components/shared/Loading";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import { Input, Space, Table } from "antd";
@@ -58,7 +59,7 @@ const ManageBooks = () => {
 
   const columns = [
     {
-      title: "RowHead",
+      title: "Serial No",
       dataIndex: "key",
       rowScope: "row",
     },
@@ -136,6 +137,9 @@ const ManageBooks = () => {
     setIsModalOpen(false);
   };
 
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
   return (
     <>
       <section>
@@ -167,6 +171,7 @@ const ManageBooks = () => {
           handleOk={handleOk}
           handleCancel={handleCancel}
           book={editedBook}
+          refetch={refetch}
         ></BookEditModal>
       </section>
     </>

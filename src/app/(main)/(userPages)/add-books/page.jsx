@@ -97,6 +97,9 @@ const AddBookForm = () => {
     },
   });
 
+  // unique id generate
+  const generateUniqueId = () => `id-${Date.now()}`;
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
     setLoading(true);
@@ -120,6 +123,7 @@ const AddBookForm = () => {
     const imageUrl = await imageUploadFunc();
     console.log("subject is ", formDataObject?.subjectBangla);
 
+    const uniqueId = generateUniqueId();
     const bookData = {
       bookName: [
         formDataObject?.bookNameBangla,
@@ -145,7 +149,7 @@ const AddBookForm = () => {
       discount: parseInt(formDataObject?.discount),
       stock: parseInt(formDataObject?.stock),
       language: formDataObject?.language,
-      bookID: `001${data + 1}`,
+      bookID: uniqueId,
       edition: formDataObject?.editionenglish,
       publicationDate: formDataObject?.publicationdate,
       pages: parseInt(formDataObject?.pages),
@@ -625,6 +629,7 @@ const AddBookForm = () => {
 
         <div className="flex  justify-end">
           <button
+            disabled={loading}
             type="submit"
             className={`bg-bg-blue hover:bg-[#4ed9c4]
                           text-white font-medium py-2 px-4 rounded-md mt-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105 ${

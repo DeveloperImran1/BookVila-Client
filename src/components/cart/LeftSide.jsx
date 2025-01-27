@@ -293,6 +293,7 @@ const LeftSide = () => {
 
             {/* Order summary  */}
             <button
+              disabled={isLoading}
               onClick={handleCheckout}
               className={`${
                 isLoading && "cursor-not-allowed"

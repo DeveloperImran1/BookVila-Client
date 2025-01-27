@@ -56,7 +56,7 @@ const Checkout = () => {
 
   const handleCreatePayment = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     // capture all form data
 
     const name = document.getElementById("name").value;
@@ -68,24 +68,31 @@ const Checkout = () => {
     const note = document.getElementById("note").value;
     if (!name) {
       setmessage("Please fillup your name");
+      setLoading(false);
       return;
     } else if (!email) {
       setmessage("Please fillup your email");
+      setLoading(false);
       return;
     } else if (!contact) {
       setmessage("Please fillup your contact");
+      setLoading(false);
       return;
     } else if (!address) {
       setmessage("Please fillup your address");
+      setLoading(false);
       return;
     } else if (!thana) {
       setmessage("Please fillup your thana");
+      setLoading(false);
       return;
     } else if (!district) {
       setmessage("Please fillup your district");
+      setLoading(false);
       return;
     } else if (!shipping) {
       setmessage("Please sellect a shipping method");
+      setLoading(false);
       return;
     } else {
       setmessage("");
@@ -111,6 +118,7 @@ const Checkout = () => {
     console.log("handle payment is triggered", orderInfo, "now pay", nowPay);
     const result = await axiosPublic.post("/createPayment", orderInfo);
     console.log("result is ", result);
+    setLoading(false);
     const redirectUrl = result?.data?.paymentUrl;
     if (redirectUrl) {
       window.location.replace(redirectUrl);
@@ -495,6 +503,7 @@ const Checkout = () => {
                 </p>
                 {/* payment button  */}
                 <button
+                  disabled={loading}
                   onClick={handleCreatePayment}
                   className="mt-4 btn hover:bg-primary/55 text-white bg-primary w-full"
                 >
