@@ -127,10 +127,11 @@ const LeftSide = () => {
     const res = await axiosPublic.post("/createNewOrder", orderObj);
     console.log(res);
     if (res?.status === 200) {
-      seIsLoading(false);
       toast
         .success("Your order is pending👏 Please fillup delivery address")
         .then(router.push(`/checkout/${res.data.orderId}`));
+
+      seIsLoading(false);
     } else {
       seIsLoading(false);
       toast.error("Sorry! something went wrong 😢");

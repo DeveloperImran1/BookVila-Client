@@ -6,15 +6,15 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 
-const AuthorEditModal = ({
+const PublicationEditModal = ({
   isModalOpen,
   handleOk,
   handleCancel,
   showModal,
-  author,
+  publica: singlePublication,
   refetch,
 }) => {
-  console.log("current author is", author);
+  console.log("current publication is", singlePublication);
 
   const axiosPublic = useAxiosPublic();
 
@@ -47,20 +47,18 @@ const AuthorEditModal = ({
   };
 
   const [formData, setFormData] = useState({
-    authorNameEnglish: "",
-    authorNameBangla: "",
-    authorAbout: "",
+    publicationNameEnglish: "",
+    publicationNameBangla: "",
   });
 
   useEffect(() => {
-    if (author) {
+    if (singlePublication) {
       setFormData({
-        authorNameEnglish: author?.name?.[0] || "",
-        authorNameBangla: author?.name?.[1] || "",
-        authorAbout: author?.about || "",
+        publicationNameEnglish: singlePublication?.name?.[0] || "",
+        publicationNameBangla: singlePublication?.name?.[1] || "",
       });
     }
-  }, [author]); // Run whenever the `book` object changes
+  }, [singlePublication]); // Run whenever the `book` object changes
 
   // Handle input changes
   const handleChange = (e) => {
@@ -93,20 +91,18 @@ const AuthorEditModal = ({
 
     const imageUrl = await imageUploadFunc();
 
-    const authorData = {
+    const publicationData = {
       name: [
-        formDataObject?.authorNameEnglish,
-        formDataObject?.authorNameBangla,
+        formDataObject?.publicationNameEnglish,
+        formDataObject?.publicationNameBangla,
       ],
-      authorID: author?.authorID,
-      about: formDataObject?.authorAbout,
-      photo: imageUrl || author?.photo,
+      publicationID: singlePublication?.publicationID,
+      photo: imageUrl || singlePublication?.photo,
     };
-    console.log("authorData", authorData);
     try {
       const res = await axiosPublic.put(
-        `/updateAuthor/${author?._id}`,
-        authorData
+        `/updatePublication/${singlePublication?._id}`,
+        publicationData
       );
       console.log(res);
       if (res?.status) {
@@ -136,7 +132,9 @@ const AuthorEditModal = ({
         footer={null}
       >
         <div className="bg-white p-4 ">
-          <p className="text-[17px] font-semibold mb-6">Edit This Author</p>
+          <p className="text-[17px] font-semibold mb-6">
+            Edit This Publication
+          </p>
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* book image upload  */}
 
@@ -147,7 +145,7 @@ const AuthorEditModal = ({
                   width={1200}
                   src={
                     selectedImage ||
-                    author?.photo ||
+                    singlePublication?.photo ||
                     "https://i.postimg.cc/xj7YmS74/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail-1.png"
                   }
                   className="w-36 h-36 scale-100 text-white transition-all duration-200 hover:scale-110 rounded-full border-4 border-bg-blue "
@@ -165,7 +163,7 @@ const AuthorEditModal = ({
                   </label>
                   <input
                     type="file"
-                    placeholder="Your Image"
+                    placeholder="Publication Image"
                     onChange={async (e) => {
                       console.log(
                         "onchange er moddhe image file",
@@ -182,38 +180,26 @@ const AuthorEditModal = ({
             </div>
 
             <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
-              <label className="block font-medium">{`Author Name (English)`}</label>
+              <label className="block font-medium">{`Publication Name (English)`}</label>
               <input
                 className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
-                name={`authorNameEnglish`}
-                value={formData[`authorNameEnglish`]}
+                name={`publicationNameEnglish`}
+                value={formData[`publicationNameEnglish`]}
                 onChange={handleChange}
                 type="text"
-                placeholder={author?.name?.[0]}
+                placeholder={singlePublication?.name?.[0]}
               />
             </div>
 
             <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
-              <label className="block font-medium">{`Author Name (Bangla)`}</label>
+              <label className="block font-medium">{`Publication Name (Bangla)`}</label>
               <input
                 className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
-                name={`authorNameBangla`}
-                value={formData[`authorNameBangla`]}
+                name={`publicationNameBangla`}
+                value={formData[`publicationNameBangla`]}
                 onChange={handleChange}
                 type="text"
-                placeholder={author?.name?.[1]}
-              />
-            </div>
-
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
-              <label className="block font-medium">{`Author About`}</label>
-              <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
-                name={`authorAbout`}
-                value={formData[`authorAbout`]}
-                onChange={handleChange}
-                type="text"
-                placeholder={author?.about}
+                placeholder={singlePublication?.name?.[1]}
               />
             </div>
 
@@ -245,4 +231,4 @@ const AuthorEditModal = ({
   );
 };
 
-export default AuthorEditModal;
+export default PublicationEditModal;

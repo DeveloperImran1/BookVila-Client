@@ -160,6 +160,7 @@ const Checkout = () => {
                 placeholder="Your Phone Number"
                 name="phone"
                 type="number"
+                onWheel={(e) => e.target.blur()}
               />
             </div>
 
