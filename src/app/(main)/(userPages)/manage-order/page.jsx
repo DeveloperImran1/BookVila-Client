@@ -1,14 +1,17 @@
 "use client";
 
+import OrderDetailsModal from "@/components/Modals/OrderDetailsModal";
 import Loading from "@/components/shared/Loading";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import { Select, Table } from "antd";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 const ManageOrder = () => {
   const axiosPublic = useAxiosPublic();
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentOrder, setCurentOrder] = useState({});
   //   date formating
 
   const formatDate = (dateString) => {
@@ -123,7 +126,17 @@ const ManageOrder = () => {
     {
       title: "Action",
       key: "action",
-      render: (_, record) => <>detail </>,
+      render: (_, record) => (
+        <>
+          <a
+            onClick={() => {
+              showModal(record?.order); // Pass the specific book data
+            }}
+          >
+            Details
+          </a>
+        </>
+      ),
     },
   ];
   const data = orders?.map((order, index) => ({
@@ -139,6 +152,18 @@ const ManageOrder = () => {
     //     action: "",
     order: order,
   }));
+
+  // handle modal for edit a book
+  const showModal = (order) => {
+    setCurentOrder(order); // Set the book to be edited
+    setIsModalOpen(true); // Open the modal
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   if (isLoading) {
     return <Loading></Loading>;
@@ -158,6 +183,15 @@ const ManageOrder = () => {
             x: "max-content",
           }}
         />
+
+        <OrderDetailsModal
+          showModal={showModal}
+          isModalOpen={isModalOpen}
+          handleOk={handleOk}
+          handleCancel={handleCancel}
+          order={currentOrder}
+          refetch={refetch}
+        ></OrderDetailsModal>
       </section>
     </>
   );
