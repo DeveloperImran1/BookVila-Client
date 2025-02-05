@@ -1,22 +1,23 @@
 "use client";
-import { useEffect, useState } from "react";
-import { Heart, Share2, Info, Star, ShoppingCart } from "lucide-react";
-import Modal from "react-modal";
-import { PlusCircle, X } from "lucide-react";
-import { motion } from "framer-motion";
-import { FaBook, FaPen, FaBuilding, FaBarcode } from "react-icons/fa";
+import {
+  cartBookGet,
+  favoruteBookGet,
+  setCartBook,
+  setFavoruteBook,
+} from "@/hooks/localStorage";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
-import { PanoramaSharp } from "@mui/icons-material";
-import { usePathname } from "next/navigation";
-import Image from "next/image";
-import axios from "axios";
-import { cartBookGet, favoruteBookGet, setCartBook, setFavoruteBook } from "@/hooks/localStorage";
+import { Heart, Info, Share2, ShoppingCart, Star } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FaBarcode, FaBook, FaBuilding, FaPen } from "react-icons/fa";
+import Loading from "../shared/Loading";
 import BookInformation from "./BookInformation";
 import ReviewPage from "./ReviewPage";
 import SimilarBooks from "./SimilarBook";
-import Loading from "../shared/Loading";
 
 // Configure modal root element for accessibility
 // Modal.setAppElement("#root");
@@ -118,7 +119,11 @@ export default function BookDetails() {
   //     setLoading(false)
   // }, [id, uiUpdate]);
 
-    const { data: book = {}, isLoading, refetch } = useQuery({
+  const {
+    data: book = {},
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["bookDetails"],
     queryFn: async () => {
       const { data } = await axiosPublic.get(`/book/${id}`);
@@ -146,58 +151,54 @@ export default function BookDetails() {
   //   setIsLoading(false);
   // };
 
-
-  // add favorute list relate kaj 
+  // add favorute list relate kaj
   useEffect(() => {
-    const res = favoruteBookGet()
-    const favoruteArr = res?.map(singleBook => singleBook?.books?._id)
-    setFavorutes(favoruteArr)
-    setFavoruteBooks(res)
-  }, [])
-
-
-
+    const res = favoruteBookGet();
+    const favoruteArr = res?.map((singleBook) => singleBook?.books?._id);
+    setFavorutes(favoruteArr);
+    setFavoruteBooks(res);
+  }, []);
 
   const handleFavoruteAdded = async () => {
-    const obj = { userEmail: session?.data?.user?.email || "demoEmail@gmail.com", books: book }
-    setFavoruteBook(obj)
+    const obj = {
+      userEmail: session?.data?.user?.email || "demoEmail@gmail.com",
+      books: book,
+    };
+    setFavoruteBook(obj);
 
     // refetch er kaj korbe
-    const res = favoruteBookGet()
-    const favoruteArr = res?.map(singleBook => singleBook?.books?._id)
-    setFavorutes(favoruteArr)
-    setFavoruteBooks(res)
-  }
-
+    const res = favoruteBookGet();
+    const favoruteArr = res?.map((singleBook) => singleBook?.books?._id);
+    setFavorutes(favoruteArr);
+    setFavoruteBooks(res);
+  };
 
   // add to cart relate kaj
 
   useEffect(() => {
     const res = cartBookGet();
-    const cartArr = res?.map(singleBook => singleBook?.books?._id)
-    setAddToCart(cartArr)
-    setCartBooks(res)
-  }, [])
-
-
-
+    const cartArr = res?.map((singleBook) => singleBook?.books?._id);
+    setAddToCart(cartArr);
+    setCartBooks(res);
+  }, []);
 
   // add add to cart
   const handleAddtoCart = async () => {
-    const obj = { userEmail: session?.data?.user?.email || 'demoEmail@gmail.com', books: book }
-    setCartBook(obj)
+    const obj = {
+      userEmail: session?.data?.user?.email || "demoEmail@gmail.com",
+      books: book,
+    };
+    setCartBook(obj);
 
-    // refetch 
+    // refetch
     const res = cartBookGet();
-    const cartArr = res?.map(singleBook => singleBook?.books?._id)
-    setAddToCart(cartArr)
-    setCartBooks(res)
-  }
-
-
+    const cartArr = res?.map((singleBook) => singleBook?.books?._id);
+    setAddToCart(cartArr);
+    setCartBooks(res);
+  };
 
   if (isLoading) {
-    <Loading></Loading>
+    <Loading></Loading>;
   }
 
   return (
@@ -242,7 +243,9 @@ export default function BookDetails() {
                 title="Book information"
               />
             </div>
-            <p className="text-gray-500 mt-2">by {book?.authorInfo?.name?.[0]}</p>
+            <p className="text-gray-500 mt-2">
+              by {book?.authorInfo?.name?.[0]}
+            </p>
           </div>
 
           <div className="flex items-center gap-4">
@@ -250,8 +253,9 @@ export default function BookDetails() {
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-4 h-4 ${i < 4 ? "text-yellow-400" : "text-gray-400"
-                    }`}
+                  className={`w-4 h-4 ${
+                    i < 4 ? "text-yellow-400" : "text-gray-400"
+                  }`}
                 />
               ))}
             </div>
@@ -282,7 +286,7 @@ export default function BookDetails() {
             )}
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 text-gray-700 mt-8">
+          <div className="flex flex-row flex-wrap gap-4 justify-between text-gray-700 mt-8">
             <div className="text-center">
               <FaBook className="text-lg mx-auto " />
               <h1 className="font-semibold">Book Length</h1>
@@ -306,7 +310,14 @@ export default function BookDetails() {
           </div>
 
           <div className="flex items-center gap-4 justify-start pt-4">
-            <button onClick={handleFavoruteAdded} className={`${addToCart?.includes(book?._id) ? 'text-secondary  ' : 'text-gray-500 '} text-gray-500 flex items-center`} >
+            <button
+              onClick={handleFavoruteAdded}
+              className={`${
+                addToCart?.includes(book?._id)
+                  ? "text-secondary  "
+                  : "text-gray-500 "
+              } text-gray-500 flex items-center`}
+            >
               {/* <button onClick={handleFavoruteAdded}  className="text-gray-500 hover:text-primary flex items-center"> */}
               <Heart className="mr-2 h-4 w-4 " />
               Add to Booklist
@@ -318,10 +329,32 @@ export default function BookDetails() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <button onClick={handleAddtoCart} className={`${addToCart?.includes(book?._id) ? 'bg-secondary text-white ' : 'bg-[#00bffe] text-white'} p-2  rounded flex items-center justify-center`} >
-              <ShoppingCart className="mr-2 h-4 w-4" />
-              Add to Cart
-            </button>
+            {addToCart?.includes(book?._id) ? (
+              <Link
+                href="/cart"
+                className={`${
+                  addToCart?.includes(book?._id)
+                    ? "bg-secondary text-white "
+                    : "bg-[#00bffe] text-white"
+                } p-2  rounded flex items-center justify-center`}
+              >
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                View Cart
+              </Link>
+            ) : (
+              <button
+                onClick={handleAddtoCart}
+                className={`${
+                  addToCart?.includes(book?._id)
+                    ? "bg-secondary text-white "
+                    : "bg-[#00bffe] text-white"
+                } p-2  rounded flex items-center justify-center`}
+              >
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                Add to Cart
+              </button>
+            )}
+
             <button
               // onClick={openModal}    // pdf er system akhono korini
               className="p-2 bg-slate-200 border rounded font-bold text-[#077aa0b7]"
@@ -329,13 +362,9 @@ export default function BookDetails() {
               একটু পড়ে দেখুন
             </button>
           </div>
-
-
         </div>
       </div>
       {/* </motion.div> */}
-
-
 
       {/* </div> */}
 
@@ -467,7 +496,7 @@ export default function BookDetails() {
 
       <BookInformation book={book}></BookInformation>
 
-      <ReviewPage book={book} refetch={refetch}  ></ReviewPage>
+      <ReviewPage book={book} refetch={refetch}></ReviewPage>
 
       <SimilarBooks category={book?.category?.[0]}></SimilarBooks>
     </div>
