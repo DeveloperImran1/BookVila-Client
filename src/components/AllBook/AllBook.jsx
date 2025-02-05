@@ -1,16 +1,13 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
+import { Drawer, DrawerAction, DrawerContent } from "keep-react";
+import Image from "next/image";
+import { useState } from "react";
+import { CiFilter } from "react-icons/ci";
 import { Range } from "react-range";
 import BooksCard from "../books/BookCard";
-import { useQuery } from "@tanstack/react-query";
-import Loading from "../shared/Loading";
 import BookCardSkelletion from "../books/BookCardSkelletion";
-import Image from "next/image";
-import { Button, Drawer, DrawerAction, DrawerContent, Skeleton, SkeletonLine } from 'keep-react'
-import { IoReorderThree } from "react-icons/io5";
-import { CiFilter } from "react-icons/ci";
 
 const MIN = 0;
 const MAX = 999;
@@ -274,11 +271,13 @@ const AllBook = () => {
           category: selectedCategories.join(","),
           subject: selectedSubjects.join(","),
           page,
-          limit: 10,
+          limit: 12,
           minPrice,
           maxPrice,
         },
       });
+      console.log(books);
+      setTotalPages(response.data.totalPages || 1);
       return response.data;
     },
     keepPreviousData: true,
@@ -325,22 +324,19 @@ const AllBook = () => {
   };
   return (
     <div className="container mx-auto ">
-
       <div className="">
-
-
         <Drawer className="text-black border-2 mt-9 ">
           <DrawerAction asChild>
-          <div className="flex justify-end">
-          <p className="bg-gray-300 hover:text-primary w-[37px] p-1 mt-4 mr-2 rounded-md lg:hidden">
-              <CiFilter size={28} />
-            </p>
-          </div>
+            <div className="flex justify-end">
+              <p className="bg-gray-300 hover:text-primary w-[37px] p-1 mt-4 mr-2 rounded-md lg:hidden">
+                <CiFilter size={28} />
+              </p>
+            </div>
           </DrawerAction>
 
           <DrawerContent
             position="left"
-            className="w-full max-w-[40%] md:max-w-full flex flex-col justify-between  h-[100vh] overflow-scroll"
+            className="w-[60%] md:max-w-[40%]  flex flex-col justify-between  h-[100vh] overflow-scroll"
           >
             <div className="flex flex-col bg-white pt-[10px] pb-[50px] rounded-md justify-between items-center">
               <div className="flex flex-col gap-6 mt-[20px] md:mt-[33px] lg:mt-11">
@@ -362,7 +358,10 @@ const AllBook = () => {
                         <input
                           type="checkbox"
                           onChange={() =>
-                            handleCheckboxChange(setSelectedAuthors, author.bengali)
+                            handleCheckboxChange(
+                              setSelectedAuthors,
+                              author.bengali
+                            )
                           }
                           checked={selectedAuthors.includes(author.bengali)}
                         />
@@ -395,7 +394,9 @@ const AllBook = () => {
                               category.bengali
                             )
                           }
-                          checked={selectedCategories.includes(category.bengali)} // Update this line
+                          checked={selectedCategories.includes(
+                            category.bengali
+                          )} // Update this line
                         />
                         {category.bengali}
                       </label>
@@ -422,7 +423,10 @@ const AllBook = () => {
                         <input
                           type="checkbox"
                           onChange={() =>
-                            handleCheckboxChange(setSelectedSubjects, subject.bengali)
+                            handleCheckboxChange(
+                              setSelectedSubjects,
+                              subject.bengali
+                            )
                           }
                           checked={selectedSubjects.includes(subject.bengali)}
                         />
@@ -487,14 +491,9 @@ const AllBook = () => {
                   />
                 </div>
               </div>
-
             </div>
-
-
-
           </DrawerContent>
         </Drawer>
-
 
         <div className="flex gap-5 ">
           <div className="hidden lg:flex w-[20%]  flex-col gap-6 mt-[20px] md:mt-[33px] lg:mt-11">
@@ -576,7 +575,10 @@ const AllBook = () => {
                     <input
                       type="checkbox"
                       onChange={() =>
-                        handleCheckboxChange(setSelectedSubjects, subject.bengali)
+                        handleCheckboxChange(
+                          setSelectedSubjects,
+                          subject.bengali
+                        )
                       }
                       checked={selectedSubjects.includes(subject.bengali)}
                     />
@@ -645,7 +647,9 @@ const AllBook = () => {
           {/* Book List */}
           <div className="w-full lg:w-[80%] bg-white p-5 mt-[20px] md:mt-[33px] lg:mt-11">
             <div className="flex justify-between items-start">
-              <p className="text-[17px] font-semibold text-gray-600">Total Books: {books?.totalBooks || 0}</p>
+              <p className="text-[17px] font-semibold text-gray-600">
+                Total Books: {books?.totalBooks || 0}
+              </p>
               {/* Search Input */}
               <div className="text-center flex justify-center items-center">
                 <input
@@ -658,25 +662,34 @@ const AllBook = () => {
               </div>
             </div>
 
-            {
-              isLoading ? <div className="container bg-white">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
-                  {
-                    [1, 2, 3, 4].map((card, index) => <BookCardSkelletion key={index}></BookCardSkelletion>)
-                  }
-                </div>
-              </div> : books?.books?.length < 1 ? <div className="flex flex-col items-center justify-center bg-white ">
-                <Image className="h-[300px] w-[300px] " height={676} width={1200} src="https://i.postimg.cc/PJX8X2QK/46524b382087d63a209441765be9eb5b-removebg-preview.png" alt="gift" />
-                <h3 className="text-[20px] font-semibold text-gray-500 mt-5 mb-8 ml-3">Your Filtering Book Not Available 🤔</h3>
-              </div> : <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
-                {
-                  books?.books?.map((book) => (
-                    <BooksCard key={book._id} book={book} />
+            {isLoading ? (
+              <div className="container">
+                <div className="w-full mx-auto  py-4 bg-white grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center justify-center gap-4 ">
+                  {[1, 2, 3, 4].map((card, index) => (
+                    <BookCardSkelletion key={index}></BookCardSkelletion>
                   ))}
+                </div>
+              </div>
+            ) : books?.books?.length < 1 ? (
+              <div className="flex flex-col items-center justify-center bg-white ">
+                <Image
+                  className="h-[300px] w-[300px] "
+                  height={676}
+                  width={1200}
+                  src="https://i.postimg.cc/PJX8X2QK/46524b382087d63a209441765be9eb5b-removebg-preview.png"
+                  alt="gift"
+                />
+                <h3 className="text-[20px] font-semibold text-gray-500 mt-5 mb-8 ml-3">
+                  Your Filtering Book Not Available 🤔
+                </h3>
+              </div>
+            ) : (
+              <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-3 lg:gap-5">
+                {books?.books?.map((book) => (
+                  <BooksCard key={book._id} book={book} />
+                ))}
               </ul>
-            }
-
-
+            )}
           </div>
         </div>
         {/* Pagination */}
@@ -685,8 +698,11 @@ const AllBook = () => {
           <button
             onClick={handlePrevPage}
             disabled={page === 1}
-            className={`px-4 py-2 border ${page === 1 ? "bg-gray-200" : "bg-blue-500 text-white"
-              } cursor-pointer`}
+            className={`px-4 py-2 border ${
+              page === 1
+                ? "bg-gray-200 cursor-not-allowed"
+                : "bg-blue-500 text-white"
+            } cursor-pointer rounded-md`}
           >
             Previous
           </button>
@@ -695,9 +711,12 @@ const AllBook = () => {
           </span>
           <button
             onClick={handleNextPage}
-            disabled={page === totalPages}
-            className={`px-4 py-2 border ${page === totalPages ? "bg-gray-200" : "bg-blue-500 text-white"
-              } cursor-pointer`}
+            disabled={page >= totalPages}
+            className={`px-4 py-2 border ${
+              page >= totalPages
+                ? "bg-gray-200 cursor-not-allowed"
+                : "bg-blue-500 text-white"
+            } cursor-pointer rounded-md`}
           >
             Next
           </button>
