@@ -1,22 +1,19 @@
-"use client"
-import { FaCartShopping } from "react-icons/fa6";
-import { useState, useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react"; // Import Swiper components
-import "swiper/css";
-import Link from "next/link";
-import Image from "next/image";
+"use client";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { useRef, useState } from "react";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react"; // Import Swiper components
 import BooksCard from "../books/BookCard";
 import BookCardSkelletion from "../books/BookCardSkelletion";
 
 const RecentlyBooks = () => {
-
   const [userRating, setUserRating] = useState(3);
   const swiperRef = useRef(null); // Reference to the Swiper component
-  const axiosPublic = useAxiosPublic()
+  const axiosPublic = useAxiosPublic();
   const currentDateTime = new Date().getTime() - 2592000000;
-  const [books, setBooks] = useState([])
+  const [books, setBooks] = useState([]);
 
   const prevSlider = () => {
     if (swiperRef.current) {
@@ -34,21 +31,22 @@ const RecentlyBooks = () => {
     queryKey: ["newBooksHome"],
     queryFn: async () => {
       const res = await axiosPublic.get(`/getBooks`);
-      const newPublishedBooks = res?.data?.filter(book => new Date(book?.updatedAt).getTime() > currentDateTime)
-      console.log("all books", res?.data)
-      setBooks(newPublishedBooks)
+      const newPublishedBooks = res?.data?.filter(
+        (book) => new Date(book?.updatedAt).getTime() > currentDateTime
+      );
+      console.log("all books", res?.data);
+      setBooks(newPublishedBooks);
       return res?.data;
-    }
-  })
-
+    },
+  });
 
   return (
-
-
     <div className="container   ">
-      <div className="bg-white my-8 p-4 relative">
+      <div className="bg-white my-8 p-2 lg:p-4 relative">
         <div className="flex justify-between mb-6 font-semibold ">
-          <h1 className="text-2xl text-gray-600">Recently Added Books</h1>
+          <h1 className="text-[17px] md:text-[20px] lg:text-2xl text-gray-600">
+            Recently Added Books
+          </h1>
           <Link href={`/new-books`}>
             <h1 className="text-bg-blue underline">See more</h1>
           </Link>
@@ -58,31 +56,44 @@ const RecentlyBooks = () => {
         <Swiper
           ref={swiperRef} // Assign the reference to Swiper
           spaceBetween={20}
-          slidesPerView={1} // Default to 1 item per view for small screens
+          slidesPerView={2} // Default to 1 item per view for small screens
           breakpoints={{
+            0: {
+              slidesPerView: 2,
+              spaceBetween: 5,
+            },
             640: {
-              slidesPerView: 1, // 1 item per view for screens up to 640px
+              slidesPerView: 3,
+              spaceBetween: 10,
             },
             768: {
-              slidesPerView: 2, // 2 items per view for medium screens
+              slidesPerView: 4,
+              spaceBetween: 15,
             },
             1024: {
-              slidesPerView: 4, // 4 items per view for large screens
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1280: {
+              slidesPerView: 4,
             },
           }}
         >
-          {isPending ? <div className="container">
-            <div className="w-full mx-auto pl-6 py-4 bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-              {
-                [1, 2, 3, 4].map((card, index) => <BookCardSkelletion key={index}></BookCardSkelletion>)
-              }
+          {isPending ? (
+            <div className="container">
+              <div className="w-full mx-auto  py-4 bg-white grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center justify-center gap-4 ">
+                {[1, 2, 3, 4].map((card, index) => (
+                  <BookCardSkelletion key={index}></BookCardSkelletion>
+                ))}
+              </div>
             </div>
-          </div> :
-          books?.map((book) => (
-            <SwiperSlide key={book._id}>
-              <BooksCard book={book}></BooksCard>
-            </SwiperSlide>
-          ))}
+          ) : (
+            books?.map((book) => (
+              <SwiperSlide key={book._id}>
+                <BooksCard book={book}></BooksCard>
+              </SwiperSlide>
+            ))
+          )}
         </Swiper>
 
         {/* arrow left */}

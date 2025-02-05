@@ -12,7 +12,7 @@ const nextConfig = {
 	  ]
 	},
   
-	// Extend Webpack configuration to handle audio files
+	// Extend Webpack configuration to handle audio file
 	// webpack: (config, { isServer }) => {
 	//   config.module.rules.push({
 	// 	test: /\.(mp3|wav|ogg)$/, // Regex to match audio file extensions
