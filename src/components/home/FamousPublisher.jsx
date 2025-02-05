@@ -1,11 +1,11 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import Image from "next/image";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import Link from "next/link";
+import { useRef } from "react";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 import BookCardSkelletion from "../books/BookCardSkelletion";
 
 const FamousPublisher = () => {
@@ -18,14 +18,10 @@ const FamousPublisher = () => {
       const res = await axiosPublic.get(`/getPublications`);
 
       return res?.data;
-    }
-  })
+    },
+  });
 
-  console.log("famousPublisher", famousPublisher)
-
-
-
-
+  console.log("famousPublisher", famousPublisher);
 
   const prevSlider = () => {
     if (swiperRef.current) {
@@ -41,9 +37,11 @@ const FamousPublisher = () => {
 
   return (
     <section className="container">
-      <div className="bg-white my-8 p-4 relative">
+      <div className="bg-white my-8 p-2 lg:p-4 relative">
         <div className="flex justify-between mb-6 font-semibold">
-          <h1 className="text-2xl text-gray-600">জনপ্রিয় প্রকাশনী</h1>
+          <h1 className=" text-[17px] md:text-[20px] lg:text-2xl text-gray-600">
+            জনপ্রিয় প্রকাশনী
+          </h1>
           <Link href={`/featured-books`}>
             <h1 className="text-bg-blue underline">See more</h1>
           </Link>
@@ -53,37 +51,65 @@ const FamousPublisher = () => {
         <Swiper
           ref={swiperRef} // Assign the reference to Swiper
           spaceBetween={20}
-          slidesPerView={1}
+          slidesPerView={2} // Default to 1 item per view for small screens
           breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 4 },
+            0: {
+              slidesPerView: 2,
+              spaceBetween: 5,
+            },
+            640: {
+              slidesPerView: 3,
+              spaceBetween: 10,
+            },
+            768: {
+              slidesPerView: 4,
+              spaceBetween: 15,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1280: {
+              slidesPerView: 4,
+            },
           }}
         >
-          {isLoading ? <div className="container">
-            <div className="w-full mx-auto pl-6 py-4 bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-              {
-                [1, 2, 3, 4].map((card, index) => <BookCardSkelletion key={index}></BookCardSkelletion>)
-              }
-            </div>
-          </div> : famousPublisher.map((publisher) => (
-            <SwiperSlide key={publisher?._id}>
-              <div className="rounded-md border-2 p-4 w-full space-y-3 bg-white">
-                <figure className="flex justify-center items-center">
-                  <Image
-                    src={publisher?.photo || 'https://pathokpoint.com/_next/image?url=%2Fdefault%2Fpublisher.png&w=1920&q=75'}
-                    alt={publisher?.name?.[1]}
-                    width={200}
-                    height={200}
-                    className="rounded-lg object-cover h-[200px] w-[200px] "
-                  />
-                </figure>
-                <h1 className="text-center">
-                  <Link href={`/publisher/${publisher?._id}`} className="text-center w-full font-semibold text-gray-700 hover:underline">{publisher?.name?.[1]}</Link>
-                </h1>
+          {isLoading ? (
+            <div className="container">
+              <div className="w-full mx-auto  py-4 bg-white grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center justify-center gap-4 ">
+                {[1, 2, 3, 4].map((card, index) => (
+                  <BookCardSkelletion key={index}></BookCardSkelletion>
+                ))}
               </div>
-            </SwiperSlide>
-          ))}
+            </div>
+          ) : (
+            famousPublisher.map((publisher) => (
+              <SwiperSlide key={publisher?._id}>
+                <div className="rounded-md border-2 p-2 md:p-3 lg:p-4 w-full min-h-[230px]  space-y-3 bg-white flex flex-col justify-between">
+                  <figure className="flex justify-center items-center">
+                    <Image
+                      src={
+                        publisher?.photo ||
+                        "https://pathokpoint.com/_next/image?url=%2Fdefault%2Fpublisher.png&w=1920&q=75"
+                      }
+                      alt={publisher?.name?.[1]}
+                      width={200}
+                      height={200}
+                      className="rounded-lg object-cover h-[140px]  w-[200px] "
+                    />
+                  </figure>
+                  <h1 className="text-center">
+                    <Link
+                      href={`/publisher/${publisher?._id}`}
+                      className="text-center w-full font-semibold text-gray-700 hover:underline"
+                    >
+                      {publisher?.name?.[1]}
+                    </Link>
+                  </h1>
+                </div>
+              </SwiperSlide>
+            ))
+          )}
         </Swiper>
 
         {/* Arrow left */}
