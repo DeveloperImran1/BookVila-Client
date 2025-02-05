@@ -276,8 +276,8 @@ const AllBook = () => {
           maxPrice,
         },
       });
-      console.log(books?.totalPages);
-      setTotalPages(parseInt(books?.totalPages));
+      console.log(books);
+      setTotalPages(response.data.totalPages || 1);
       return response.data;
     },
     keepPreviousData: true,
@@ -663,8 +663,8 @@ const AllBook = () => {
             </div>
 
             {isLoading ? (
-              <div className="container bg-white">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
+              <div className="container">
+                <div className="w-full mx-auto  py-4 bg-white grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center justify-center gap-4 ">
                   {[1, 2, 3, 4].map((card, index) => (
                     <BookCardSkelletion key={index}></BookCardSkelletion>
                   ))}
@@ -684,7 +684,7 @@ const AllBook = () => {
                 </h3>
               </div>
             ) : (
-              <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
+              <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-3 lg:gap-5">
                 {books?.books?.map((book) => (
                   <BooksCard key={book._id} book={book} />
                 ))}
@@ -699,19 +699,23 @@ const AllBook = () => {
             onClick={handlePrevPage}
             disabled={page === 1}
             className={`px-4 py-2 border ${
-              page === 1 ? "bg-gray-200" : "bg-blue-500 text-white"
+              page === 1
+                ? "bg-gray-200 cursor-not-allowed"
+                : "bg-blue-500 text-white"
             } cursor-pointer rounded-md`}
           >
             Previous
           </button>
           <span className="px-4 py-2">
-            Page {page} of {Math.ceil(totalPages)}
+            Page {page} of {totalPages}
           </span>
           <button
             onClick={handleNextPage}
             disabled={page >= totalPages}
             className={`px-4 py-2 border ${
-              page >= totalPages ? "bg-gray-200" : "bg-blue-500 text-white"
+              page >= totalPages
+                ? "bg-gray-200 cursor-not-allowed"
+                : "bg-blue-500 text-white"
             } cursor-pointer rounded-md`}
           >
             Next
