@@ -22,6 +22,7 @@ import {
   FaClipboardList,
   FaHeart,
   FaInfoCircle,
+  FaSignInAlt,
   FaSignOutAlt,
   FaStar,
   FaUser,
@@ -36,7 +37,7 @@ import {
 import { HiOutlineLibrary } from "react-icons/hi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoBookSharp, IoCartSharp } from "react-icons/io5";
-import { MdManageSearch } from "react-icons/md";
+import { MdContactMail, MdManageSearch } from "react-icons/md";
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
@@ -219,7 +220,7 @@ const Navbar = () => {
                       height={676}
                       width={1200}
                       src="https://i.ibb.co.com/SfNwSrp/Whats-App-Image-2024-10-10-at-11-12-02-PM-removebg-preview-1.png"
-                      className="w-[100px] h-[100px] scale-100 text-white transition-all duration-200 hover:scale-110"
+                      className="w-[90px] h-[90px] scale-100 text-white transition-all duration-200 hover:scale-110"
                       alt="logo"
                     />
                   </Link>
@@ -382,13 +383,23 @@ const Navbar = () => {
               </DrawerContent>
             </Drawer>
 
-            <Link href="/">
+            <Link href="/" className="flex md:hidden">
+              {" "}
+              <Image
+                height={676}
+                width={1200}
+                src="https://i.postimg.cc/BZTx3Nzy/Book-Vila-logo1.png"
+                className="w-full h-[45px] md:h-[60px] scale-100 text-white transition-all duration-200 hover:scale-110 "
+                alt="logo"
+              />
+            </Link>
+            <Link href="/" className="hidden md:flex">
               {" "}
               <Image
                 height={676}
                 width={1200}
                 src="https://i.postimg.cc/d0Q1LPVR/Bookvila-removebg-preview.png"
-                className="w-full h-[60px] scale-100 text-white transition-all duration-200 hover:scale-110 "
+                className="w-full h-[45px] md:h-[60px] scale-100 text-white transition-all duration-200 hover:scale-110 "
                 alt="logo"
               />
             </Link>
@@ -503,6 +514,14 @@ const Navbar = () => {
                       <li className=" ">About Us</li>
                     </Link>
 
+                    <Link
+                      href={"/contact-us"}
+                      className="flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white "
+                    >
+                      <MdContactMail size={18}></MdContactMail>
+                      <li className=" ">Contact Us</li>
+                    </Link>
+
                     {auth?.data?.role === "admin" && (
                       <>
                         <>
@@ -577,7 +596,7 @@ const Navbar = () => {
                           href={"/login"}
                           className="flex items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white "
                         >
-                          <FaStar size={18}></FaStar>
+                          <FaSignInAlt size={18}></FaSignInAlt>
                           <li className=" ">Login</li>
                         </Link>
                       </>

@@ -8,7 +8,11 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { CiDiscount1 } from "react-icons/ci";
 import { HiArrowNarrowRight } from "react-icons/hi";
-import { TbCurrencyTaka, TbTruckDelivery } from "react-icons/tb";
+import {
+  TbCurrencyTaka,
+  TbFidgetSpinner,
+  TbTruckDelivery,
+} from "react-icons/tb";
 import DataNotFound from "../shared/DataNotFound";
 import TableCard from "./TableCard";
 
@@ -300,10 +304,19 @@ const LeftSide = () => {
                 isLoading && "cursor-not-allowed"
               } mt-14 btn hover:bg-primary/55 text-white bg-primary w-full`}
             >
-              <div className="flex gap-x-1 items-center">
-                <span>Payment</span>
-                <HiArrowNarrowRight className="text-base" />
-              </div>
+              {isLoading ? (
+                <p className="flex flex-col justify-center items-center">
+                  <TbFidgetSpinner
+                    size={22}
+                    className="text-white animate-spin "
+                  ></TbFidgetSpinner>
+                </p>
+              ) : (
+                <div className="flex gap-x-1 items-center">
+                  <span>Payment</span>
+                  <HiArrowNarrowRight className="text-base" />
+                </div>
+              )}
             </button>
           </div>
         </div>
