@@ -46,7 +46,7 @@ const BooksCard = ({ book }) => {
       new Date(book?.updatedAt).getTime() > currentDateTime;
 
     if (book?.discount) {
-      setBookStatus(`${book?.discount}% off`);
+      setBookStatus(`${book?.discount}%`);
     } else if (newPublishedBooks) {
       setBookStatus("New");
     }
@@ -99,7 +99,7 @@ const BooksCard = ({ book }) => {
     <>
       {/* large device er jonno  */}
       <article className="rounded-md border-2 md:p-2 lg:p-4  w-full space-y-3 hidden lg:flex flex-col justify-between relative bg-white">
-        <div className="clit-element absolute top-[-2px] left-0 z-50 overflow-hidden">
+        {/* <div className="clit-element absolute top-[-2px] left-0 z-50 overflow-hidden">
           {bookStatus === "New" ? (
             <p className="-rotate-[50deg] text-white top-3 left-1 font-semibold absolute ">
               {bookStatus}
@@ -109,7 +109,29 @@ const BooksCard = ({ book }) => {
               {bookStatus}
             </p>
           )}
+        </div> */}
+        <div className=" absolute top-[-2px] left-0 z-50 overflow-hidden">
+          <div className="relative">
+            <Image
+              height={600}
+              width={600}
+              className="h-[60px] w-[60px]"
+              src="https://i.postimg.cc/bJJggnKk/Untitled-design-removebg-preview.png"
+              alt=""
+            />
+            {bookStatus === "New" ? (
+              <p className=" text-white top-[45%] left-[10%px]  font-semibold absolute text-center ">
+                {bookStatus}
+              </p>
+            ) : (
+              <p className=" text-white top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] font-semibold absolute text-center text-sm ">
+                {bookStatus}{" "}
+                <span className="block text-[10px] mt-[-5px]">ছাড়</span>
+              </p>
+            )}
+          </div>
         </div>
+
         <div
           onClick={handleFavoruteAdded}
           className="absolute top-[-2px] right-1 z-50 rounded-full p-2 hover:scale-150 duration-300 cursor-pointer"
@@ -157,18 +179,26 @@ const BooksCard = ({ book }) => {
             <small>by {book?.authorInfo?.name[0]}</small>
           </Link>
         </div>
-
+        <div className="my-1 md:my-2 text-smitems-center ">
+          <span className=" text-red-500 ">
+            {book?.stock < 1 && "Product in stock out"}
+          </span>
+          <span className="text-green-500">
+            {book?.stock > 0 && "Product in stock"}
+          </span>
+        </div>
         <div className="flex justify-between items-center">
           <div className="flex gap-4 items-center">
             <h2 className="text-[17px] font-semibold flex items-center ">
               <span>{parseInt(newPrice)}</span>
               <TbCurrencyTaka size={22}></TbCurrencyTaka>
             </h2>
-            <del className="text-[17px] font-semibold text-gray-600 flex items-center">
+            <del className="text-sm  font-semibold text-gray-600 flex items-center">
               <span>{originalPrice}</span>
-              <TbCurrencyTaka size={22}></TbCurrencyTaka>
+              <TbCurrencyTaka size={16}></TbCurrencyTaka>
             </del>
           </div>
+
           {addToCart?.includes(book?._id) ? (
             <Link
               href="/cart"
@@ -190,16 +220,26 @@ const BooksCard = ({ book }) => {
 
       {/* small to medium device er jonno  */}
       <article className="min-h-[260px] rounded-md border-2 p-1 flex flex-col justify-between   lg:hidden relative bg-white">
-        <div className="clit-element absolute top-[-2px] left-0 z-50 overflow-hidden">
-          {bookStatus === "New" ? (
-            <p className="-rotate-[50deg] text-white top-3 left-1 font-semibold absolute ">
-              {bookStatus}
-            </p>
-          ) : (
-            <p className="-rotate-[50deg] text-white top-[9px] left-[-2px] font-semibold absolute ">
-              {bookStatus}
-            </p>
-          )}
+        <div className=" absolute top-[-2px] left-0 z-50 overflow-hidden">
+          <div className="relative">
+            <Image
+              height={600}
+              width={600}
+              className="h-[60px] w-[60px]"
+              src="https://i.postimg.cc/bJJggnKk/Untitled-design-removebg-preview.png"
+              alt=""
+            />
+            {bookStatus === "New" ? (
+              <p className=" text-white top-[45%] left-[10%px]  font-semibold absolute text-center ">
+                {bookStatus}
+              </p>
+            ) : (
+              <p className=" text-white top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] font-semibold absolute text-center text-sm ">
+                {bookStatus}{" "}
+                <span className="block text-[10px] mt-[-5px]">ছাড়</span>
+              </p>
+            )}
+          </div>
         </div>
         <div
           onClick={handleFavoruteAdded}
@@ -220,7 +260,7 @@ const BooksCard = ({ book }) => {
           </svg>
         </div>
 
-        <div className="hover:scale-110 transition delay-900 cursor-pointer  border-2">
+        <div className=" transition delay-900 cursor-pointer ">
           <Link href={`/book/${book?._id}`}>
             <Image
               height={676}
@@ -230,7 +270,7 @@ const BooksCard = ({ book }) => {
                 "https://cdn-icons-png.flaticon.com/512/5078/5078727.png"
               }
               alt="book"
-              className="w-full h-[120px] sm:h-[180px] md:h-[210px]  rounded-md"
+              className="w-full h-[260px] sm:h-[270px] md:h-[260px]  rounded-md"
             />
           </Link>
         </div>
@@ -238,7 +278,7 @@ const BooksCard = ({ book }) => {
         <div className=" text-gray-600 space-x-2 mt-2 md:mt-3">
           <Link href={`/book/${book?._id}`} className="inline">
             <h1 className="text-[15px] md:text-base lg:text-[17px] hover:underline mt-2 inline">
-              {book?.bookName[0]}
+              {book?.bookName?.[0]}
             </h1>
           </Link>
           <Link
@@ -255,10 +295,19 @@ const BooksCard = ({ book }) => {
               <span>{parseInt(newPrice)}</span>
               <TbCurrencyTaka></TbCurrencyTaka>
             </h2>
-            <del className=" font-semibold text-gray-600 flex items-center">
+            <del className="text-sm font-semibold text-gray-600 flex items-center">
               <span>{originalPrice}</span>
               <TbCurrencyTaka></TbCurrencyTaka>
             </del>
+          </div>
+
+          <div className="my-1 md:my-2 text-smitems-center ">
+            <span className=" text-red-500 ">
+              {book?.stock < 1 && "Product in stock out"}
+            </span>
+            <span className="text-green-500">
+              {book?.stock > 0 && "Product in stock"}
+            </span>
           </div>
 
           {addToCart?.includes(book?._id) ? (

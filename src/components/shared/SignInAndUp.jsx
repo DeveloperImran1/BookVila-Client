@@ -42,8 +42,10 @@ export default function SignInAndUp() {
         setLinks(data?.url);
         return data?.url;
       } catch (error) {
-        console.log(error);
+        return "https://i.postimg.cc/xTmfVLXn/download-black-male-user-profile-icon-png-701751695035033bwdeymrpov.png";
       }
+    } else {
+      return "https://i.postimg.cc/xTmfVLXn/download-black-male-user-profile-icon-png-701751695035033bwdeymrpov.png";
     }
   };
 
@@ -82,7 +84,6 @@ export default function SignInAndUp() {
 
   const [formData, setFormData] = useState({
     firstName: "",
-    lastName: "",
     email: "",
     password: "",
   });
@@ -96,11 +97,10 @@ export default function SignInAndUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const name = `${e.target.firstName.value} ${e.target.lastName.value}`;
+    const name = `${e.target.firstName.value}`;
     const email = e.target.email.value;
     const password = e.target.password.value;
     const image = await imageUploadFunc();
-    console.log("db te image pathassi", image);
 
     if (!image) {
       setLoading(false);
@@ -108,7 +108,7 @@ export default function SignInAndUp() {
     }
 
     const newUser = {
-      name: `${e.target.firstName.value} ${e.target.lastName.value}`,
+      name: `${e.target.firstName.value}`,
       email: e.target.email.value,
       password: e.target.password.value,
       photo: image,
@@ -286,36 +286,21 @@ export default function SignInAndUp() {
                         </div>
                       </div>
                     </div>
-                    {/* First and Last Name */}
-                    <div className="flex flex-col md:flex-row space-y-1 md:space-y-0 md:space-x-2">
-                      <div className="w-full">
-                        <label className="block text-[15px] font-medium mb-1">
-                          First name
-                        </label>
-                        <input
-                          type="text"
-                          name="firstName"
-                          value={formData.firstName}
-                          onChange={handleChange}
-                          placeholder="First name"
-                          required
-                          className="border bg-gray-100 border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-100"
-                        />
-                      </div>
-                      <div className="w-full">
-                        <label className="block text-[15px] font-medium mb-1">
-                          Last name
-                        </label>
-                        <input
-                          type="text"
-                          name="lastName"
-                          value={formData.lastName}
-                          onChange={handleChange}
-                          placeholder="Last name"
-                          required
-                          className="border bg-gray-100 border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-100"
-                        />
-                      </div>
+                    {/* First  Name */}
+
+                    <div className="w-full">
+                      <label className="block text-[15px] font-medium mb-1">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        placeholder="Your Name"
+                        required
+                        className="border bg-gray-100 border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-100"
+                      />
                     </div>
 
                     {/* Email */}
@@ -529,36 +514,20 @@ export default function SignInAndUp() {
                       </div>
                     </div>
                   </div>
-                  {/* First and Last Name */}
-                  <div className="flex flex-col md:flex-row space-y-1 md:space-y-0 md:space-x-2">
-                    <div className="w-full">
-                      <label className="block text-[15px] font-medium mb-1">
-                        First name
-                      </label>
-                      <input
-                        type="text"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        placeholder="First name"
-                        required
-                        className="border bg-gray-100 border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-100"
-                      />
-                    </div>
-                    <div className="w-full">
-                      <label className="block text-[15px] font-medium mb-1">
-                        Last name
-                      </label>
-                      <input
-                        type="text"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        placeholder="Last name"
-                        required
-                        className="border bg-gray-100 border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-100"
-                      />
-                    </div>
+                  {/* First Name */}
+                  <div className="w-full">
+                    <label className="block text-[15px] font-medium mb-1">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      placeholder="Your Name"
+                      required
+                      className="border bg-gray-100 border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-green-100"
+                    />
                   </div>
 
                   {/* Email */}

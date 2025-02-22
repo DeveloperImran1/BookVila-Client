@@ -163,7 +163,7 @@ const Banner = () => {
           <span className="relative   ">
             <input
               type="text"
-              placeholder="Search Anything"
+              placeholder="Search by book or author name"
               className="  bg-white  md:w-[200px] lg:w-[300px] py-1  px-2 border-none focus:outline-none focus:border-none bg-transparent rounded-full md:rounded-l-full "
             />
             <FaSearch
@@ -185,6 +185,21 @@ const Banner = () => {
               New Year Cupon Code
             </p>
           </div>
+        </section>
+
+        {/* for small device serchebar */}
+        <section className="flex md:hidden py-2  px-2 items-center justify-between bg-[#00bffe] mb-3 rounded-md">
+          <span className="relative  w-full ">
+            <input
+              type="text"
+              placeholder="Search by book or author name"
+              className="  bg-white  w-full py-1  px-2 border-none focus:outline-none focus:border-none bg-transparent rounded-full md:rounded-l-full "
+            />
+            <FaSearch
+              size={22}
+              className="text-gray-500 absolute right-3 top-[20%]"
+            ></FaSearch>
+          </span>
         </section>
       </div>
 
@@ -286,7 +301,7 @@ const Banner = () => {
           //  }}
           //  navigation={true}
           modules={[Autoplay]}
-          className="mySwiper h-[250px] md:h-[340px] lg:h-[430px] w-full md:w-[70%] lg:w-[80%] "
+          className="mySwiper h-[150px] md:h-[340px] lg:h-[430px] w-full md:w-[70%] lg:w-[80%] "
         >
           <SwiperSlide className=" rounded-md  ">
             <Image

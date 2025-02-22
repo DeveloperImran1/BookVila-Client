@@ -3,7 +3,7 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import { Drawer, DrawerAction, DrawerContent } from "keep-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiFilter } from "react-icons/ci";
 import { Range } from "react-range";
 import BooksCard from "../books/BookCard";
@@ -25,7 +25,7 @@ const AllBook = () => {
   const [searchSubjectsQuery, setSearchSubjectsQuery] = useState("");
   const [searchCategoriesQuery, setSearchCategoriesQuery] = useState("");
   const [priceRange, setPriceRange] = useState([MIN, MAX]);
-
+  const [authors, setAuthors] = useState([]);
   const axiosPublic = useAxiosPublic();
 
   // Search input change handlers with explicit casting
@@ -39,25 +39,48 @@ const AllBook = () => {
     setPriceRange(values);
   };
 
-  // Authors, categories, and subjects options
-  const authors = [
-    { bengali: "রবীন্দ্রনাথ ঠাকুর", english: "Rabindranath Tagore" },
-    { bengali: "কাজী নজরুল ইসলাম", english: "Kazi Nazrul Islam" },
-    {
-      bengali: "শরৎচন্দ্র চট্টোপাধ্যায়",
-      english: "Sarat Chandra Chattopadhyay",
+  const {
+    data: allAuthorsObj = [],
+    isLoading: isAuthorLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["manageAuthors"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllAuthors");
+      return response.data;
     },
-    { bengali: "সেলিনা হোসেন", english: "Selina Hossain" },
-    { bengali: "আখতারুজ্জামান ইলিয়াস", english: "Akhtaruzzaman Elias" },
-    { bengali: "হুমায়ুন আহমেদ", english: "Humayun Ahmed" },
-    { bengali: "মাইকেল মধুসূদন দত্ত", english: "Michael Madhusudan Dutt" },
-    { bengali: "জীবনানন্দ দাশ", english: "Jibanananda Das" },
-    { bengali: "বুদ্ধদেব বসু", english: "Buddhadeb Basu" },
-    { bengali: "মানিক বন্দ্যোপাধ্যায়", english: "Manik Bandopadhyay" },
-    { bengali: "হাসান আজিজুল হক", english: "Hasan Azizul Haque" },
-    { bengali: "আরিফ আজাদ", english: "Arif Azad" },
-    { bengali: "তারিক জামিল", english: "Tarik Jamil" },
-  ];
+  });
+
+  useEffect(() => {
+    if (allAuthorsObj) {
+      const formatedAuthorObj = allAuthorsObj?.map((obj) => ({
+        bengali: obj?.name?.[1],
+        english: obj?.name?.[0],
+      }));
+      console.log("formatedAuthorObj", formatedAuthorObj);
+      setAuthors(formatedAuthorObj);
+    }
+  }, [allAuthorsObj]);
+
+  // Authors, categories, and subjects options
+  // const authors = [
+  //   { bengali: "রবীন্দ্রনাথ ঠাকুর", english: "Rabindranath Tagore" },
+  //   { bengali: "কাজী নজরুল ইসলাম", english: "Kazi Nazrul Islam" },
+  //   {
+  //     bengali: "শরৎচন্দ্র চট্টোপাধ্যায়",
+  //     english: "Sarat Chandra Chattopadhyay",
+  //   },
+  //   { bengali: "সেলিনা হোসেন", english: "Selina Hossain" },
+  //   { bengali: "আখতারুজ্জামান ইলিয়াস", english: "Akhtaruzzaman Elias" },
+  //   { bengali: "হুমায়ুন আহমেদ", english: "Humayun Ahmed" },
+  //   { bengali: "মাইকেল মধুসূদন দত্ত", english: "Michael Madhusudan Dutt" },
+  //   { bengali: "জীবনানন্দ দাশ", english: "Jibanananda Das" },
+  //   { bengali: "বুদ্ধদেব বসু", english: "Buddhadeb Basu" },
+  //   { bengali: "মানিক বন্দ্যোপাধ্যায়", english: "Manik Bandopadhyay" },
+  //   { bengali: "হাসান আজিজুল হক", english: "Hasan Azizul Haque" },
+  //   { bengali: "আরিফ আজাদ", english: "Arif Azad" },
+  //   { bengali: "তারিক জামিল", english: "Tarik Jamil" },
+  // ];
 
   const subjects = [
     { bengali: "দেশপ্রেম", english: "Patriotism", banglish: "Deshprem" },
@@ -283,11 +306,10 @@ const AllBook = () => {
     keepPreviousData: true,
   });
 
-  // if (isLoading) return <Loading></Loading>
   if (error) return <p>Error loading books: {error.message}</p>;
 
   // Filter authors based on search input
-  const filteredAuthors = authors.filter(
+  const filteredAuthors = authors?.filter(
     (author) =>
       author.bengali.includes(searchAuthorQuery) ||
       author.english.toLowerCase().includes(searchAuthorQuery.toLowerCase())
@@ -353,19 +375,19 @@ const AllBook = () => {
 
                   {/* Scrollable container for authors */}
                   <div className="flex flex-col max-h-[200px] overflow-y-auto">
-                    {filteredAuthors.map((author) => (
-                      <label key={author.bengali}>
+                    {filteredAuthors?.map((author) => (
+                      <label key={author?.bengali}>
                         <input
                           type="checkbox"
                           onChange={() =>
                             handleCheckboxChange(
                               setSelectedAuthors,
-                              author.bengali
+                              author?.bengali
                             )
                           }
-                          checked={selectedAuthors.includes(author.bengali)}
+                          checked={selectedAuthors?.includes(author?.bengali)}
                         />
-                        {author.bengali}
+                        {author?.bengali}
                       </label>
                     ))}
                   </div>
@@ -510,16 +532,19 @@ const AllBook = () => {
 
               {/* Scrollable container for authors */}
               <div className="flex flex-col max-h-[200px] overflow-y-auto">
-                {filteredAuthors.map((author) => (
-                  <label key={author.bengali}>
+                {filteredAuthors?.map((author) => (
+                  <label key={author?.bengali}>
                     <input
                       type="checkbox"
                       onChange={() =>
-                        handleCheckboxChange(setSelectedAuthors, author.bengali)
+                        handleCheckboxChange(
+                          setSelectedAuthors,
+                          author?.bengali
+                        )
                       }
-                      checked={selectedAuthors.includes(author.bengali)}
+                      checked={selectedAuthors.includes(author?.bengali)}
                     />
-                    {author.bengali}
+                    {author?.bengali}
                   </label>
                 ))}
               </div>
