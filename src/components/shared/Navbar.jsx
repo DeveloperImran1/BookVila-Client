@@ -36,6 +36,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 
+import { Plus, Settings } from "lucide-react";
 import {
   FiBook,
   FiClipboard,
@@ -557,6 +558,21 @@ const Navbar = () => {
                           >
                             <PenTool size={18}></PenTool>
                             <p>Manage Subject</p>
+                          </Link>
+
+                          <Link
+                            href="/add-banner"
+                            className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
+                          >
+                            <Plus size={18}></Plus>
+                            <p>Add Banner</p>
+                          </Link>
+                          <Link
+                            href="/manage-banner"
+                            className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
+                          >
+                            <Settings size={18}></Settings>
+                            <p>Manage Banner</p>
                           </Link>
 
                           <Link

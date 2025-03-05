@@ -6,6 +6,8 @@ import {
   Pencil,
   PenSquare,
   PenTool,
+  Plus,
+  Settings,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
@@ -179,6 +181,21 @@ const Sidebar = () => {
             >
               <PenTool size={18} className="hover:text-bg-gray"></PenTool>
               <p>Manage Subject</p>
+            </Link>
+
+            <Link
+              href="/add-banner"
+              className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
+            >
+              <Plus size={18} className="hover:text-bg-gray"></Plus>
+              <p>Add Banner</p>
+            </Link>
+            <Link
+              href="/manage-banner"
+              className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
+            >
+              <Settings size={18} className="hover:text-bg-gray"></Settings>
+              <p>Manage Banner</p>
             </Link>
 
             <Link
