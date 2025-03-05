@@ -73,7 +73,7 @@ const BookEditModal = ({
     language: "",
     // Text Fields
     editionenglish: "",
-    publicationdate: "",
+    // publicationdate: "",
     publicationID: "",
     authorID: "",
     authorNameBangla: "",
@@ -109,12 +109,12 @@ const BookEditModal = ({
         pages: book?.pages || "",
         language: book?.language || "",
         editionenglish: book?.edition || "",
-        publicationdate: book?.publicationDate || "",
+        // publicationdate: book?.publicationDate || "",
         publicationID: book?.publicationID || "",
         authorID: book?.authorInfo?.authorID || "",
         authorNameBangla: book?.authorInfo?.name?.[0] || "",
         authorNameEnglish: book?.authorInfo?.name?.[1] || "",
-        hardCoverPrice: book?.buyingOptions?.[0]?.price || "",
+        hardCoverPrice: book?.price || "",
         ebookPrice: book?.buyingOptions?.[1]?.price || "",
         ebookFileLink: book?.buyingOptions?.[1]?.fileLink || "",
         formatbangla: book?.format || "",
@@ -184,7 +184,7 @@ const BookEditModal = ({
       language: formDataObject?.language || book?.language,
       bookID: book?.bookID,
       edition: formDataObject?.editionenglish || book?.edition,
-      publicationDate: formDataObject?.publicationdate || book?.publicationDate,
+      // publicationDate: formDataObject?.publicationdate || book?.publicationDate,
       pages: parseInt(formDataObject?.pages || book?.pages),
       format: formDataObject?.formatbangla || book?.format,
       binding: formDataObject?.bindingbangla || book?.binding,
@@ -201,9 +201,7 @@ const BookEditModal = ({
       buyingOptions: [
         {
           type: "হার্ডকভার",
-          price: parseInt(
-            formDataObject?.hardCoverPrice || book?.buyingOptions?.[0]?.price
-          ),
+          price: parseInt(formDataObject?.price || book?.price),
         },
         {
           type: "ইবুক",
@@ -421,13 +419,10 @@ const BookEditModal = ({
 
             {/* Book Name Fields */}
             {["Bangla", "Banglish", "English"]?.map((lang) => (
-              <div
-                key={lang}
-                className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-              >
+              <div key={lang} className="space-y-2 text-sm text-zinc-700 ">
                 <label className="block font-medium">{`Book Name (${lang})`}</label>
                 <input
-                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                   name={`bookName${lang}`}
                   value={formData[`bookName${lang}`]}
                   onChange={handleChange}
@@ -439,13 +434,10 @@ const BookEditModal = ({
 
             {/* Publisher Fields */}
             {["Bangla", "Banglish"]?.map((lang) => (
-              <div
-                key={lang}
-                className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-              >
-                <label className="block font-medium">{`Publisher Name (${lang})`}</label>
+              <div key={lang} className="space-y-2 text-sm text-zinc-700 ">
+                <label className="block font-medium">{`Publication Name (${lang})`}</label>
                 <input
-                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                   name={`publisher${lang}`}
                   value={formData[`publisher${lang}`]}
                   onChange={handleChange}
@@ -455,10 +447,10 @@ const BookEditModal = ({
               </div>
             ))}
 
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
-              <label className="block font-medium">{`Publisher ID`}</label>
+            <div className="space-y-2 text-sm text-zinc-700 ">
+              <label className="block font-medium">{`Publication ID`}</label>
               <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                 name={`publicationID`}
                 value={formData[`publicationID`]}
                 onChange={handleChange}
@@ -468,10 +460,10 @@ const BookEditModal = ({
             </div>
 
             {/* author info  */}
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium">{`Author ID`}</label>
               <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                 name={`authorID`}
                 value={formData[`authorID`]}
                 onChange={handleChange}
@@ -480,10 +472,10 @@ const BookEditModal = ({
               />
             </div>
 
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium">{`Author Name Bangla`}</label>
               <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                 name={`authorNameBangla`}
                 value={formData[`authorNameBangla`]}
                 onChange={handleChange}
@@ -492,10 +484,10 @@ const BookEditModal = ({
               />
             </div>
 
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium">{`Author Name English`}</label>
               <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                 name={`authorNameEnglish`}
                 value={formData[`authorNameEnglish`]}
                 onChange={handleChange}
@@ -505,10 +497,10 @@ const BookEditModal = ({
             </div>
 
             {/* buing option  */}
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            {/* <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium">{`Hard Cover Price`}</label>
               <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                 name={`hardCoverPrice`}
                 value={formData[`hardCoverPrice`]}
                 onChange={handleChange}
@@ -516,12 +508,12 @@ const BookEditModal = ({
                 onWheel={(e) => e.target.blur()}
                 placeholder={`Hard Cover Price`}
               />
-            </div>
+            </div> */}
 
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium">{`E-book Price`}</label>
               <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                 name={`ebookPrice`}
                 value={formData[`ebookPrice`]}
                 onChange={handleChange}
@@ -531,10 +523,10 @@ const BookEditModal = ({
               />
             </div>
 
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium">{`E-book File link`}</label>
               <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                 name={`ebookFileLink`}
                 value={formData[`ebookFileLink`]}
                 onChange={handleChange}
@@ -545,16 +537,13 @@ const BookEditModal = ({
 
             {/* Category Fields */}
             {["Bangla", "English", "Banglish"]?.map((lang, index) => (
-              <div
-                key={lang}
-                className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-              >
+              <div key={lang} className="space-y-2 text-sm text-zinc-700 ">
                 <label className="block font-medium">
                   {`Category (${lang})`}{" "}
                   <span className="text-red-500 font-bold">*</span>
                 </label>
                 <select
-                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                   name={`category${lang}`}
                   value={formData[`category${lang}`]}
                   onChange={handleChange}
@@ -570,16 +559,13 @@ const BookEditModal = ({
 
             {/* Subcategory Fields */}
             {["Bangla", "English", "Banglish"]?.map((lang) => (
-              <div
-                key={lang}
-                className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-              >
+              <div key={lang} className="space-y-2 text-sm text-zinc-700 ">
                 <label className="block font-medium">
                   {`Subcategory (${lang})`}{" "}
                   <span className="text-red-500 font-bold">*</span>
                 </label>
                 <select
-                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                   name={`subCategory${lang}`}
                   value={formData[`subCategory${lang}`]}
                   onChange={handleChange}
@@ -594,13 +580,13 @@ const BookEditModal = ({
             ))}
 
             {/* Subject Field */}
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium">
                 Subject (Bangla){" "}
                 <span className="text-red-500 font-bold">*</span>
               </label>
               <select
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                 name="subjectBangla"
                 value={formData.subjectBangla}
                 onChange={handleChange}
@@ -615,13 +601,10 @@ const BookEditModal = ({
 
             {/* Numeric Fields */}
             {["Price", "Discount", "Stock", "Pages"]?.map((field) => (
-              <div
-                key={field}
-                className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-              >
+              <div key={field} className="space-y-2 text-sm text-zinc-700 ">
                 <label className="block font-medium">{field}</label>
                 <input
-                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                   name={field.toLowerCase()}
                   value={formData[field.toLowerCase()]}
                   onChange={handleChange}
@@ -633,12 +616,12 @@ const BookEditModal = ({
             ))}
 
             {/* Language Field */}
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium">
                 Language <span className="text-red-500 font-bold">*</span>
               </label>
               <select
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                 name="language"
                 value={formData.language}
                 onChange={handleChange}
@@ -659,13 +642,10 @@ const BookEditModal = ({
               "Country Bangla",
               "Description",
             ]?.map((field) => (
-              <div
-                key={field}
-                className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-              >
+              <div key={field} className="space-y-2 text-sm text-zinc-700 ">
                 <label className="block font-medium">{field}</label>
                 <input
-                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                   name={field.replace(/ /g, "").toLowerCase()}
                   value={formData[field.replace(/ /g, "").toLowerCase()]}
                   onChange={handleChange}
@@ -675,17 +655,17 @@ const BookEditModal = ({
               </div>
             ))}
 
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            {/* <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium">Publication Date</label>
               <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                 name="publicationdate"
                 value={formData.publicationdate}
                 onChange={handleChange}
                 type="text"
                 placeholder="month-date-year"
               />
-            </div>
+            </div> */}
 
             <div className="flex  justify-end">
               <button

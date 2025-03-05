@@ -205,7 +205,7 @@ const ContactUs = () => {
             <h2 className="text-4xl font-bold leading-tight lg:text-5xl">
               Lets talk!
             </h2>
-            <div className="dark:text-gray-600">
+            <div className="">
               If you know more information? Please Contact Us.
             </div>
           </div>
@@ -310,9 +310,7 @@ const ContactUs = () => {
               <span className="p-3 rounded-full bg-white text-black">
                 <RiHomeOfficeFill size={30}></RiHomeOfficeFill>
               </span>
-              <h2 className="text-[19px] font-bold group  dark:text-black">
-                Shariatpur
-              </h2>
+              <h2 className="text-[19px] font-bold group  ">Shariatpur</h2>
               <h2 className="text-center px-3 mt-3 group ">
                 Shariatpur Sadar. Neat at Thakurgaon Polytechnic Institute
               </h2>
@@ -322,18 +320,14 @@ const ContactUs = () => {
               <span className="p-3 rounded-full bg-white text-black">
                 <FiPhone size={30}></FiPhone>
               </span>
-              <h2 className="text-[19px] font-bold group  dark:text-black">
-                Phone
-              </h2>
+              <h2 className="text-[19px] font-bold group  ">Phone</h2>
               <h2 className="text-center px-3 mt-3 group ">+880 1580-995152</h2>
             </div>
             <div className="w-[230px] h-[230px] cursor-pointer md:mr-4 rounded-3xl bg-white  hover:bg-[#076aa5] hover:text-white flex flex-col justify-center items-center transition-all delay-300">
               <span className="p-3 rounded-full bg-white text-black">
                 <MdOutlineEmail size={30}></MdOutlineEmail>
               </span>
-              <h2 className="text-[19px] font-bold group  dark:text-black">
-                Email
-              </h2>
+              <h2 className="text-[19px] font-bold group  ">Email</h2>
               <h2 className="text-center px-3 mt-3 group ">
                 bookvila.xyz@gmail.com
               </h2>
@@ -343,9 +337,7 @@ const ContactUs = () => {
               <span className="p-3 rounded-full bg-white text-black">
                 <AiOutlineClockCircle size={30}></AiOutlineClockCircle>
               </span>
-              <h2 className="text-[19px] font-bold group  dark:text-black">
-                Working Hours
-              </h2>
+              <h2 className="text-[19px] font-bold group  ">Working Hours</h2>
               <h2 className="text-center px-3 mt-3 group ">7 Days 24 hours</h2>
             </div>
           </div>

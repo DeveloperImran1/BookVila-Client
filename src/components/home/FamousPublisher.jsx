@@ -95,7 +95,7 @@ const FamousPublisher = () => {
                       alt={publisher?.name?.[1]}
                       width={200}
                       height={200}
-                      className="rounded-lg object-cover h-[140px]  w-[200px] "
+                      className="rounded-lg  h-[200px]  w-[200px] "
                     />
                   </figure>
                   <h1 className="text-center">

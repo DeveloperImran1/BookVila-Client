@@ -47,7 +47,7 @@ const BudgetFriendlyBooks = () => {
       <div className="bg-white my-8 p-2 lg:p-4 relative">
         <div className="flex justify-between mb-6 font-semibold">
           <h1 className="text-[17px] md:text-[20px] lg:text-2xl text-gray-600">
-            Budget Friendly Books
+            বাজেট ফ্রেন্ডলি বই
           </h1>
           <Link href={`/budget-frindly-books`}>
             <h1 className="text-bg-blue underline">See more</h1>

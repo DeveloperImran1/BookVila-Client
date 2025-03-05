@@ -162,10 +162,10 @@ const AddAuthor = () => {
           </div>
         </div>
 
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">{`Author Name (English)`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`authorNameEnglish`}
             value={formData[`authorNameEnglish`]}
             onChange={handleChange}
@@ -174,10 +174,10 @@ const AddAuthor = () => {
           />
         </div>
 
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">{`Author Name (Bangla)`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`authorNameBangla`}
             value={formData[`authorNameBangla`]}
             onChange={handleChange}
@@ -186,10 +186,10 @@ const AddAuthor = () => {
           />
         </div>
 
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">{`Author About`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`authorAbout`}
             value={formData[`authorAbout`]}
             onChange={handleChange}

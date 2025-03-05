@@ -324,21 +324,21 @@ const ReviewPage = ({ book, refetch }) => {
                             "https://i.postimg.cc/xTmfVLXn/download-black-male-user-profile-icon-png-701751695035033bwdeymrpov.png"
                           }
                           alt=""
-                          className="object-cover w-12 h-12 rounded-full dark:bg-gray-500"
+                          className="object-cover w-12 h-12 rounded-full "
                         />
                       </div>
                       <div>
                         <h4 className="font-bold">
                           {review?.user || "anonymus"}
                         </h4>
-                        <span className="text-xs dark:text-gray-600">
+                        <span className="text-xs ">
                           {formatDistanceToNow(new Date(review?.createdAt), {
                             addSuffix: true,
                           })}
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2 dark:text-yellow-700">
+                    <div className="flex items-center space-x-2 ">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512 512"
@@ -372,7 +372,7 @@ const ReviewPage = ({ book, refetch }) => {
                       ))}
                     </Swiper>
                   )}
-                  <div className="p-4 space-y-2 text-sm dark:text-gray-600">
+                  <div className="p-4 space-y-2 text-sm ">
                     <p>{review?.comment}</p>
                   </div>
                 </div>
@@ -393,21 +393,21 @@ const ReviewPage = ({ book, refetch }) => {
                             "https://i.postimg.cc/xTmfVLXn/download-black-male-user-profile-icon-png-701751695035033bwdeymrpov.png"
                           }
                           alt=""
-                          className="object-cover w-12 h-12 rounded-full dark:bg-gray-500"
+                          className="object-cover w-12 h-12 rounded-full "
                         />
                       </div>
                       <div>
                         <h4 className="font-bold">
                           {review?.user || "anonymus"}
                         </h4>
-                        <span className="text-xs dark:text-gray-600">
+                        <span className="text-xs ">
                           {formatDistanceToNow(new Date(review?.createdAt), {
                             addSuffix: true,
                           })}
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2 dark:text-yellow-700">
+                    <div className="flex items-center space-x-2 ">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512 512"
@@ -441,7 +441,7 @@ const ReviewPage = ({ book, refetch }) => {
                       ))}
                     </Swiper>
                   )}
-                  <div className="p-4 space-y-2 text-sm dark:text-gray-600">
+                  <div className="p-4 space-y-2 text-sm ">
                     <p>{review?.comment}</p>
                   </div>
                 </div>

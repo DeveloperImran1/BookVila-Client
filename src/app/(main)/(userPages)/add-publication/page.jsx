@@ -151,10 +151,10 @@ const AddPublication = () => {
           </div>
         </div>
 
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">{`Publication Name (English)`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`publicationNameEnglish`}
             value={formData[`publicationNameEnglish`]}
             onChange={handleChange}
@@ -163,10 +163,10 @@ const AddPublication = () => {
           />
         </div>
 
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">{`Publication Name (Bangla)`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`publicationNameBangla`}
             value={formData[`publicationNameBangla`]}
             onChange={handleChange}

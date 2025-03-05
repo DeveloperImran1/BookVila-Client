@@ -1,4 +1,12 @@
 "use client";
+import {
+  Book,
+  FolderOpen,
+  Layers3,
+  Pencil,
+  PenSquare,
+  PenTool,
+} from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -100,12 +108,16 @@ const Sidebar = () => {
               <p>Add Author</p>
             </Link>
             <Link
-              href="/add-books"
+              href="/manage-author"
               className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
             >
-              <FiBook size={18} className="hover:text-bg-gray"></FiBook>
-              <p>Add Book</p>
+              <FiUserCheck
+                size={18}
+                className="hover:text-bg-gray"
+              ></FiUserCheck>
+              <p>Manage Author</p>
             </Link>
+
             <Link
               href="/add-publication"
               className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
@@ -113,16 +125,68 @@ const Sidebar = () => {
               <BiBookAdd size={18} className="hover:text-bg-gray"></BiBookAdd>
               <p>Add Publication</p>
             </Link>
-
             <Link
-              href="/manage-order"
+              href="/manage-publication"
               className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
             >
-              <FiClipboard
+              <HiOutlineLibrary
                 size={18}
                 className="hover:text-bg-gray"
-              ></FiClipboard>
-              <p>Manage Orders</p>
+              ></HiOutlineLibrary>
+              <p>Manage Publication</p>
+            </Link>
+
+            <Link
+              href="/add-category"
+              className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
+            >
+              <FolderOpen size={18} className="hover:text-bg-gray"></FolderOpen>
+              <p>Add Category</p>
+            </Link>
+            <Link
+              href="/manage-category"
+              className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
+            >
+              <Pencil size={18} className="hover:text-bg-gray"></Pencil>
+              <p>Manage Category</p>
+            </Link>
+
+            <Link
+              href="/add-subcategory"
+              className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
+            >
+              <Layers3 size={18} className="hover:text-bg-gray"></Layers3>
+              <p>Add Sub Category</p>
+            </Link>
+            <Link
+              href="/manage-subcategory"
+              className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
+            >
+              <PenSquare size={18} className="hover:text-bg-gray"></PenSquare>
+              <p>Manage Sub Category</p>
+            </Link>
+
+            <Link
+              href="/add-subject"
+              className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
+            >
+              <Book size={18} className="hover:text-bg-gray"></Book>
+              <p>Add Subject</p>
+            </Link>
+            <Link
+              href="/manage-subject"
+              className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
+            >
+              <PenTool size={18} className="hover:text-bg-gray"></PenTool>
+              <p>Manage Subject</p>
+            </Link>
+
+            <Link
+              href="/add-books"
+              className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
+            >
+              <FiBook size={18} className="hover:text-bg-gray"></FiBook>
+              <p>Add Book</p>
             </Link>
             <Link
               href="/manage-books"
@@ -136,24 +200,14 @@ const Sidebar = () => {
             </Link>
 
             <Link
-              href="/manage-author"
+              href="/manage-order"
               className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
             >
-              <FiUserCheck
+              <FiClipboard
                 size={18}
                 className="hover:text-bg-gray"
-              ></FiUserCheck>
-              <p>Manage Author</p>
-            </Link>
-            <Link
-              href="/manage-publication"
-              className={` py-2 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex gap-3 items-center`}
-            >
-              <HiOutlineLibrary
-                size={18}
-                className="hover:text-bg-gray"
-              ></HiOutlineLibrary>
-              <p>Manage Publication</p>
+              ></FiClipboard>
+              <p>Manage Orders</p>
             </Link>
           </>
         )}

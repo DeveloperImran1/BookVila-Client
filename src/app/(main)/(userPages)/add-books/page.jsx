@@ -3,8 +3,9 @@
 import { uploadCloudinary } from "@/hooks/upload";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import { Checkbox } from "antd";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 
@@ -16,7 +17,19 @@ const AddBookForm = () => {
   const [showName, setShowName] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState({
+    Bangla: [],
+    English: [],
+    Banglish: [],
+  });
 
+  const [subCategories, setSubCategories] = useState({
+    Bangla: [],
+    English: [],
+    Banglish: [],
+  });
+
+  const [subjectsBangla, setSubjectBangla] = useState([]);
   const handleImageChange = async (e) => {
     const file = e.target.files[0]; // Get the selected file
     if (file) {
@@ -37,6 +50,38 @@ const AddBookForm = () => {
         console.log(error);
       }
     }
+  };
+
+  // extra attribute handle
+  const [isFeatured, setIsFeatured] = useState(false);
+  const [isFlashSale, setIsFlashSale] = useState(false);
+  const [isPreOrder, setIsPreOrder] = useState(false);
+  const [isBestSelling, setIsBestSelling] = useState(false);
+  const [isComboOffer, setIsComboOffer] = useState(false);
+  const [isTrending, setIsTrending] = useState(false);
+  const [isGift, setIsGift] = useState(false);
+
+  const featuredBookChange = (e) => {
+    setIsFeatured(e.target.checked);
+  };
+
+  const flashSaleChange = (e) => {
+    setIsFlashSale(e.target.checked);
+  };
+  const preOrderChange = (e) => {
+    setIsPreOrder(e.target.checked);
+  };
+  const bestSellingChange = (e) => {
+    setIsBestSelling(e.target.checked);
+  };
+  const comboOfferChange = (e) => {
+    setIsComboOffer(e.target.checked);
+  };
+  const trendingChange = (e) => {
+    setIsTrending(e.target.checked);
+  };
+  const giftChange = (e) => {
+    setIsGift(e.target.checked);
   };
 
   const [formData, setFormData] = useState({
@@ -66,7 +111,7 @@ const AddBookForm = () => {
     language: "",
     // Text Fields
     editionenglish: "",
-    publicationdate: "",
+    // publicationdate: "",
     publicationID: "",
     authorID: "",
     authorNameBangla: "",
@@ -151,7 +196,7 @@ const AddBookForm = () => {
       language: formDataObject?.language,
       bookID: uniqueId,
       edition: formDataObject?.editionenglish,
-      publicationDate: formDataObject?.publicationdate,
+      // publicationDate: formDataObject?.publicationdate,
       pages: parseInt(formDataObject?.pages),
       format: formDataObject?.formatbangla,
       binding: formDataObject?.bindingbangla,
@@ -159,7 +204,7 @@ const AddBookForm = () => {
       coverImage: imageUrl,
       description: formDataObject?.description,
       authorInfo: {
-        authorID: formDataObject?.authorID,
+        authorID: formDataObject?.authorID.trim(),
         name: [
           formDataObject?.authorNameBangla,
           formDataObject?.authorNameEnglish,
@@ -168,7 +213,7 @@ const AddBookForm = () => {
       buyingOptions: [
         {
           type: "হার্ডকভার",
-          price: parseInt(formDataObject?.hardCoverPrice),
+          price: parseInt(formDataObject?.price),
         },
         {
           type: "ইবুক",
@@ -176,7 +221,14 @@ const AddBookForm = () => {
           fileLink: formDataObject?.ebookFileLink,
         },
       ],
-      publicationID: formDataObject?.publicationID,
+      publicationID: formDataObject?.publicationID.trim(),
+      isFeatured,
+      isFlashSale,
+      isPreOrder,
+      isBestSelling,
+      isComboOffer,
+      isTrending,
+      isGift,
     };
 
     try {
@@ -196,130 +248,84 @@ const AddBookForm = () => {
     }
   };
 
-  const subCategories = {
-    Bangla: [
-      "মহাকালের কণ্ঠ",
-      "গোয়েন্দা কাহিনী সমগ্র",
-      "ভূতের গল্প",
-      "নক্ষত্রের রাত",
-      "জীবনের জলছবি",
-      "বাংলা সাহিত্যের ইতিহাস",
-      "ইতিহাসের অজানা অধ্যায়",
-      "গণিতের আনন্দ",
-      "পাখিদের নিয়ে গল্প",
-      "ভূগোলের বিস্ময়",
-      "শিশুতোষ গল্পসমগ্র",
-      "রহস্যময় পৃথিবী",
-      "প্রাণীর কাহিনী",
-      "বিজ্ঞানের বিস্ময়",
-      "বিশ্বের সেরা উপন্যাস",
-      "রবীন্দ্রনাথের কবিতা",
-      "প্রাচীন মিসরের ইতিহাস",
-      "যুগান্তরের কবিতা",
-      "অ্যালিস ইন ওয়ান্ডারল্যান্ড (বাংলা অনুবাদ)",
-      "বাংলা প্রবাদ প্রবচন",
-      "আধুনিক বাংলার কথা",
-      "চর্যাপদ ও প্রাচীন সাহিত্য",
-      "বাংলাদেশের মুক্তিযুদ্ধের গল্প",
-    ],
-    English: [
-      "Voice of Eternity",
-      "Detective Story Collection",
-      "Ghost Stories",
-      "Starry Night",
-      "Life's Watercolor",
-      "History of Bengali Literature",
-      "Unknown Chapters of History",
-      "Joy of Mathematics",
-      "Stories about Birds",
-      "Wonders of Geography",
-      "Children's Story Collection",
-      "Mysterious Earth",
-      "Stories of Animals",
-      "Wonders of Science",
-      "World's Best Novels",
-      "Rabindranath's Poems",
-      "History of Ancient Egypt",
-      "Poems of a New Era",
-      "Alice in Wonderland (Bengali Translation)",
-      "Bengali Proverbs and Sayings",
-      "Modern Bengal's Story",
-      "Charyapada and Ancient Literature",
-      "Stories of Bangladesh Liberation War",
-    ],
-    Banglish: [
-      "Mahakaler Kontho",
-      "Goenda Kahini Samagra",
-      "Bhuter Golpo",
-      "Nokkhotrer Raat",
-      "Jiboner Jolchhobi",
-      "Bangla Sahitter Itihash",
-      "Itihasher Ojano Oddhay",
-      "Goniter Anondo",
-      "Pakhir Golpo",
-      "Vugoler Bishmoy",
-      "Shishutosh Golposamagra",
-      "Rohosshomoy Prithibi",
-      "Pranir Kahini",
-      "Bigganer Bishmoy",
-      "Bishwer Sera Uponyas",
-      "Robindranather Kobita",
-      "Prachin Misher Itihash",
-      "Jugantorer Kobita",
-      "Alice in Wonderland (Bangla Onubad)",
-      "Bangla Probad Probachan",
-      "Adhunik Banglar Kotha",
-      "Charyapod O Prachin Sahitto",
-      "Bangladesher Muktijuddher Golpo",
-    ],
-  };
+  // category data get
+  const { data: allCategories = [] } = useQuery({
+    queryKey: ["manageCategory"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllCategories");
 
-  const categories = {
-    Bangla: [
-      "মাস্ট রিড কালেকশন",
-      "সেলফ ডেভেলপমেন্ট",
-      "শিশুদের বই",
-      "কমিকস",
-      "টপ ট্রেন্ডস",
-    ],
-    English: [
-      "Must Read Collection",
-      "Self Development",
-      "Children's Books",
-      "Comics",
-      "Top Trends",
-    ],
-    Banglish: [
-      "Must Read Kolekshan",
-      "Self Development",
-      "Shishuder Boi",
-      "Comics",
-      "Top Trends",
-    ],
-  };
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
 
-  const subjectsBangla = [
-    "উপন্যাস",
-    "কবিতা",
-    "গল্প",
-    "ইতিহাস",
-    "বিজ্ঞান",
-    "দর্শন",
-    "ধর্ম",
-    "জীবনী",
-    "শিশুসাহিত্য",
-    "কৃষি",
-    "ভ্রমণকাহিনী",
-    "রাজনীতি",
-    "সমাজবিজ্ঞান",
-    "প্রযুক্তি",
-    "চিকিৎসাশাস্ত্র",
-    "গণিত",
-    "আইন",
-    "সাহিত্য",
-    "শিল্প ও সংস্কৃতি",
-    "ভৌগোলিক গবেষণা",
-  ];
+  useEffect(() => {
+    if (allCategories.length > 0) {
+      const newCategories = {
+        Bangla: [],
+        English: [],
+        Banglish: [],
+      };
+
+      allCategories.forEach((category) => {
+        newCategories.Bangla.push(category.bengali);
+        newCategories.English.push(category.english);
+        newCategories.Banglish.push(category.banglish);
+      });
+
+      setCategories(newCategories); // ✅ This will trigger re-render
+    }
+  }, [allCategories]);
+
+  // sub category data get
+  const { data: allSubCategories = [] } = useQuery({
+    queryKey: ["manageSubCategory"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllSubCategories");
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
+
+  useEffect(() => {
+    if (allSubCategories.length > 0) {
+      const newSubCategories = {
+        Bangla: [],
+        English: [],
+        Banglish: [],
+      };
+
+      allSubCategories.forEach((subCategory) => {
+        newSubCategories.Bangla.push(subCategory.bengali);
+        newSubCategories.English.push(subCategory.english);
+        newSubCategories.Banglish.push(subCategory.banglish);
+      });
+
+      setSubCategories(newSubCategories); // ✅ This will trigger re-render
+    }
+  }, [allSubCategories]);
+
+  // subject data get
+  const { data: allSubjects = [] } = useQuery({
+    queryKey: ["manageSubject"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllSubjects");
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
+
+  useEffect(() => {
+    if (allSubjects.length > 0) {
+      const newSubjects = [];
+
+      allSubjects.forEach((subject) => {
+        newSubjects.push(subject.bengali);
+      });
+
+      setSubjectBangla(newSubjects); // ✅ This will trigger re-render
+    }
+  }, [allSubjects]);
 
   return (
     <div className="bg-white p-4 ">
@@ -354,7 +360,7 @@ const AddBookForm = () => {
               </label>
               <input
                 type="file"
-                placeholder="Your Image"
+                placeholder="Book Image"
                 onChange={async (e) => {
                   console.log(
                     "onchange er moddhe image file",
@@ -372,13 +378,10 @@ const AddBookForm = () => {
 
         {/* Book Name Fields */}
         {["Bangla", "Banglish", "English"]?.map((lang) => (
-          <div
-            key={lang}
-            className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-          >
-            <label className="block font-medium">{`Book Name (${lang})`}</label>
+          <div key={lang} className="space-y-2 text-sm text-zinc-700 ">
+            <label className="block font-medium">{`Book Name (${lang}) Required`}</label>
             <input
-              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
               name={`bookName${lang}`}
               value={formData[`bookName${lang}`]}
               onChange={handleChange}
@@ -390,13 +393,10 @@ const AddBookForm = () => {
 
         {/* Publisher Fields */}
         {["Bangla", "Banglish"]?.map((lang) => (
-          <div
-            key={lang}
-            className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-          >
-            <label className="block font-medium">{`Publisher Name (${lang})`}</label>
+          <div key={lang} className="space-y-2 text-sm text-zinc-700 ">
+            <label className="block font-medium">{`Publication Name (${lang})`}</label>
             <input
-              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
               name={`publisher${lang}`}
               value={formData[`publisher${lang}`]}
               onChange={handleChange}
@@ -406,10 +406,10 @@ const AddBookForm = () => {
           </div>
         ))}
 
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
-          <label className="block font-medium">{`Publisher ID`}</label>
+        <div className="space-y-2 text-sm text-zinc-700 ">
+          <label className="block font-medium">{`Publication ID`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`publicationID`}
             value={formData[`publicationID`]}
             onChange={handleChange}
@@ -419,10 +419,10 @@ const AddBookForm = () => {
         </div>
 
         {/* author info  */}
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">{`Author ID`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`authorID`}
             value={formData[`authorID`]}
             onChange={handleChange}
@@ -431,10 +431,10 @@ const AddBookForm = () => {
           />
         </div>
 
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">{`Author Name Bangla`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`authorNameBangla`}
             value={formData[`authorNameBangla`]}
             onChange={handleChange}
@@ -443,10 +443,10 @@ const AddBookForm = () => {
           />
         </div>
 
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">{`Author Name English`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`authorNameEnglish`}
             value={formData[`authorNameEnglish`]}
             onChange={handleChange}
@@ -456,10 +456,10 @@ const AddBookForm = () => {
         </div>
 
         {/* buing option  */}
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        {/* <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">{`Hard Cover Price`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`hardCoverPrice`}
             value={formData[`hardCoverPrice`]}
             onChange={handleChange}
@@ -467,12 +467,12 @@ const AddBookForm = () => {
             onWheel={(e) => e.target.blur()}
             placeholder={`Hard Cover Price`}
           />
-        </div>
+        </div> */}
 
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">{`E-book Price`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`ebookPrice`}
             value={formData[`ebookPrice`]}
             onChange={handleChange}
@@ -482,10 +482,10 @@ const AddBookForm = () => {
           />
         </div>
 
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">{`E-book File link`}</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name={`ebookFileLink`}
             value={formData[`ebookFileLink`]}
             onChange={handleChange}
@@ -496,13 +496,10 @@ const AddBookForm = () => {
 
         {/* Category Fields */}
         {["Bangla", "English", "Banglish"]?.map((lang) => (
-          <div
-            key={lang}
-            className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-          >
+          <div key={lang} className="space-y-2 text-sm text-zinc-700 ">
             <label className="block font-medium">{`Category (${lang})`}</label>
             <select
-              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
               name={`category${lang}`}
               value={formData[`category${lang}`]}
               onChange={handleChange}
@@ -518,13 +515,10 @@ const AddBookForm = () => {
 
         {/* Subcategory Fields */}
         {["Bangla", "English", "Banglish"]?.map((lang) => (
-          <div
-            key={lang}
-            className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-          >
+          <div key={lang} className="space-y-2 text-sm text-zinc-700 ">
             <label className="block font-medium">{`Subcategory (${lang})`}</label>
             <select
-              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
               name={`subCategory${lang}`}
               value={formData[`subCategory${lang}`]}
               onChange={handleChange}
@@ -539,10 +533,10 @@ const AddBookForm = () => {
         ))}
 
         {/* Subject Field */}
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">Subject (Bangla)</label>
           <select
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name="subjectBangla"
             value={formData.subjectBangla}
             onChange={handleChange}
@@ -557,13 +551,10 @@ const AddBookForm = () => {
 
         {/* Numeric Fields */}
         {["Price", "Discount", "Stock", "Pages"]?.map((field) => (
-          <div
-            key={field}
-            className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-          >
+          <div key={field} className="space-y-2 text-sm text-zinc-700 ">
             <label className="block font-medium">{field}</label>
             <input
-              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
               name={field.toLowerCase()}
               value={formData[field.toLowerCase()]}
               onChange={handleChange}
@@ -575,10 +566,10 @@ const AddBookForm = () => {
         ))}
 
         {/* Language Field */}
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">Language</label>
           <select
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name="language"
             value={formData.language}
             onChange={handleChange}
@@ -599,13 +590,10 @@ const AddBookForm = () => {
           "Country Bangla",
           "Description",
         ]?.map((field) => (
-          <div
-            key={field}
-            className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400"
-          >
+          <div key={field} className="space-y-2 text-sm text-zinc-700 ">
             <label className="block font-medium">{field}</label>
             <input
-              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+              className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
               name={field.replace(/ /g, "").toLowerCase()}
               value={formData[field.replace(/ /g, "").toLowerCase()]}
               onChange={handleChange}
@@ -615,17 +603,42 @@ const AddBookForm = () => {
           </div>
         ))}
 
-        <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+        <div className="space-y-2 text-sm text-zinc-700 ">
+          <Checkbox checked={isFeatured} onChange={featuredBookChange}>
+            বাছাইকৃত বই
+          </Checkbox>
+
+          <Checkbox checked={isFlashSale} onChange={flashSaleChange}>
+            ফ্ল্যাশ সেলস
+          </Checkbox>
+          <Checkbox checked={isPreOrder} onChange={preOrderChange}>
+            প্রি-অর্ডার বই
+          </Checkbox>
+          <Checkbox checked={isBestSelling} onChange={bestSellingChange}>
+            বেস্ট সেলার বই
+          </Checkbox>
+          <Checkbox checked={isComboOffer} onChange={comboOfferChange}>
+            কম্বো অফার
+          </Checkbox>
+          <Checkbox checked={isTrending} onChange={trendingChange}>
+            ট্রেন্ডিং বই
+          </Checkbox>
+          <Checkbox checked={isGift} onChange={giftChange}>
+            গিফট বই
+          </Checkbox>
+        </div>
+
+        {/* <div className="space-y-2 text-sm text-zinc-700 ">
           <label className="block font-medium">Publication Date</label>
           <input
-            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+            className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
             name="publicationdate"
             value={formData.publicationdate}
             onChange={handleChange}
             type="text"
             placeholder="month-date-year"
           />
-        </div>
+        </div> */}
 
         <div className="flex  justify-end">
           <button

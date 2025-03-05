@@ -4,35 +4,35 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 
-const CategoryEditModal = ({
+const SubCategoryEditModal = ({
   isModalOpen,
   handleOk,
   handleCancel,
   showModal,
-  editCategory,
+  editSubCategory,
   refetch,
 }) => {
-  console.log("current editCategory is", editCategory);
+  console.log("current editSubCategory is", editSubCategory);
 
   const axiosPublic = useAxiosPublic();
 
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    categoryBangla: "",
-    categoryEnglish: "",
-    categoryBanglish: "",
+    subCategoryBangla: "",
+    subCategoryEnglish: "",
+    subCategoryBanglish: "",
   });
 
   useEffect(() => {
-    if (editCategory) {
+    if (editSubCategory) {
       setFormData({
-        categoryBangla: editCategory?.bengali || "",
-        categoryEnglish: editCategory?.english || "",
-        categoryBanglish: editCategory?.banglish || "",
+        subCategoryBangla: editSubCategory?.bengali || "",
+        subCategoryEnglish: editSubCategory?.english || "",
+        subCategoryBanglish: editSubCategory?.banglish || "",
       });
     }
-  }, [editCategory]); // Run whenever the `book` object changes
+  }, [editSubCategory]); // Run whenever the `book` object changes
 
   // Handle input changes
   const handleChange = (e) => {
@@ -60,16 +60,16 @@ const CategoryEditModal = ({
       }
     });
 
-    const categoryData = {
-      bengali: formDataObject?.categoryBangla,
-      english: formDataObject?.categoryEnglish,
-      banglish: formDataObject?.categoryBanglish,
+    const subCategoryData = {
+      bengali: formDataObject?.subCategoryBangla,
+      english: formDataObject?.subCategoryEnglish,
+      banglish: formDataObject?.subCategoryBanglish,
     };
-    console.log(categoryData);
+    console.log(subCategoryData);
     try {
       const res = await axiosPublic.put(
-        `/updateCategory/${editCategory?._id}`,
-        categoryData
+        `/updateSubCategory/${editSubCategory?._id}`,
+        subCategoryData
       );
       console.log(res);
       if (res?.status) {
@@ -99,41 +99,43 @@ const CategoryEditModal = ({
         footer={null}
       >
         <div className="bg-white p-4 ">
-          <p className="text-[17px] font-semibold mb-6">Edit This Category</p>
+          <p className="text-[17px] font-semibold mb-6">
+            Edit This Sub Category
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2 text-sm text-zinc-700 ">
-              <label className="block font-medium">{`Category (Bangla)`}</label>
+              <label className="block font-medium">{`Sub Category (Bangla)`}</label>
               <input
                 className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
-                name={`categoryBangla`}
-                value={formData[`categoryBangla`]}
+                name={`subCategoryBangla`}
+                value={formData[`subCategoryBangla`]}
                 onChange={handleChange}
                 type="text"
-                placeholder={editCategory?.bengali}
+                placeholder={editSubCategory?.bengali}
               />
             </div>
             <div className="space-y-2 text-sm text-zinc-700 ">
-              <label className="block font-medium">{`Category (English)`}</label>
+              <label className="block font-medium">{`Sub Category (English)`}</label>
               <input
                 className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
-                name={`categoryEnglish`}
-                value={formData[`categoryEnglish`]}
+                name={`subCategoryEnglish`}
+                value={formData[`subCategoryEnglish`]}
                 onChange={handleChange}
                 type="text"
-                placeholder={editCategory?.english}
+                placeholder={editSubCategory?.english}
               />
             </div>
 
             <div className="space-y-2 text-sm text-zinc-700 ">
-              <label className="block font-medium">{`Category (Banglish)`}</label>
+              <label className="block font-medium">{`Sub Category (Banglish)`}</label>
               <input
                 className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
-                name={`categoryBanglish`}
-                value={formData[`categoryBanglish`]}
+                name={`subCategoryBanglish`}
+                value={formData[`subCategoryBanglish`]}
                 onChange={handleChange}
                 type="text"
-                placeholder={editCategory?.banglish}
+                placeholder={editSubCategory?.banglish}
               />
             </div>
 
@@ -165,4 +167,4 @@ const CategoryEditModal = ({
   );
 };
 
-export default CategoryEditModal;
+export default SubCategoryEditModal;

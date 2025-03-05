@@ -129,19 +129,19 @@ const Checkout = () => {
     <div className="py-8">
       <div className="container flex flex-col lg:flex-row gap-4">
         {/* left side  */}
-        <div className="w-full  rounded-lg bg-white  shadow-md dark:bg-zinc-900 p-4">
+        <div className="w-full  rounded-lg bg-white  shadow-md  p-4">
           <div className="mb-5">
             <h2 className="text-[20px] font-semibold tracking-tight">
               Shipping address{" "}
             </h2>
           </div>
           <form className="w-full space-y-4">
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium" htmlFor="name">
                 Name
               </label>
               <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700 cursor-not-allowed"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1  cursor-not-allowed"
                 id="name"
                 defaultValue={data?.[0]?.user?.name}
                 placeholder={data?.[0]?.user?.name}
@@ -150,12 +150,12 @@ const Checkout = () => {
                 type="text"
               />
             </div>
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium" htmlFor="contact">
                 Contact Number
               </label>
               <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                 id="contact"
                 placeholder="Your Phone Number"
                 name="phone"
@@ -164,12 +164,12 @@ const Checkout = () => {
               />
             </div>
 
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium" htmlFor="_email">
                 Email
               </label>
               <input
-                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700 cursor-not-allowed"
+                className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1  cursor-not-allowed"
                 id="_email"
                 defaultValue={data?.[0]?.user?.email}
                 placeholder={data?.[0]?.user?.email}
@@ -179,12 +179,12 @@ const Checkout = () => {
               />
             </div>
 
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium" htmlFor="address">
                 Address
               </label>
               <textarea
-                className="min-h-[80px] w-full rounded border px-3 py-2 leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="min-h-[80px] w-full rounded border px-3 py-2 leading-tight focus:outline-none focus:ring-1 "
                 id="address"
                 placeholder="House no, Road no, Area"
                 name="message"
@@ -192,23 +192,23 @@ const Checkout = () => {
             </div>
 
             <div className="flex justify-between">
-              <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+              <div className="space-y-2 text-sm text-zinc-700 ">
                 <label className="block font-medium" htmlFor="thana">
                   Thana
                 </label>
                 <input
-                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                  className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
                   id="thana"
                   placeholder="Thana"
                   name="thana"
                   type="text"
                 />
               </div>
-              <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+              <div className="space-y-2 text-sm text-zinc-700 ">
                 <label className="block font-medium" htmlFor="district">
                   District
                 </label>
-                <select className="  h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700">
+                <select className="  h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 ">
                   <option disabled selected>
                     Select District
                   </option>
@@ -284,12 +284,12 @@ const Checkout = () => {
               </div>
             </div>
 
-            <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-400">
+            <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium" htmlFor="note">
                 Note (if any)
               </label>
               <textarea
-                className="min-h-[80px] w-full rounded border px-3 py-2 leading-tight focus:outline-none focus:ring-1 dark:border-zinc-700"
+                className="min-h-[80px] w-full rounded border px-3 py-2 leading-tight focus:outline-none focus:ring-1 "
                 id="note"
                 placeholder="extra information"
                 name="note"

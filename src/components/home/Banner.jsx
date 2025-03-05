@@ -11,7 +11,7 @@ import { Autoplay } from "swiper/modules";
 
 import { FaSearch } from "react-icons/fa";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
@@ -23,7 +23,8 @@ import { MdOutlineArrowForwardIos } from "react-icons/md";
 const Banner = () => {
   const [selectCategory, setSelectCategory] = useState(null);
   const axiosPublic = useAxiosPublic();
-
+  const [subjects, setSubjects] = useState([]);
+  const [boiShomogro, setBoiShomogro] = useState([]);
   const { data: writers = [] } = useQuery({
     queryKey: ["sidebarWriter"],
     queryFn: async () => {
@@ -58,103 +59,65 @@ const Banner = () => {
 
   console.log(publications);
 
-  const boiShomogro = [
-    "মহাকালের কণ্ঠ",
-    "গোয়েন্দা কাহিনী সমগ্র",
-    "ভূতের গল্প",
-    "নক্ষত্রের রাত",
-    "জীবনের জলছবি",
-    "বাংলা সাহিত্যের ইতিহাস",
-    "ইতিহাসের অজানা অধ্যায়",
-    "গণিতের আনন্দ",
-    "পাখিদের নিয়ে গল্প",
-    "ভূগোলের বিস্ময়",
-    "শিশুতোষ গল্পসমগ্র",
-    "রহস্যময় পৃথিবী",
-    "প্রাণীর কাহিনী",
-    "বিজ্ঞানের বিস্ময়",
-    "বিশ্বের সেরা উপন্যাস",
-    "রবীন্দ্রনাথের কবিতা",
-    "প্রাচীন মিসরের ইতিহাস",
-    "যুগান্তরের কবিতা",
-    "অ্যালিস ইন ওয়ান্ডারল্যান্ড (বাংলা অনুবাদ)",
-    "বাংলা প্রবাদ প্রবচন",
-    "আধুনিক বাংলার কথা",
-    "চর্যাপদ ও প্রাচীন সাহিত্য",
-    "বাংলাদেশের মুক্তিযুদ্ধের গল্প",
-  ];
+  // subject data get
+  const { data: allSubjects = [] } = useQuery({
+    queryKey: ["manageSubject"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllSubjects");
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
 
-  // বিষয়ের নামের অ্যারে
-  const subjects = [
-    "উপন্যাস",
-    "কবিতা",
-    "গল্প",
-    "ইতিহাস",
-    "বিজ্ঞান",
-    "দর্শন",
-    "ধর্ম",
-    "জীবনী",
-    "শিশুসাহিত্য",
-    "কৃষি",
-    "ভ্রমণকাহিনী",
-    "রাজনীতি",
-    "সমাজবিজ্ঞান",
-    "প্রযুক্তি",
-    "চিকিৎসাশাস্ত্র",
-    "গণিত",
-    "আইন",
-    "সাহিত্য",
-    "শিল্প ও সংস্কৃতি",
-    "ভৌগোলিক গবেষণা",
-  ];
+  useEffect(() => {
+    if (allSubjects.length > 0) {
+      const newSubjects = [];
 
-  // // লেখকের নামের অ্যারে
-  // const writers = [
-  //     "হুমায়ুন আহমেদ",
-  //     "জহির রায়হান",
-  //     "রবীন্দ্রনাথ ঠাকুর",
-  //     "কাজী নজরুল ইসলাম",
-  //     "আবুল বাশার",
-  //     "সৈয়দ মুজতবা আলী",
-  //     "সুনীল গঙ্গোপাধ্যায়",
-  //     "আবুল মনসুর আহমদ",
-  //     "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-  //     "মুহম্মদ জাফর ইকবাল",
-  //     "শীর্ষেন্দু মুখোপাধ্যায়",
-  //     "আনিসুল হক",
-  //     "আহমদ ছফা",
-  //     "অনীশ দাস অপু",
-  //     "বেগম রোকেয়া",
-  //     "ফয়েজ আহমেদ",
-  //     "মীর মশাররফ হোসেন",
-  //     "তসলিমা নাসরিন",
-  //     "জাকির তালুকদার",
-  //     "প্রেমচাঁদ"
-  // ];
+      allSubjects.forEach((subject) => {
+        newSubjects.push(subject.bengali);
+      });
 
-  // // প্রকাশনীর নামের অ্যারে
-  // const publications = [
-  //     "প্রথমা প্রকাশন",
-  //     "অন্যপ্রকাশ",
-  //     "আনন্দ পাবলিশার্স",
-  //     "বাংলা একাডেমি",
-  //     "বিদ্যাপ্রকাশ",
-  //     "ইত্যাদি গ্রন্থ প্রকাশ",
-  //     "কাকলী প্রকাশনী",
-  //     "পাঠক সমাবেশ",
-  //     "মাওলা ব্রাদার্স",
-  //     "সাহিত্য প্রকাশ",
-  //     "অনন্যা প্রকাশনী",
-  //     "অন্তর্জলী প্রকাশন",
-  //     "বঙ্গপ্রকাশ",
-  //     "সৃজনশীল প্রকাশনী",
-  //     "সম্প্রতি প্রকাশনী",
-  //     "জ্ঞানভবন প্রকাশনী",
-  //     "বিশ্বসাহিত্য কেন্দ্র",
-  //     "শিখা প্রকাশনী",
-  //     "বর্ণমালা প্রকাশনী",
-  //     "সাহিত্য সংসদ"
-  // ];
+      setSubjects(newSubjects); // ✅ This will trigger re-render
+    }
+  }, [allSubjects]);
+
+  // sub category data get
+  const { data: allSubCategories = [] } = useQuery({
+    queryKey: ["manageSubCategory"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllSubCategories");
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
+
+  useEffect(() => {
+    if (allSubCategories.length > 0) {
+      const newSubCategories = [];
+
+      allSubCategories.forEach((subCategory) => {
+        newSubCategories.push(subCategory.bengali);
+      });
+
+      setBoiShomogro(newSubCategories); // ✅ This will trigger re-render
+    }
+  }, [allSubCategories]);
+
+  // banner data get
+  const {
+    data: banners = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["allBanner"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllBanner");
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
+  console.log("banners", banners?.banner?.images?.[1]);
 
   return (
     <>
@@ -211,7 +174,7 @@ const Banner = () => {
               onMouseOver={() => setSelectCategory("books")}
               className="py-3 px-3 font-semibold w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
             >
-              <p>Books</p>
+              <p>বই</p>
               <MdOutlineArrowForwardIos></MdOutlineArrowForwardIos>
             </Link>
             <Link
@@ -219,7 +182,7 @@ const Banner = () => {
               onMouseOver={() => setSelectCategory("subjects")}
               className="py-3 px-3 font-semibold w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
             >
-              <p>Subjects</p>
+              <p>বিষয়</p>
               <MdOutlineArrowForwardIos></MdOutlineArrowForwardIos>
             </Link>
             <Link
@@ -227,7 +190,7 @@ const Banner = () => {
               onMouseOver={() => setSelectCategory("writers")}
               className="py-3 px-3 font-semibold w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
             >
-              <p>Writer</p>
+              <p>লেখক</p>
               <MdOutlineArrowForwardIos></MdOutlineArrowForwardIos>
             </Link>
             <Link
@@ -235,7 +198,7 @@ const Banner = () => {
               onMouseOver={() => setSelectCategory("publications")}
               className="py-3 px-3 font-semibold w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
             >
-              <p>Publications</p>
+              <p>প্রকাশনী</p>
               <MdOutlineArrowForwardIos></MdOutlineArrowForwardIos>
             </Link>
 
@@ -303,45 +266,24 @@ const Banner = () => {
           modules={[Autoplay]}
           className="mySwiper h-[150px] md:h-[340px] lg:h-[430px] w-full md:w-[70%] lg:w-[80%] "
         >
-          <SwiperSlide className=" rounded-md  ">
-            <Image
-              className="h-full w-full"
-              height={676}
-              width={1200}
-              src="https://i.postimg.cc/RhstS7fm/464131621-1724559988082883-6219848670324800565-n.jpg"
-              alt="Banner"
-            ></Image>
-          </SwiperSlide>
-
-          <SwiperSlide className=" rounded-md  ">
-            <Image
-              className="h-full w-full"
-              height={676}
-              width={1200}
-              src="https://i.postimg.cc/m2n9KSBN/463936600-847081824293619-1177587183998418642-n.jpg"
-              alt="Banner"
-            ></Image>
-          </SwiperSlide>
-
-          <SwiperSlide className=" rounded-md  ">
-            <Image
-              className="h-full w-full"
-              height={676}
-              width={1200}
-              src="https://i.postimg.cc/dt3dWfPV/462201945-838668078468327-2997440976020437268-n.jpg"
-              alt="Banner"
-            ></Image>
-          </SwiperSlide>
-
-          <SwiperSlide className=" rounded-md  ">
-            <Image
-              className="h-full w-full"
-              height={676}
-              width={1200}
-              src="https://i.postimg.cc/jqZP4b11/457252998-812125854455883-2437830174375563780-n.jpg"
-              alt="Banner"
-            ></Image>
-          </SwiperSlide>
+          {banners?.map((banner, index) => (
+            <SwiperSlide key={banner?._id} className=" rounded-md  ">
+              <Image
+                className="h-full w-full hidden md:block"
+                height={676}
+                width={1200}
+                src={banner?.images?.[1]}
+                alt="Banner"
+              ></Image>
+              <Image
+                className="h-full w-full block md:hidden"
+                height={676}
+                width={1200}
+                src={banner?.images?.[0]}
+                alt="Banner"
+              ></Image>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </div>
     </>

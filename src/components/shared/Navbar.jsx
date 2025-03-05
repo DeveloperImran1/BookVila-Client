@@ -1,5 +1,5 @@
 "user client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoReorderThree } from "react-icons/io5";
 import Swal from "sweetalert2";
 
@@ -12,6 +12,14 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import useMyCartBooks from "@/hooks/useCartBooks";
 import { useQuery } from "@tanstack/react-query";
 import { Drawer, DrawerAction, DrawerContent } from "keep-react";
+import {
+  Book,
+  FolderOpen,
+  Layers3,
+  Pencil,
+  PenSquare,
+  PenTool,
+} from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,6 +35,7 @@ import {
   FaStar,
   FaUser,
 } from "react-icons/fa";
+
 import {
   FiBook,
   FiClipboard,
@@ -46,6 +55,9 @@ const Navbar = () => {
   const [bookWriters, setBookWriters] = useState(false);
   const [bookPublications, setBookPublications] = useState(false);
   const { data, refetch, isLoading } = useMyCartBooks();
+
+  const [subjects, setSubjects] = useState([]);
+  const [boiShomogro, setBoiShomogro] = useState([]);
 
   const axiosPublic = useAxiosPublic();
   const session = useSession();
@@ -99,103 +111,49 @@ const Navbar = () => {
 
   console.log(publications);
 
-  const boiShomogro = [
-    "মহাকালের কণ্ঠ",
-    "গোয়েন্দা কাহিনী সমগ্র",
-    "ভূতের গল্প",
-    "নক্ষত্রের রাত",
-    "জীবনের জলছবি",
-    "বাংলা সাহিত্যের ইতিহাস",
-    "ইতিহাসের অজানা অধ্যায়",
-    "গণিতের আনন্দ",
-    "পাখিদের নিয়ে গল্প",
-    "ভূগোলের বিস্ময়",
-    "শিশুতোষ গল্পসমগ্র",
-    "রহস্যময় পৃথিবী",
-    "প্রাণীর কাহিনী",
-    "বিজ্ঞানের বিস্ময়",
-    "বিশ্বের সেরা উপন্যাস",
-    "রবীন্দ্রনাথের কবিতা",
-    "প্রাচীন মিসরের ইতিহাস",
-    "যুগান্তরের কবিতা",
-    "অ্যালিস ইন ওয়ান্ডারল্যান্ড (বাংলা অনুবাদ)",
-    "বাংলা প্রবাদ প্রবচন",
-    "আধুনিক বাংলার কথা",
-    "চর্যাপদ ও প্রাচীন সাহিত্য",
-    "বাংলাদেশের মুক্তিযুদ্ধের গল্প",
-  ];
+  // subject data get
+  const { data: allSubjects = [] } = useQuery({
+    queryKey: ["manageSubject"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllSubjects");
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
 
-  // বিষয়ের নামের অ্যারে
-  const subjects = [
-    "উপন্যাস",
-    "কবিতা",
-    "গল্প",
-    "ইতিহাস",
-    "বিজ্ঞান",
-    "দর্শন",
-    "ধর্ম",
-    "জীবনী",
-    "শিশুসাহিত্য",
-    "কৃষি",
-    "ভ্রমণকাহিনী",
-    "রাজনীতি",
-    "সমাজবিজ্ঞান",
-    "প্রযুক্তি",
-    "চিকিৎসাশাস্ত্র",
-    "গণিত",
-    "আইন",
-    "সাহিত্য",
-    "শিল্প ও সংস্কৃতি",
-    "ভৌগোলিক গবেষণা",
-  ];
+  useEffect(() => {
+    if (allSubjects.length > 0) {
+      const newSubjects = [];
 
-  // লেখকের নামের অ্যারে
-  // const writers = [
-  //     "হুমায়ুন আহমেদ",
-  //     "জহির রায়হান",
-  //     "রবীন্দ্রনাথ ঠাকুর",
-  //     "কাজী নজরুল ইসলাম",
-  //     "আবুল বাশার",
-  //     "সৈয়দ মুজতবা আলী",
-  //     "সুনীল গঙ্গোপাধ্যায়",
-  //     "আবুল মনসুর আহমদ",
-  //     "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-  //     "মুহম্মদ জাফর ইকবাল",
-  //     "শীর্ষেন্দু মুখোপাধ্যায়",
-  //     "আনিসুল হক",
-  //     "আহমদ ছফা",
-  //     "অনীশ দাস অপু",
-  //     "বেগম রোকেয়া",
-  //     "ফয়েজ আহমেদ",
-  //     "মীর মশাররফ হোসেন",
-  //     "তসলিমা নাসরিন",
-  //     "জাকির তালুকদার",
-  //     "প্রেমচাঁদ"
-  // ];
+      allSubjects.forEach((subject) => {
+        newSubjects.push(subject.bengali);
+      });
 
-  // প্রকাশনীর নামের অ্যারে
-  // const publications = [
-  //     "প্রথমা প্রকাশন",
-  //     "অন্যপ্রকাশ",
-  //     "আনন্দ পাবলিশার্স",
-  //     "বাংলা একাডেমি",
-  //     "বিদ্যাপ্রকাশ",
-  //     "ইত্যাদি গ্রন্থ প্রকাশ",
-  //     "কাকলী প্রকাশনী",
-  //     "পাঠক সমাবেশ",
-  //     "মাওলা ব্রাদার্স",
-  //     "সাহিত্য প্রকাশ",
-  //     "অনন্যা প্রকাশনী",
-  //     "অন্তর্জলী প্রকাশন",
-  //     "বঙ্গপ্রকাশ",
-  //     "সৃজনশীল প্রকাশনী",
-  //     "সম্প্রতি প্রকাশনী",
-  //     "জ্ঞানভবন প্রকাশনী",
-  //     "বিশ্বসাহিত্য কেন্দ্র",
-  //     "শিখা প্রকাশনী",
-  //     "বর্ণমালা প্রকাশনী",
-  //     "সাহিত্য সংসদ"
-  // ];
+      setSubjects(newSubjects); // ✅ This will trigger re-render
+    }
+  }, [allSubjects]);
+
+  // sub category data get
+  const { data: allSubCategories = [] } = useQuery({
+    queryKey: ["manageSubCategory"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllSubCategories");
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
+
+  useEffect(() => {
+    if (allSubCategories.length > 0) {
+      const newSubCategories = [];
+
+      allSubCategories.forEach((subCategory) => {
+        newSubCategories.push(subCategory.bengali);
+      });
+
+      setBoiShomogro(newSubCategories); // ✅ This will trigger re-render
+    }
+  }, [allSubCategories]);
 
   return (
     <div className="">
@@ -235,14 +193,14 @@ const Navbar = () => {
                         books ? "bg-bg-blue text-white" : ""
                       } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                     >
-                      <p>Books</p>
+                      <p>বই</p>
                       {books ? <IoIosArrowUp /> : <IoIosArrowDown />}
                     </Link>
 
                     <ul
                       className={`${
                         books ? "flex " : "hidden"
-                      } py-2 flex-col ml-4 text-sm text-gray-700 dark:text-gray-200 h-[200px] overflow-auto `}
+                      } py-2 flex-col ml-4 text-sm text-gray-700  h-[200px] overflow-auto `}
                       aria-labelledby="multiLevelDropdownButton"
                     >
                       {boiShomogro?.map((sub, index) => (
@@ -266,14 +224,14 @@ const Navbar = () => {
                         subject ? "bg-bg-blue text-white" : ""
                       } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                     >
-                      <p>Subjects</p>
+                      <p>বিষয়</p>
                       {subject ? <IoIosArrowUp /> : <IoIosArrowDown />}
                     </Link>
 
                     <ul
                       className={`${
                         subject ? "flex " : "hidden"
-                      } py-2 flex-col ml-4 text-sm text-gray-700 dark:text-gray-200 h-[200px] overflow-auto `}
+                      } py-2 flex-col ml-4 text-sm text-gray-700  h-[200px] overflow-auto `}
                       aria-labelledby="multiLevelDropdownButton"
                     >
                       {subjects?.map((sub, index) => (
@@ -297,14 +255,14 @@ const Navbar = () => {
                         bookWriters ? "bg-bg-blue text-white" : ""
                       } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                     >
-                      <p>Writers</p>
+                      <p>লেখক</p>
                       {bookWriters ? <IoIosArrowUp /> : <IoIosArrowDown />}
                     </Link>
 
                     <ul
                       className={`${
                         bookWriters ? "flex " : "hidden"
-                      } py-2 flex-col ml-4 text-sm text-gray-700 dark:text-gray-200 h-[200px] overflow-auto `}
+                      } py-2 flex-col ml-4 text-sm text-gray-700  h-[200px] overflow-auto `}
                       aria-labelledby="multiLevelDropdownButton"
                     >
                       {writers?.map((writer, index) => (
@@ -329,14 +287,14 @@ const Navbar = () => {
                         bookPublications ? "bg-bg-blue text-white" : ""
                       } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                     >
-                      <p>Publications</p>
+                      <p>প্রকাশনী</p>
                       {bookPublications ? <IoIosArrowUp /> : <IoIosArrowDown />}
                     </Link>
 
                     <ul
                       className={`${
                         bookPublications ? "flex " : "hidden"
-                      } py-2 flex-col ml-4 text-sm text-gray-700 dark:text-gray-200 h-[200px] overflow-auto `}
+                      } py-2 flex-col ml-4 text-sm text-gray-700  h-[200px] overflow-auto `}
                       aria-labelledby="multiLevelDropdownButton"
                     >
                       {publications?.map((singlePub, index) => (
@@ -532,13 +490,15 @@ const Navbar = () => {
                             <FiUsers size={18} className=""></FiUsers>
                             <p>Add Author</p>
                           </Link>
+
                           <Link
-                            href="/add-books"
-                            className={` flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
+                            href="/manage-author"
+                            className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
                           >
-                            <FiBook size={18}></FiBook>
-                            <p>Add Book</p>
+                            <FiUserCheck size={18}></FiUserCheck>
+                            <p>Manage Author</p>
                           </Link>
+
                           <Link
                             href="/add-publication"
                             className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
@@ -546,13 +506,65 @@ const Navbar = () => {
                             <BiBookAdd size={18}></BiBookAdd>
                             <p>Add Publication</p>
                           </Link>
-
                           <Link
-                            href="/manage-order"
+                            href="/manage-publication"
                             className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
                           >
-                            <FiClipboard size={18}></FiClipboard>
-                            <p>Manage Orders</p>
+                            <HiOutlineLibrary size={18}></HiOutlineLibrary>
+                            <p>Manage Publication</p>
+                          </Link>
+
+                          <Link
+                            href="/add-category"
+                            className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
+                          >
+                            <FolderOpen size={18}></FolderOpen>
+                            <p>Add Category</p>
+                          </Link>
+                          <Link
+                            href="/manage-category"
+                            className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
+                          >
+                            <Pencil size={18}></Pencil>
+                            <p>Manage Category</p>
+                          </Link>
+
+                          <Link
+                            href="/add-subcategory"
+                            className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
+                          >
+                            <Layers3 size={18}></Layers3>
+                            <p>Add Sub Category</p>
+                          </Link>
+                          <Link
+                            href="/manage-subcategory"
+                            className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
+                          >
+                            <PenSquare size={18}></PenSquare>
+                            <p>Manage Sub Category</p>
+                          </Link>
+
+                          <Link
+                            href="/add-subject"
+                            className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
+                          >
+                            <Book size={18}></Book>
+                            <p>Add Subject</p>
+                          </Link>
+                          <Link
+                            href="/manage-subject"
+                            className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
+                          >
+                            <PenTool size={18}></PenTool>
+                            <p>Manage Subject</p>
+                          </Link>
+
+                          <Link
+                            href="/add-books"
+                            className={` flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
+                          >
+                            <FiBook size={18}></FiBook>
+                            <p>Add Book</p>
                           </Link>
                           <Link
                             href="/manage-books"
@@ -563,18 +575,11 @@ const Navbar = () => {
                           </Link>
 
                           <Link
-                            href="/manage-author"
+                            href="/manage-order"
                             className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
                           >
-                            <FiUserCheck size={18}></FiUserCheck>
-                            <p>Manage Author</p>
-                          </Link>
-                          <Link
-                            href="/manage-publication"
-                            className={`flex md:hidden items-center gap-2 w-full p-1 pl-3 rounded-sm hover:bg-bg-blue hover:text-white`}
-                          >
-                            <HiOutlineLibrary size={18}></HiOutlineLibrary>
-                            <p>Manage Publication</p>
+                            <FiClipboard size={18}></FiClipboard>
+                            <p>Manage Orders</p>
                           </Link>
                         </>
                       </>

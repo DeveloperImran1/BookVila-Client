@@ -5,13 +5,13 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 
-const AddCategory = () => {
+const AddSubCategory = () => {
   const axiosPublic = useAxiosPublic();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    categoryBangla: "",
-    categoryEnglish: "",
-    categoryBanglish: "",
+    subCategoryBangla: "",
+    subCategoryEnglish: "",
+    subCategoryBanglish: "",
   });
 
   // Handle input changes
@@ -40,14 +40,17 @@ const AddCategory = () => {
       }
     });
 
-    const categoryData = {
-      bengali: formDataObject?.categoryBangla,
-      english: formDataObject?.categoryEnglish,
-      banglish: formDataObject?.categoryBanglish,
+    const subCategoryData = {
+      bengali: formDataObject?.subCategoryBangla,
+      english: formDataObject?.subCategoryEnglish,
+      banglish: formDataObject?.subCategoryBanglish,
     };
-    console.log(categoryData);
+    console.log(subCategoryData);
     try {
-      const res = await axiosPublic.post("/addNewCategorie", categoryData);
+      const res = await axiosPublic.post(
+        "/addNewSubCategorie",
+        subCategoryData
+      );
       console.log(res);
       if (res?.status) {
         setLoading(false);
@@ -65,41 +68,41 @@ const AddCategory = () => {
 
   return (
     <div className="bg-white p-4 ">
-      <p className="text-[17px] font-semibold mb-6">Add New Category</p>
+      <p className="text-[17px] font-semibold mb-6">Add New Sub Category</p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2 text-sm text-zinc-700 ">
-          <label className="block font-medium">{`Category (Bangla)`}</label>
+          <label className="block font-medium">{`Sub Category (Bangla)`}</label>
           <input
             className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
-            name={`categoryBangla`}
-            value={formData[`categoryBangla`]}
+            name={`subCategoryBangla`}
+            value={formData[`subCategoryBangla`]}
             onChange={handleChange}
             type="text"
-            placeholder={`Category Name Bangla`}
+            placeholder={`Sub Category Name Bangla`}
           />
         </div>
         <div className="space-y-2 text-sm text-zinc-700 ">
-          <label className="block font-medium">{`Category (English)`}</label>
+          <label className="block font-medium">{`Sub Category (English)`}</label>
           <input
             className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
-            name={`categoryEnglish`}
-            value={formData[`categoryEnglish`]}
+            name={`subCategoryEnglish`}
+            value={formData[`subCategoryEnglish`]}
             onChange={handleChange}
             type="text"
-            placeholder={`Category Name English`}
+            placeholder={`Sub Category Name English`}
           />
         </div>
 
         <div className="space-y-2 text-sm text-zinc-700 ">
-          <label className="block font-medium">{`Category (Banglish)`}</label>
+          <label className="block font-medium">{`Sub Category (Banglish)`}</label>
           <input
             className="h-10 w-full rounded border px-3 py-2 text-sm leading-tight focus:outline-none focus:ring-1 "
-            name={`categoryBanglish`}
-            value={formData[`categoryBanglish`]}
+            name={`subCategoryBanglish`}
+            value={formData[`subCategoryBanglish`]}
             onChange={handleChange}
             type="text"
-            placeholder={`Category Name Banglish`}
+            placeholder={`Sub Category Name Banglish`}
           />
         </div>
 
@@ -129,4 +132,4 @@ const AddCategory = () => {
   );
 };
 
-export default AddCategory;
+export default AddSubCategory;
