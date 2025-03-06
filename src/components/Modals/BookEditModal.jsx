@@ -1,6 +1,7 @@
 import { uploadCloudinary } from "@/hooks/upload";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
-import { Modal } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import { Checkbox, Modal } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -23,6 +24,51 @@ const BookEditModal = ({
   const [showName, setShowName] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState({
+    Bangla: [],
+    English: [],
+    Banglish: [],
+  });
+
+  const [subCategories, setSubCategories] = useState({
+    Bangla: [],
+    English: [],
+    Banglish: [],
+  });
+
+  const [subjectsBangla, setSubjectBangla] = useState([]);
+
+  // extra attribute handle
+  const [isFeatured, setIsFeatured] = useState(false);
+  const [isFlashSale, setIsFlashSale] = useState(false);
+  const [isPreOrder, setIsPreOrder] = useState(false);
+  const [isBestSelling, setIsBestSelling] = useState(false);
+  const [isComboOffer, setIsComboOffer] = useState(false);
+  const [isTrending, setIsTrending] = useState(false);
+  const [isGift, setIsGift] = useState(false);
+
+  const featuredBookChange = (e) => {
+    setIsFeatured(e.target.checked);
+  };
+
+  const flashSaleChange = (e) => {
+    setIsFlashSale(e.target.checked);
+  };
+  const preOrderChange = (e) => {
+    setIsPreOrder(e.target.checked);
+  };
+  const bestSellingChange = (e) => {
+    setIsBestSelling(e.target.checked);
+  };
+  const comboOfferChange = (e) => {
+    setIsComboOffer(e.target.checked);
+  };
+  const trendingChange = (e) => {
+    setIsTrending(e.target.checked);
+  };
+  const giftChange = (e) => {
+    setIsGift(e.target.checked);
+  };
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0]; // Get the selected file
@@ -122,6 +168,14 @@ const BookEditModal = ({
         countrybangla: book?.country || "",
         description: book?.description || "",
       });
+
+      setIsFeatured(book?.isFeatured);
+      setIsFlashSale(book?.isFlashSale);
+      setIsPreOrder(book?.isPreOrder);
+      setIsBestSelling(book?.isBestSelling);
+      setIsComboOffer(book?.isComboOffer);
+      setIsTrending(book?.isTrending);
+      setIsGift(book?.isGift);
     }
   }, [book]); // Run whenever the `book` object changes
 
@@ -213,6 +267,13 @@ const BookEditModal = ({
         },
       ],
       publicationID: formDataObject?.publicationID || book?.publicationID,
+      isFeatured,
+      isFlashSale,
+      isPreOrder,
+      isBestSelling,
+      isComboOffer,
+      isTrending,
+      isGift,
     };
 
     console.log("updated book data", bookData);
@@ -234,130 +295,84 @@ const BookEditModal = ({
     }
   };
 
-  const subCategories = {
-    Bangla: [
-      "মহাকালের কণ্ঠ",
-      "গোয়েন্দা কাহিনী সমগ্র",
-      "ভূতের গল্প",
-      "নক্ষত্রের রাত",
-      "জীবনের জলছবি",
-      "বাংলা সাহিত্যের ইতিহাস",
-      "ইতিহাসের অজানা অধ্যায়",
-      "গণিতের আনন্দ",
-      "পাখিদের নিয়ে গল্প",
-      "ভূগোলের বিস্ময়",
-      "শিশুতোষ গল্পসমগ্র",
-      "রহস্যময় পৃথিবী",
-      "প্রাণীর কাহিনী",
-      "বিজ্ঞানের বিস্ময়",
-      "বিশ্বের সেরা উপন্যাস",
-      "রবীন্দ্রনাথের কবিতা",
-      "প্রাচীন মিসরের ইতিহাস",
-      "যুগান্তরের কবিতা",
-      "অ্যালিস ইন ওয়ান্ডারল্যান্ড (বাংলা অনুবাদ)",
-      "বাংলা প্রবাদ প্রবচন",
-      "আধুনিক বাংলার কথা",
-      "চর্যাপদ ও প্রাচীন সাহিত্য",
-      "বাংলাদেশের মুক্তিযুদ্ধের গল্প",
-    ],
-    English: [
-      "Voice of Eternity",
-      "Detective Story Collection",
-      "Ghost Stories",
-      "Starry Night",
-      "Life's Watercolor",
-      "History of Bengali Literature",
-      "Unknown Chapters of History",
-      "Joy of Mathematics",
-      "Stories about Birds",
-      "Wonders of Geography",
-      "Children's Story Collection",
-      "Mysterious Earth",
-      "Stories of Animals",
-      "Wonders of Science",
-      "World's Best Novels",
-      "Rabindranath's Poems",
-      "History of Ancient Egypt",
-      "Poems of a New Era",
-      "Alice in Wonderland (Bengali Translation)",
-      "Bengali Proverbs and Sayings",
-      "Modern Bengal's Story",
-      "Charyapada and Ancient Literature",
-      "Stories of Bangladesh Liberation War",
-    ],
-    Banglish: [
-      "Mahakaler Kontho",
-      "Goenda Kahini Samagra",
-      "Bhuter Golpo",
-      "Nokkhotrer Raat",
-      "Jiboner Jolchhobi",
-      "Bangla Sahitter Itihash",
-      "Itihasher Ojano Oddhay",
-      "Goniter Anondo",
-      "Pakhir Golpo",
-      "Vugoler Bishmoy",
-      "Shishutosh Golposamagra",
-      "Rohosshomoy Prithibi",
-      "Pranir Kahini",
-      "Bigganer Bishmoy",
-      "Bishwer Sera Uponyas",
-      "Robindranather Kobita",
-      "Prachin Misher Itihash",
-      "Jugantorer Kobita",
-      "Alice in Wonderland (Bangla Onubad)",
-      "Bangla Probad Probachan",
-      "Adhunik Banglar Kotha",
-      "Charyapod O Prachin Sahitto",
-      "Bangladesher Muktijuddher Golpo",
-    ],
-  };
+  // category data get
+  const { data: allCategories = [] } = useQuery({
+    queryKey: ["manageCategory"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllCategories");
 
-  const categories = {
-    Bangla: [
-      "মাস্ট রিড কালেকশন",
-      "সেলফ ডেভেলপমেন্ট",
-      "শিশুদের বই",
-      "কমিকস",
-      "টপ ট্রেন্ডস",
-    ],
-    English: [
-      "Must Read Collection",
-      "Self Development",
-      "Children's Books",
-      "Comics",
-      "Top Trends",
-    ],
-    Banglish: [
-      "Must Read Kolekshan",
-      "Self Development",
-      "Shishuder Boi",
-      "Comics",
-      "Top Trends",
-    ],
-  };
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
 
-  const subjectsBangla = [
-    "উপন্যাস",
-    "কবিতা",
-    "গল্প",
-    "ইতিহাস",
-    "বিজ্ঞান",
-    "দর্শন",
-    "ধর্ম",
-    "জীবনী",
-    "শিশুসাহিত্য",
-    "কৃষি",
-    "ভ্রমণকাহিনী",
-    "রাজনীতি",
-    "সমাজবিজ্ঞান",
-    "প্রযুক্তি",
-    "চিকিৎসাশাস্ত্র",
-    "গণিত",
-    "আইন",
-    "সাহিত্য",
-    "শিল্প ও সংস্কৃতি",
-    "ভৌগোলিক গবেষণা",
-  ];
+  useEffect(() => {
+    if (allCategories.length > 0) {
+      const newCategories = {
+        Bangla: [],
+        English: [],
+        Banglish: [],
+      };
+
+      allCategories.forEach((category) => {
+        newCategories.Bangla.push(category.bengali);
+        newCategories.English.push(category.english);
+        newCategories.Banglish.push(category.banglish);
+      });
+
+      setCategories(newCategories); // ✅ This will trigger re-render
+    }
+  }, [allCategories]);
+
+  // sub category data get
+  const { data: allSubCategories = [] } = useQuery({
+    queryKey: ["manageSubCategory"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllSubCategories");
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
+
+  useEffect(() => {
+    if (allSubCategories.length > 0) {
+      const newSubCategories = {
+        Bangla: [],
+        English: [],
+        Banglish: [],
+      };
+
+      allSubCategories.forEach((subCategory) => {
+        newSubCategories.Bangla.push(subCategory.bengali);
+        newSubCategories.English.push(subCategory.english);
+        newSubCategories.Banglish.push(subCategory.banglish);
+      });
+
+      setSubCategories(newSubCategories); // ✅ This will trigger re-render
+    }
+  }, [allSubCategories]);
+
+  // subject data get
+  const { data: allSubjects = [] } = useQuery({
+    queryKey: ["manageSubject"],
+    queryFn: async () => {
+      const response = await axiosPublic.get("/getAllSubjects");
+      return response.data;
+    },
+    keepPreviousData: true,
+  });
+
+  useEffect(() => {
+    if (allSubjects.length > 0) {
+      const newSubjects = [];
+
+      allSubjects.forEach((subject) => {
+        newSubjects.push(subject.bengali);
+      });
+
+      setSubjectBangla(newSubjects); // ✅ This will trigger re-render
+    }
+  }, [allSubjects]);
 
   return (
     <>
@@ -654,6 +669,31 @@ const BookEditModal = ({
                 />
               </div>
             ))}
+
+            <div className="space-y-2 text-sm text-zinc-700 ">
+              <Checkbox checked={isFeatured} onChange={featuredBookChange}>
+                বাছাইকৃত বই
+              </Checkbox>
+
+              <Checkbox checked={isFlashSale} onChange={flashSaleChange}>
+                ফ্ল্যাশ সেলস
+              </Checkbox>
+              <Checkbox checked={isPreOrder} onChange={preOrderChange}>
+                প্রি-অর্ডার বই
+              </Checkbox>
+              <Checkbox checked={isBestSelling} onChange={bestSellingChange}>
+                বেস্ট সেলার বই
+              </Checkbox>
+              <Checkbox checked={isComboOffer} onChange={comboOfferChange}>
+                কম্বো অফার
+              </Checkbox>
+              <Checkbox checked={isTrending} onChange={trendingChange}>
+                ট্রেন্ডিং বই
+              </Checkbox>
+              <Checkbox checked={isGift} onChange={giftChange}>
+                গিফট বই
+              </Checkbox>
+            </div>
 
             {/* <div className="space-y-2 text-sm text-zinc-700 ">
               <label className="block font-medium">Publication Date</label>
