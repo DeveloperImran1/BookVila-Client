@@ -58,7 +58,7 @@ export default function SignInAndUp() {
     Swal.fire({
       position: "center",
       icon: "success",
-      title: "Welcome to Book Vila",
+      title: "Welcome to Readora",
       showConfirmButton: false,
       timer: 1500,
     });
@@ -204,8 +204,8 @@ export default function SignInAndUp() {
                 <Image
                   height={676}
                   width={1200}
-                  src="https://i.ibb.co.com/SfNwSrp/Whats-App-Image-2024-10-10-at-11-12-02-PM-removebg-preview-1.png"
-                  className="w-[100px] h-[100px] scale-100 text-white transition-all duration-200 hover:scale-110"
+                  src="https://i.postimg.cc/RVP3mcZM/Logo-R1-T-modify.png"
+                  className="w-[220px] h-[110px] scale-100 text-white transition-all duration-200 hover:scale-110"
                   alt="logo"
                 />
               </Link>
@@ -461,8 +461,8 @@ export default function SignInAndUp() {
               <Image
                 height={676}
                 width={1200}
-                src="https://i.ibb.co.com/SfNwSrp/Whats-App-Image-2024-10-10-at-11-12-02-PM-removebg-preview-1.png"
-                className="w-[100px] h-[100px] scale-100 text-white transition-all duration-200 hover:scale-110"
+                src="https://i.postimg.cc/RVP3mcZM/Logo-R1-T-modify.png"
+                className="w-[220px] h-[110px] scale-100 text-white transition-all duration-200 hover:scale-110"
                 alt="logo"
               />
             </Link>

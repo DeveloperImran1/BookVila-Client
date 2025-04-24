@@ -1,8 +1,8 @@
-import localFont from "next/font/local";
-import "./globals.css";
 import AuthProvider from "@/services/AuthProvider";
+import localFont from "next/font/local";
 import TanStackProvider from "providers/TanstackProvider";
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
+import "./globals.css";
 // import Modal from "react-modal";
 
 // Modal.setAppElement("#__next");
@@ -18,16 +18,16 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-
 // aikhane kiso real information dia chage korte hobe for SEO
 export const metadata = {
   title: {
-    default: "Book Vila",
-    template: "%s | Book Vila"
+    default: "Readora",
+    template: "%s | Readora",
   },
-  description: "Discover, explore, and buy books online at Book Vila - your go-to platform for novels, educational resources, self-development, children's books, and more.",
+  description:
+    "Discover, explore, and buy books online at Readora - your go-to platform for novels, educational resources, self-development, children's books, and more.",
   keywords: [
-    "Book Vila",
+    "Readora",
     "online bookstore",
     "buy books online",
     "novels",
@@ -36,41 +36,40 @@ export const metadata = {
     "educational books",
     "book shop",
     "Bangla books",
-    "literature"
+    "literature",
   ],
-  author: "Book Vila Team",
+  author: "Readora Team",
   openGraph: {
-    title: "Book Vila - Your Online Bookstore",
-    description: "Discover and buy your favorite books online at Book Vila. From novels to educational resources, we have a wide range of categories.",
+    title: "Readora - Your Online Bookstore",
+    description:
+      "Discover and buy your favorite books online at Readora. From novels to educational resources, we have a wide range of categories.",
     type: "website",
-    url: "https://yourwebsite.com", // replace with actual URL
+    url: "https://readora.shop",
     images: [
       {
         url: "https://i.ibb.co.com/SfNwSrp/Whats-App-Image-2024-10-10-at-11-12-02-PM-removebg-preview-1.png", // replace with actual image URL
         width: 1200,
         height: 630,
-        alt: "Book Vila - Your Online Bookstore"
-      }
-    ]
+        alt: "Readora - Your Online Bookstore",
+      },
+    ],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Book Vila - Your Online Bookstore",
-    description: "Discover and buy your favorite books online at Book Vila.",
-    images: ["https://i.ibb.co.com/SfNwSrp/Whats-App-Image-2024-10-10-at-11-12-02-PM-removebg-preview-1.png"] // replace with actual image URL
-  }
+    card: "Readora logo",
+    title: "Readora - Your Online Bookstore",
+    description: "Discover and buy your favorite books online at Readora.",
+    images: ["https://i.postimg.cc/1tHmHQg9/Logo-R1-T-modify-large-scale.png"], // replace with actual image URL
+  },
 };
-
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={``} >
+      <body className={``}>
         <TanStackProvider>
           <AuthProvider>
             {children}
-            <Toaster></Toaster>      
+            <Toaster></Toaster>
           </AuthProvider>
         </TanStackProvider>
       </body>

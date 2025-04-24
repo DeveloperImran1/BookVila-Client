@@ -145,9 +145,9 @@ const Footer = () => {
             <Image
               height={676}
               width={1200}
-              src="https://i.postimg.cc/d0Q1LPVR/Bookvila-removebg-preview.png"
+              src="https://i.postimg.cc/1tHmHQg9/Logo-R1-T-modify-large-scale.png"
               alt="logo"
-              className="w-[120px] h-[60px] "
+              className="w-[140px] h-[60px] "
             />
           </Link>
 
@@ -158,7 +158,7 @@ const Footer = () => {
               target="_blank"
               className="font-bold hover:text-primary hover:underline"
             >
-              Book Vila Team
+              Readora Team
             </Link>
             . All Rights Reserved.{" "}
           </p>

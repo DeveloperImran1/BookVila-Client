@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 
 export const middleware = async (request) => {
   const token = cookies(request).get("__Secure-next-auth.session-token"); // vercel a deploy korar somoi ai line comentout kore dibo.
-  // const token = cookies(request).get("next-auth.session-token");
+  // const token = cookies(request).get("next-auth.session-token");   // localhost a aita use kori
+
   // const token = request.cookies.get("next-auth.session-token")?.value;
   console.log("token is ", token);
   const pathname = request.nextUrl.pathname;

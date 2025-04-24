@@ -117,9 +117,9 @@ const Checkout = () => {
     };
     console.log("handle payment is triggered", orderInfo, "now pay", nowPay);
     const result = await axiosPublic.post("/createPayment", orderInfo);
-    console.log("result is ", result);
+
     setLoading(false);
-    const redirectUrl = result?.data?.paymentUrl;
+    const redirectUrl = result?.data?.payment_url;
     if (redirectUrl) {
       window.location.replace(redirectUrl);
     }

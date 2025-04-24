@@ -1,36 +1,34 @@
-# Website Name: Book Vila - Book Sell Platform
+# Website Name: Readora - Book Sell Platform
 
-**Book Vila**  is an e-commerce platform designed for book lovers to explore, purchase, and review books effortlessly. It provides a seamless user experience with a user-friendly interface and essential features for online book sales.
+**Readora** is an e-commerce platform designed for book lovers to explore, purchase, and review books effortlessly. It provides a seamless user experience with a user-friendly interface and essential features for online book sales.
 
 ## Credential
 
 **User Email and Password**
+
 - **Email:** user1122@gmail.com
 - **Password:** aaaaaa
 
-**Admin Email and Password**
-- **Email:** admin@gmail.com
-- **Password:** aaaaaa
-
 ## Live Site URL
-Visit the live site at [Book Vila Live](https://book-vila-client.vercel.app/)
+
+Visit the live site at [Readora Live](https://www.readora.shop)
 
 ## Features and Characteristics
-- **Book Categories:** 
+
+- **Book Categories:**
   Browse books by genres like fiction, non-fiction, academic, and more.
 
-- **Advanced Search and Filters:** 
+- **Advanced Search and Filters:**
   Filter books by price, author, genre, and ratings.
 
-- **User Experience:** 
+- **User Experience:**
   Real-time availability, detailed event categories and filters, social sharing, and multi-language support.
 
-- **User Dashboard:** 
+- **User Dashboard:**
   Manage profiles, track orders, and view purchase history.
 
-- **Admin Dashboard:** 
+- **Admin Dashboard:**
   Manage books, monitor sales, and track customer activities.
-  
 - **Book Reviews and Ratings:**
   Users can leave feedback and rate books to help other buyers.
 
@@ -42,35 +40,34 @@ Visit the live site at [Book Vila Live](https://book-vila-client.vercel.app/)
 
 - **Wishlist Functionality:**
   Save favorite books for future purchases.
-  
 - **Real-Time Stock Updates:**
   Check stock availability instantly during checkout.
 
 - **Book Recommendations:**
   Personalized recommendations based on user interests.
-  
 
 ## Website Sections
+
 - **Homepage:**
-Featured books, new arrivals, and top-rated selections.
+  Featured books, new arrivals, and top-rated selections.
 
 - **Category Page:**
-Explore books by genre or topic.
+  Explore books by genre or topic.
 
 - **Book Detail Page:**
-Detailed information about the book, author, reviews, and price.
+  Detailed information about the book, author, reviews, and price.
 
 - **Checkout Page:**
-Event and user management, sales monitoring, and detailed platform analytics.
+  Event and user management, sales monitoring, and detailed platform analytics.
 
 - **Payment and Checkout:**
-Secure and user-friendly payment process.
+  Secure and user-friendly payment process.
 
 - **Admin Panel:**
-Add, edit, and manage book listings, sales reports, and user management.
+  Add, edit, and manage book listings, sales reports, and user management.
 
+## Used Technology and Framework
 
-## Used Technology and Framework 
 - HTML
 - CSS
 - Tailwind CSS
@@ -86,42 +83,48 @@ Add, edit, and manage book listings, sales reports, and user management.
 ## How to Start This Application
 
 1. **Clone the Repositories:**
-    ```sh
-    # Client Side:
-    git clone https://github.com/DeveloperImran1/BookVila-Client.git
-    cd BookVila-Client
 
-    # Server Side:
-    git clone https://github.com/DeveloperImran1/BookVila-Server.git
-    cd BookVila-Server
-    ```
+   ```sh
+   # Client Side:
+   git clone https://github.com/DeveloperImran1/BookVila-Client.git
+   cd BookVila-Client
+
+   # Server Side:
+   git clone https://github.com/DeveloperImran1/BookVila-Server.git
+   cd BookVila-Server
+   ```
 
 2. **Install Dependencies:**
-    ```sh
-    npm install
-    ```
+
+   ```sh
+   npm install
+   ```
 
 3. **Start the Development Server:**
-    ```sh
-    nodemon index.js
-    ```
+
+   ```sh
+   nodemon index.js
+   ```
 
 4. **Build for Production:**
-    ```sh
-    npm run build
-    ```
+
+   ```sh
+   npm run build
+   ```
 
 5. **Deploy to vercel:**
-    ```sh
-    vercel website to build and deploy
-    ```
+   ```sh
+   vercel website to build and deploy
+   ```
 
 ## Server Side Github Link
+
 [Server Code](https://github.com/DeveloperImran1/BookVila-Server)
 
 ## Dependencies
 
 - **Frontend:**
+
   - NextJS: A React Framework for building user interfaces.
   - Axios: Promise-based HTTP client for the browser and Node.js.
   - React Query: Hooks for fetching, caching, and updating asynchronous data in React.
@@ -138,10 +141,12 @@ Add, edit, and manage book listings, sales reports, and user management.
   - Dotenv: Module to load environment variables from a `.env` file.
 
 ## Additional Information
-  - Secure authentication using Google and Facebook providers, along with Mailgun for email notifications.
-    
+
+- Secure authentication using Google and Facebook providers, along with Mailgun for email notifications.
 - **Environment Variables:**
+
   - Create a `.env.local` file in the root of your client project and add the following variables:
+
     ```plaintext
     NEXT_PUBLIC_MONGODB_URI=<Your MongoDB URI>
     NEXT_PUBLIC_GOOGLE_CLIENT_ID=<Your Google Client ID>
@@ -162,4 +167,3 @@ Add, edit, and manage book listings, sales reports, and user management.
 ## Contributing
 
 If you'd like to contribute to this project, please fork the repository and use a feature branch. Pull requests are welcome.
-
