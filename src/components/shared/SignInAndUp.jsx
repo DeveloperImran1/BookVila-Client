@@ -204,7 +204,7 @@ export default function SignInAndUp() {
                 <Image
                   height={676}
                   width={1200}
-                  src="https://i.postimg.cc/RVP3mcZM/Logo-R1-T-modify.png"
+                  src="https://res.cloudinary.com/dqdircc96/image/upload/v1745676518/Logo_R1_T_kqgxb4.png"
                   className="w-[220px] h-[110px] scale-100 text-white transition-all duration-200 hover:scale-110"
                   alt="logo"
                 />
@@ -461,7 +461,7 @@ export default function SignInAndUp() {
               <Image
                 height={676}
                 width={1200}
-                src="https://i.postimg.cc/RVP3mcZM/Logo-R1-T-modify.png"
+                src="https://res.cloudinary.com/dqdircc96/image/upload/v1745676518/Logo_R1_T_kqgxb4.png"
                 className="w-[220px] h-[110px] scale-100 text-white transition-all duration-200 hover:scale-110"
                 alt="logo"
               />

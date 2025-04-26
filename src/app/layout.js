@@ -58,7 +58,9 @@ export const metadata = {
     card: "Readora logo",
     title: "Readora - Your Online Bookstore",
     description: "Discover and buy your favorite books online at Readora.",
-    images: ["https://i.postimg.cc/1tHmHQg9/Logo-R1-T-modify-large-scale.png"], // replace with actual image URL
+    images: [
+      "https://res.cloudinary.com/dqdircc96/image/upload/v1745676650/Logo_R1_T_modify_large_scale_lx6gvd.png",
+    ], // replace with actual image URL
   },
 };
 

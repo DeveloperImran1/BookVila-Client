@@ -126,7 +126,7 @@ const Footer = () => {
               <label className="text-[0.9rem]">Your Email</label>
               <input
                 type="email"
-                className="py-3 px-4 w-full pr-[90px] rounded-md border border-[#00bffe] outline-none"
+                className="py-3 px-4 w-full pr-[90px] rounded-md border border-[#00bffe] outline-none bg-white"
                 placeholder="Email address"
               />
 
@@ -145,7 +145,7 @@ const Footer = () => {
             <Image
               height={676}
               width={1200}
-              src="https://i.postimg.cc/1tHmHQg9/Logo-R1-T-modify-large-scale.png"
+              src="https://res.cloudinary.com/dqdircc96/image/upload/v1745676650/Logo_R1_T_modify_large_scale_lx6gvd.png"
               alt="logo"
               className="w-[140px] h-[60px] "
             />

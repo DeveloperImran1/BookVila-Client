@@ -28,3 +28,9 @@ body {
   /* overflow-x: hidden; */
   font-family: poppins;
 }
+
+html,
+body {
+  background-color: white !important;
+  color: black;
+}

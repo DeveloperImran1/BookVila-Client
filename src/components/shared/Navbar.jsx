@@ -178,8 +178,8 @@ const Navbar = () => {
                     <Image
                       height={676}
                       width={1200}
-                      src="https://i.postimg.cc/RVP3mcZM/Logo-R1-T-modify.png"
-                      className="w-[110px] h-[110px] scale-100 text-white transition-all duration-200 hover:scale-110"
+                      src="https://res.cloudinary.com/dqdircc96/image/upload/v1745676650/Logo_R1_T_modify_large_scale_lx6gvd.png"
+                      className="w-[150px] h-[90px] scale-100 text-white transition-all duration-200 hover:scale-110"
                       alt="logo"
                     />
                   </Link>
@@ -347,7 +347,7 @@ const Navbar = () => {
               <Image
                 height={676}
                 width={1200}
-                src="https://i.postimg.cc/tgs7N5Qz/Logo-R-T.png"
+                src="https://res.cloudinary.com/dqdircc96/image/upload/v1745675220/Logo_R_T_nctywx.png"
                 className="w-full h-[45px] md:h-[60px] scale-100 text-white transition-all duration-200 hover:scale-110 "
                 alt="logo"
               />
@@ -357,7 +357,7 @@ const Navbar = () => {
               <Image
                 height={676}
                 width={1200}
-                src="https://i.postimg.cc/1tHmHQg9/Logo-R1-T-modify-large-scale.png"
+                src="https://res.cloudinary.com/dqdircc96/image/upload/v1745676650/Logo_R1_T_modify_large_scale_lx6gvd.png"
                 className="w-full h-[45px] md:h-[60px] scale-100 text-white transition-all duration-200 hover:scale-110 "
                 alt="logo"
               />
