@@ -98,7 +98,7 @@ const BooksCard = ({ book }) => {
   return (
     <>
       {/* large device er jonno  */}
-      <article className="rounded-md border-2 md:p-2 lg:p-4  w-full space-y-3 hidden lg:flex flex-col justify-between relative bg-white">
+      <article className="rounded-md border-2 md:p-2 lg:p-4  w-full space-y-1 hidden lg:flex flex-col justify-between relative bg-white">
         {/* <div className="clit-element absolute top-[-2px] left-0 z-50 overflow-hidden">
           {bookStatus === "New" ? (
             <p className="-rotate-[50deg] text-white top-3 left-1 font-semibold absolute ">
@@ -166,15 +166,17 @@ const BooksCard = ({ book }) => {
           </Link>
         </div>
 
-        <div className=" text-gray-600 space-x-2">
-          <Link href={`/book/${book?._id}`} className="inline">
-            <h1 className="text-[17px] hover:underline mt-2 inline">
-              {book?.bookName[0]}
+        <div className=" text-gray-600 ">
+          <Link href={`/book/${book?._id}`} className="block">
+            <h1 className="text-base hover:underline mt-2 ">
+              {book?.bookName[0]?.length > 19
+                ? `${book?.bookName[0]?.slice(0, 19)}...`
+                : book?.bookName[0]}
             </h1>
           </Link>
           <Link
             href={`/writer/${book?.authorInfo?.authorID}`}
-            className="inline hover:underline"
+            className=" hover:underline"
           >
             <small>by {book?.authorInfo?.name[0]}</small>
           </Link>
@@ -187,11 +189,11 @@ const BooksCard = ({ book }) => {
             {book?.stock > 0 && "Product in stock"}
           </span>
         </div>
-        <div className="flex justify-between items-center">
-          <div className="flex gap-4 items-center">
+        <div className="flex gap-2 justify-between items-center">
+          <div className="flex gap-2 justify-between items-center">
             <h2 className="text-[17px] font-semibold flex items-center ">
               <span>{parseInt(newPrice)}</span>
-              <TbCurrencyTaka size={22}></TbCurrencyTaka>
+              <TbCurrencyTaka size={20}></TbCurrencyTaka>
             </h2>
             <del className="text-sm  font-semibold text-gray-600 flex items-center">
               <span>{originalPrice}</span>
@@ -202,7 +204,7 @@ const BooksCard = ({ book }) => {
           {addToCart?.includes(book?._id) ? (
             <Link
               href="/cart"
-              className={`bg-secondary flex items-center justify-center  px-2 py-1  rounded-md text-white w-full`}
+              className={`bg-secondary flex items-center justify-center   py-1  rounded-md text-white w-[50%]`}
             >
               <ShoppingCart className="mr-2 h-4 w-4" />
               <span>View Cart</span>
@@ -210,7 +212,7 @@ const BooksCard = ({ book }) => {
           ) : (
             <button
               onClick={handleAddtoCart}
-              className={`bg-primary px-2 py-1  rounded-md text-white hover:bg-[#e0435e] w-full`}
+              className={`bg-primary  py-1  rounded-md text-white hover:bg-[#e0435e] w-[50%]`}
             >
               Add to Cart
             </button>
@@ -219,13 +221,13 @@ const BooksCard = ({ book }) => {
       </article>
 
       {/* small to medium device er jonno  */}
-      <article className="min-h-[260px] rounded-md border-2 p-1 flex flex-col justify-between   lg:hidden relative bg-white">
+      <article className=" rounded-md border-2 p-1 flex flex-col justify-between   lg:hidden relative bg-white">
         <div className=" absolute top-[-2px] left-0 z-50 overflow-hidden">
           <div className="relative">
             <Image
               height={600}
               width={600}
-              className="h-[60px] w-[60px]"
+              className="h-[50px] md:h-[60px] w-[50px] md:w-[60px]"
               src="https://i.postimg.cc/bJJggnKk/Untitled-design-removebg-preview.png"
               alt=""
             />
@@ -270,27 +272,29 @@ const BooksCard = ({ book }) => {
                 "https://cdn-icons-png.flaticon.com/512/5078/5078727.png"
               }
               alt="book"
-              className="w-full h-[260px] sm:h-[270px] md:h-[260px]  rounded-md"
+              className="w-full h-[150px] sm:h-[200px] md:h-[200px]  rounded-md"
             />
           </Link>
         </div>
 
-        <div className=" text-gray-600 space-x-2 mt-2 md:mt-3">
-          <Link href={`/book/${book?._id}`} className="inline">
-            <h1 className="text-[15px] md:text-base lg:text-[17px] hover:underline mt-2 inline">
-              {book?.bookName?.[0]}
+        <div className=" text-gray-600  mt-1 md:mt-2">
+          <Link href={`/book/${book?._id}`} className="block">
+            <h1 className="text-[13px] md:text-[14px] lg:text-base hover:underline mt-2 ">
+              {book?.bookName[0]?.length > 15
+                ? `${book?.bookName[0]?.slice(0, 15)}...`
+                : book?.bookName[0]}
             </h1>
           </Link>
-          <Link
+          {/* <Link
             href={`/writer/${book?.authorInfo?.authorID}`}
             className="inline hover:underline"
           >
             <small>by {book?.authorInfo?.name[0]}</small>
-          </Link>
+          </Link> */}
         </div>
 
-        <div className="text-[15px] md:text-base lg:text-[17px]">
-          <div className="flex gap-4 my-1 md:my-3 items-center ">
+        <div className="text-sm md:text-[15px] lg:text-base">
+          <div className="flex gap-4  items-center ">
             <h2 className=" font-semibold flex items-center ">
               <span>{parseInt(newPrice)}</span>
               <TbCurrencyTaka></TbCurrencyTaka>
@@ -301,7 +305,7 @@ const BooksCard = ({ book }) => {
             </del>
           </div>
 
-          <div className="my-1 md:my-2 text-smitems-center ">
+          <div className=" text-sm items-center ">
             <span className=" text-red-500 ">
               {book?.stock < 1 && "Product in stock out"}
             </span>

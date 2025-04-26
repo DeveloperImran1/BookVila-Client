@@ -172,7 +172,7 @@ const Banner = () => {
             <Link
               href={"#"}
               onMouseOver={() => setSelectCategory("books")}
-              className="py-3 px-3 font-semibold w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
+              className="py-3 px-3 font-medium w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
             >
               <p>বই</p>
               <MdOutlineArrowForwardIos></MdOutlineArrowForwardIos>
@@ -180,7 +180,7 @@ const Banner = () => {
             <Link
               href={"/all-book"}
               onMouseOver={() => setSelectCategory("subjects")}
-              className="py-3 px-3 font-semibold w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
+              className="py-3 px-3 font-medium w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
             >
               <p>বিষয়</p>
               <MdOutlineArrowForwardIos></MdOutlineArrowForwardIos>
@@ -188,7 +188,7 @@ const Banner = () => {
             <Link
               href={"#"}
               onMouseOver={() => setSelectCategory("writers")}
-              className="py-3 px-3 font-semibold w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
+              className="py-3 px-3 font-medium w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
             >
               <p>লেখক</p>
               <MdOutlineArrowForwardIos></MdOutlineArrowForwardIos>
@@ -196,7 +196,7 @@ const Banner = () => {
             <Link
               href={"#"}
               onMouseOver={() => setSelectCategory("publications")}
-              className="py-3 px-3 font-semibold w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
+              className="py-3 px-3 font-medium w-full hover:bg-[#00bffe] hover:text-white rounded-md flex justify-between items-center"
             >
               <p>প্রকাশনী</p>
               <MdOutlineArrowForwardIos></MdOutlineArrowForwardIos>

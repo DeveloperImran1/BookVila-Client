@@ -208,7 +208,7 @@ const AllBook = () => {
                     placeholder="Search Authors"
                     value={searchAuthorQuery}
                     onChange={handleSearchAuthorChange} // Update search query
-                    className="mb-2 w-full p-2 border border-gray-300"
+                    className="mb-2 w-full p-2 border border-gray-300 bg-white"
                   />
 
                   {/* Scrollable container for authors */}
@@ -217,6 +217,7 @@ const AllBook = () => {
                       <label key={author?.bengali}>
                         <input
                           type="checkbox"
+                          className=""
                           onChange={() =>
                             handleCheckboxChange(
                               setSelectedAuthors,
@@ -239,7 +240,7 @@ const AllBook = () => {
                     placeholder="Search Category"
                     value={searchCategoriesQuery}
                     onChange={handleSearchCategoriesChange} // Update search query
-                    className="mb-2 w-full p-2 border border-gray-300"
+                    className="mb-2 w-full p-2 border border-gray-300 bg-white"
                   />
 
                   {/* Scrollable container for authors */}
@@ -273,11 +274,11 @@ const AllBook = () => {
                     placeholder="Search Subjects"
                     value={searchSubjectsQuery}
                     onChange={handleSearchSubjectsChange} // Update search query
-                    className="mb-2 w-full p-2 border border-gray-300"
+                    className="mb-2 w-full p-2 border border-gray-300 bg-white"
                   />
 
                   {/* Scrollable container for authors */}
-                  <div className="flex flex-col max-h-[200px] overflow-y-auto">
+                  <div className="flex flex-col max-h-[200px] overflow-y-auto ">
                     {filteredSubjects.map((subject) => (
                       <label key={subject.bengali}>
                         <input
@@ -365,7 +366,7 @@ const AllBook = () => {
                 placeholder="Search Authors"
                 value={searchAuthorQuery}
                 onChange={handleSearchAuthorChange} // Update search query
-                className="mb-2 w-full p-2 border border-gray-300"
+                className="mb-2 w-full p-2 border border-gray-300 bg-white"
               />
 
               {/* Scrollable container for authors */}
@@ -396,7 +397,7 @@ const AllBook = () => {
                 placeholder="Search Category"
                 value={searchCategoriesQuery}
                 onChange={handleSearchCategoriesChange} // Update search query
-                className="mb-2 w-full p-2 border border-gray-300"
+                className="mb-2 w-full p-2 border border-gray-300 bg-white"
               />
 
               {/* Scrollable container for authors */}
@@ -428,7 +429,7 @@ const AllBook = () => {
                 placeholder="Search Subjects"
                 value={searchSubjectsQuery}
                 onChange={handleSearchSubjectsChange} // Update search query
-                className="mb-2 w-full p-2 border border-gray-300"
+                className="mb-2 w-full p-2 border border-gray-300 bg-white"
               />
 
               {/* Scrollable container for authors */}
@@ -520,7 +521,7 @@ const AllBook = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by book name"
-                  className="border-2 w-full mb-4 px-5 py-2 rounded-lg"
+                  className="border-2 w-full mb-4 px-5 py-2 rounded-lg bg-white"
                 />
               </div>
             </div>

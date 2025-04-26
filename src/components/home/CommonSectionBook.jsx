@@ -43,8 +43,8 @@ const CommonSectionBook = ({ sectionTitle, attribute }) => {
   return (
     <div className="container   ">
       <div className="bg-white my-8 p-2 lg:p-4 relative">
-        <div className="flex justify-between mb-6 font-semibold ">
-          <h1 className="text-[17px] md:text-[20px] lg:text-2xl text-gray-600">
+        <div className="flex justify-between mb-4 md:mb-6 font-semibold ">
+          <h1 className="text-[16px] md:text-[18px]  text-gray-600">
             {sectionTitle}
           </h1>
           {/* {featuredBooks?.books?.length && books?.length > 0 && ( */}
@@ -101,10 +101,10 @@ const CommonSectionBook = ({ sectionTitle, attribute }) => {
         {/* arrow left */}
         <button
           onClick={prevSlider}
-          className="absolute top-1/2 left-3 z-50 flex justify-center items-center hover:bg-bg-blue bg-slate-200 rounded-full w-8 h-8 md:w-8 md:h-8 group"
+          className="absolute top-1/2 left-3 z-50 flex justify-center items-center hover:bg-bg-blue bg-slate-200 rounded-full w-6 h-6 md:w-8 md:h-8 group"
         >
           <svg
-            className="icon h-6 w-6 fill-black group-hover:fill-white md:h-6 md:w-6"
+            className="icon h-4 md:h-6 w-4 md:w-6 fill-black group-hover:fill-white "
             viewBox="0 0 1024 1024"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -115,10 +115,10 @@ const CommonSectionBook = ({ sectionTitle, attribute }) => {
         {/* arrow right */}
         <button
           onClick={nextSlider}
-          className="absolute top-1/2 right-3 z-50 flex justify-center items-center hover:bg-bg-blue bg-slate-200 rounded-full w-8 h-8 md:w-8 md:h-8 group"
+          className="absolute top-1/2 right-3 z-50 flex justify-center items-center hover:bg-bg-blue bg-slate-200 rounded-full w-6 h-6 md:w-8 md:h-8 group"
         >
           <svg
-            className="icon h-6 w-6 fill-black group-hover:fill-white  md:h-6 md:w-6 "
+            className="icon h-4 md:h-6 w-4 md:w-6 fill-black group-hover:fill-white  "
             viewBox="0 0 1024 1024"
             xmlns="http://www.w3.org/2000/svg"
             transform="rotate(180)"

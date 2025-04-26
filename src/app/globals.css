@@ -30,7 +30,9 @@ body {
 }
 
 html,
-body {
+body,
+input,
+select {
   background-color: white !important;
   color: black;
 }

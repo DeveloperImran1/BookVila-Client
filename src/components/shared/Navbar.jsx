@@ -1,5 +1,5 @@
 "user client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoReorderThree } from "react-icons/io5";
 import Swal from "sweetalert2";
 
@@ -51,6 +51,7 @@ import { MdContactMail, MdManageSearch } from "react-icons/md";
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
+  const menuRef = useRef(null);
   const [subject, setSubject] = useState(false);
   const [books, setBooks] = useState(false);
   const [bookWriters, setBookWriters] = useState(false);
@@ -64,8 +65,21 @@ const Navbar = () => {
   const session = useSession();
   const user = session?.data?.user;
   const auth = useAuth();
-  console.log("auth valu is", auth);
-  console.log(session);
+
+  // user profile a click korle dropdown show and hide functionality
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setShow(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const router = useRouter();
   const handleLogOut = async () => {
     await signOut();
@@ -159,9 +173,9 @@ const Navbar = () => {
   return (
     <div className="">
       <div className="bg-[#ffffff] mt-1 mb-3">
-        <nav className="flex items-center justify-between container  text-black font-semibold ">
+        <nav className="flex items-center justify-between container  text-black font-medium ">
           {/* drawer section  */}
-          <div className=" cursor-pointer rounded-2xl flex items-center text-xl font-semibold max-w-[50%]">
+          <div className=" cursor-pointer rounded-2xl flex items-center text-xl font-medium max-w-[50%]">
             <Drawer className="text-black border-2">
               <DrawerAction asChild>
                 <p className="bg-gray-300 p-1 mr-2 rounded-md md:hidden">
@@ -192,7 +206,7 @@ const Navbar = () => {
                       onClick={() => setBooks(!books)}
                       className={`${
                         books ? "bg-bg-blue text-white" : ""
-                      } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                      } py-3 px-3 font-medium w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                     >
                       <p>বই</p>
                       {books ? <IoIosArrowUp /> : <IoIosArrowDown />}
@@ -208,7 +222,7 @@ const Navbar = () => {
                         <Link
                           href=""
                           key={index}
-                          className="py-2 px-3 font-semibold w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
+                          className="py-2 px-3 font-medium w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
                         >
                           <p>{sub}</p>
                         </Link>
@@ -223,7 +237,7 @@ const Navbar = () => {
                       onClick={() => setSubject(!subject)}
                       className={`${
                         subject ? "bg-bg-blue text-white" : ""
-                      } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                      } py-3 px-3 font-medium w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                     >
                       <p>বিষয়</p>
                       {subject ? <IoIosArrowUp /> : <IoIosArrowDown />}
@@ -239,7 +253,7 @@ const Navbar = () => {
                         <Link
                           href=""
                           key={index}
-                          className="py-2 px-3 font-semibold w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
+                          className="py-2 px-3 font-medium w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
                         >
                           <p>{sub}</p>
                         </Link>
@@ -254,7 +268,7 @@ const Navbar = () => {
                       onClick={() => setBookWriters(!bookWriters)}
                       className={`${
                         bookWriters ? "bg-bg-blue text-white" : ""
-                      } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                      } py-3 px-3 font-medium w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                     >
                       <p>লেখক</p>
                       {bookWriters ? <IoIosArrowUp /> : <IoIosArrowDown />}
@@ -270,7 +284,7 @@ const Navbar = () => {
                         <Link
                           href={`/writer/${writer?.authorID}`}
                           key={index}
-                          className="py-2 px-3 font-semibold w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
+                          className="py-2 px-3 font-medium w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
                         >
                           <p>{writer?.name}</p>
                         </Link>
@@ -286,7 +300,7 @@ const Navbar = () => {
                       onClick={() => setBookPublications(!bookPublications)}
                       className={`${
                         bookPublications ? "bg-bg-blue text-white" : ""
-                      } py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                      } py-3 px-3 font-medium w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                     >
                       <p>প্রকাশনী</p>
                       {bookPublications ? <IoIosArrowUp /> : <IoIosArrowDown />}
@@ -302,7 +316,7 @@ const Navbar = () => {
                         <Link
                           href={`/publisher/${singlePub?.publicationID}`}
                           key={index}
-                          className="py-2 px-3 font-semibold w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
+                          className="py-2 px-3 font-medium w-[90%] hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center"
                         >
                           <p>{singlePub?.name}</p>
                         </Link>
@@ -317,7 +331,7 @@ const Navbar = () => {
 
                   <Link
                     href="/about-us"
-                    className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                    className={` py-3 px-3 font-medium w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                   >
                     <p>Contact Us</p>
                     <AiOutlinePhone></AiOutlinePhone>
@@ -325,14 +339,14 @@ const Navbar = () => {
                   {user ? (
                     <div
                       onClick={() => handleLogOut()}
-                      className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                      className={` py-3 px-3 font-medium w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                     >
                       <p>Logout</p>
                       <FiLogIn></FiLogIn>
                     </div>
                   ) : (
                     <div
-                      className={` py-3 px-3 font-semibold w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
+                      className={` py-3 px-3 font-medium w-full hover:bg-bg-blue hover:text-white rounded-md flex justify-between items-center`}
                     >
                       <p>Login</p>
                       <FiLogIn></FiLogIn>
@@ -407,10 +421,13 @@ const Navbar = () => {
                 </p>
               </Link>
               <div
-                onClick={() => setShow(!show)}
+                ref={menuRef}
                 className="flex items-center border-2 rounded-[32px] relative cursor-pointer text-gray-600"
               >
-                <button className="rounded-full transition-all duration-300 hover:scale-90">
+                <button
+                  onClick={() => setShow((prev) => !prev)}
+                  className="rounded-full transition-all duration-300 hover:scale-90"
+                >
                   <Image
                     height={676}
                     width={1200}
@@ -423,6 +440,7 @@ const Navbar = () => {
                   />
                 </button>
                 <div
+                  onClick={() => setShow((prev) => !prev)}
                   className={`${
                     show
                       ? "right-0 top-[50px] visible"

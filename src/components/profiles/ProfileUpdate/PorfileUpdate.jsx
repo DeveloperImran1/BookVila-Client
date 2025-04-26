@@ -6,6 +6,7 @@ import Loading from "@/components/shared/Loading";
 import { uploadCloudinary } from "@/hooks/upload";
 import useAuth from "@/hooks/useAuth";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { Radio } from "antd";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
@@ -19,6 +20,7 @@ function ProfileUpdate() {
   const [showName, setShowName] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [currentGender, setCurrentGender] = useState(data?.gender);
   const session = useSession();
   const axiosPublic = useAxiosPublic();
 
@@ -53,7 +55,7 @@ function ProfileUpdate() {
     const month = e.target.month?.value || data?.month;
     const year = e.target.year?.value || data?.year;
     const phoneNumber = e.target.phoneNumber?.value || data?.phoneNumber;
-    const gender = e.target.gender?.value || data?.gender;
+    const gender = currentGender || data?.gender;
 
     const imageUrl = await imageUploadFunc();
     const newObj = {
@@ -66,6 +68,7 @@ function ProfileUpdate() {
       photo: imageUrl || data?.photo,
     };
     console.log("Form data submitted:", newObj);
+
     const email = session?.data?.user?.email;
 
     // Check if no fields were modified
@@ -182,7 +185,7 @@ function ProfileUpdate() {
                   className="border-2 rounded-md px-3 py-2 w-full transition-all duration-300 focus:outline-none focus:ring-2  "
                 >
                   <option value="">Day</option>
-                  {[...Array(31).keys()].map((day) => (
+                  {[...Array(31).keys()]?.map((day) => (
                     <option key={day + 1} value={day + 1}>
                       {day + 1}
                     </option>
@@ -207,7 +210,7 @@ function ProfileUpdate() {
                     "October",
                     "November",
                     "December",
-                  ].map((month, index) => (
+                  ]?.map((month, index) => (
                     <option key={index + 1} value={index + 1}>
                       {month}
                     </option>
@@ -219,7 +222,7 @@ function ProfileUpdate() {
                   className="border-2 rounded-md px-3 py-2 w-full transition-all duration-300 focus:outline-none focus:ring-2  "
                 >
                   <option value="">Year</option>
-                  {[...Array(50).keys()].map((year) => (
+                  {[...Array(50).keys()]?.map((year) => (
                     <option key={year} value={2024 - year}>
                       {2024 - year}
                     </option>
@@ -257,11 +260,31 @@ function ProfileUpdate() {
                 ))}
               </div>
             </div>
+
+            <div className="mt-4">
+              <label className="block font-medium mb-1">Gender</label>
+
+              <div className="space-y-2 text-sm text-zinc-700 ">
+                <Radio.Group
+                  name="radiogroup"
+                  onChange={(e) => setCurrentGender(e.target.value)}
+                  defaultValue={data?.gender}
+                  options={[
+                    { value: "Male", label: "Male" },
+                    { value: "Female", label: "Female" },
+                    { value: "Others", label: "Others" },
+                  ]}
+                />
+              </div>
+            </div>
+
             <div className="flex  justify-end">
               <button
                 type="submit"
                 className={`bg-bg-blue hover:bg-[#4ed9c4]
-                   text-white font-medium py-2 px-4 rounded-md mt-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105`}
+                   text-white font-medium py-2 px-4 rounded-md mt-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 transform hover:scale-105 ${
+                     loading && "disabled"
+                   }`}
               >
                 {loading ? (
                   <p className="flex flex-col justify-center items-center">
