@@ -7,17 +7,22 @@ import {
 } from "@/hooks/localStorage";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import { Modal } from "antd";
 import { Heart, Info, Share2, ShoppingCart, Star } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BsMessenger } from "react-icons/bs";
 import { FaBarcode, FaBook, FaBuilding, FaPen } from "react-icons/fa";
+import { FacebookMessengerShareButton, FacebookShareButton } from "react-share";
 import Loading from "../shared/Loading";
 import BookInformation from "./BookInformation";
 import ReviewPage from "./ReviewPage";
 import SimilarBooks from "./SimilarBook";
+
+// facebook share for
 
 // Configure modal root element for accessibility
 // Modal.setAppElement("#root");
@@ -45,7 +50,7 @@ const initialQAs = [
 ];
 
 export default function BookDetails() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [qas, setQas] = useState(initialQAs);
   const [newQuestion, setNewQuestion] = useState("");
   const [questionModalIsOpen, setQuestionModalIsOpen] = useState(false);
@@ -59,6 +64,7 @@ export default function BookDetails() {
   const [favoruteBooks, setFavoruteBooks] = useState([]);
   const [addToCart, setAddToCart] = useState([]);
   const [cartBooks, setCartBooks] = useState([]);
+  const [bookStatus, setBookStatus] = useState("");
 
   const session = useSession();
   // Question And Ans Form
@@ -138,18 +144,37 @@ export default function BookDetails() {
   );
   const savings = book?.price - discountedPrice;
 
-  // const openModal = () => {
-  //   setModalIsOpen(true);
-  // };
-  // const openQuestionModal = () => setQuestionModalIsOpen(true);
-  // const closeModal = () => {
-  //   setModalIsOpen(false);
-  //   setIsLoading(true); // Reset loading state when modal closes
-  // };
+  // calculate for book status
+  const currentDateTime = new Date().getTime() - 2592000000;
 
-  // const handleIframeLoad = () => {
-  //   setIsLoading(false);
-  // };
+  useEffect(() => {
+    const newPublishedBooks =
+      new Date(book?.updatedAt).getTime() > currentDateTime;
+
+    if (book?.discount) {
+      setBookStatus(`${book?.discount}%`);
+    } else if (newPublishedBooks) {
+      setBookStatus("New");
+    }
+  }, [book?.discount, book, currentDateTime]);
+
+  // book rating er gor calculation
+  const { data: currentBookReview = [] } = useQuery({
+    queryKey: ["currentBookReview", book?._id],
+    queryFn: async () => {
+      const res = await axiosPublic.get(`/getReview/${book?._id}`);
+      return res?.data;
+    },
+  });
+
+  let totalRating = 0;
+  currentBookReview?.map((rating) => {
+    totalRating += parseFloat(rating?.rating);
+  });
+  const totalRatingsGor =
+    currentBookReview?.length > 0
+      ? (totalRating / parseInt(currentBookReview?.length)).toFixed(1)
+      : 0;
 
   // add favorute list relate kaj
   useEffect(() => {
@@ -213,15 +238,31 @@ export default function BookDetails() {
         > */}
       <div className=" flex flex-col md:flex-row gap-5">
         <div className="relative border-2 w-full md:w-[40%] rounded-lg overflow-hidden">
-          <div className="absolute top-2 -left-6 bg-red-500 px-3  transform -rotate-45">
-            <p className="text-white text-base px-3 py-1">
-              <span className="font-bold">{book?.discount}%</span> OFF
-            </p>
+          <div className=" absolute top-[-2px] left-0 z-50 overflow-hidden">
+            <div className="relative text-[18px]">
+              <Image
+                height={600}
+                width={600}
+                className="h-[70px] md:h-[90px] w-[70px] md:w-[90px]"
+                src="https://i.postimg.cc/bJJggnKk/Untitled-design-removebg-preview.png"
+                alt=""
+              />
+              {bookStatus === "New" ? (
+                <p className=" text-white top-[45%] left-[10%px]  font-semibold absolute text-center ">
+                  {bookStatus}
+                </p>
+              ) : (
+                <p className=" text-white top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] font-semibold absolute text-center  ">
+                  {bookStatus}{" "}
+                  <span className="block mt-[-5px] text-[13px]">ছাড়</span>
+                </p>
+              )}
+            </div>
           </div>
           <Image
             src={book?.coverImage}
             alt={book?.bookName?.[0] || "Books"}
-            className="w-full h-[300px]  md:h-[500px] object-cover"
+            className="w-full h-[300px]  md:h-[500px] "
             height={676}
             width={1200}
           />
@@ -233,10 +274,9 @@ export default function BookDetails() {
           <div>
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-2xl text-black font-bold">
+                <h1 className="text-[18px] md:text-[20px] lg:text-2xl text-black font-bold">
                   {book?.bookName?.[0]}
                 </h1>
-                <p className="text-gray-500">({book?.bookName?.[1]})</p>
               </div>
               <Info
                 className="h-5 w-5 text-gray-500"
@@ -254,25 +294,35 @@ export default function BookDetails() {
                 <Star
                   key={i}
                   className={`w-4 h-4 ${
-                    i < 4 ? "text-yellow-400" : "text-gray-400"
+                    i < Math.floor(totalRatingsGor)
+                      ? "text-yellow-400"
+                      : "text-gray-400"
                   }`}
                 />
               ))}
             </div>
             <div className="text-sm text-gray-500">
-              {book?.ratings} Ratings | {book?.reviews} Reviews
+              <span className="font-bold text-black">{totalRatingsGor}</span>{" "}
+              Star Ratings |{" "}
+              <span className="font-bold text-black">
+                {currentBookReview?.length || 0}
+              </span>{" "}
+              Reviews
             </div>
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl text-gray-600 font-bold">
-                TK. {discountedPrice}
-              </span>
-              <span className="text-lg text-gray-500 line-through">
-                TK. {book?.price}
-              </span>
-              <span className="text-green-600 text-sm">
+            <div className="flex flex-col md:flex-row items-baseline gap-5">
+              <div className="flex items-baseline gap-2">
+                <span className="text-[18px] md:text-[20px] lg:text-2xl text-gray-600 font-bold">
+                  TK. {discountedPrice}
+                </span>
+                <span className="text-[15px] md:text-[17px] lg:text-xl text-gray-500 line-through">
+                  TK. {book?.price}
+                </span>
+              </div>
+
+              <span className="text-green-600 text-sm ">
                 You Save TK. {savings} ({book?.discount}%)
               </span>
             </div>
@@ -286,7 +336,7 @@ export default function BookDetails() {
             )}
           </div>
 
-          <div className="flex flex-row flex-wrap gap-4 justify-between text-gray-700 mt-8">
+          <div className="flex flex-col md:flex-row gap-6 md:gap-4 justify-between text-gray-700 mt-8">
             <div className="text-center">
               <FaBook className="text-lg mx-auto " />
               <h1 className="font-semibold">Book Length</h1>
@@ -309,7 +359,7 @@ export default function BookDetails() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 justify-start pt-4">
+          <div className="flex items-center gap-4 justify-between pt-4">
             <button
               onClick={handleFavoruteAdded}
               className={`${
@@ -319,13 +369,33 @@ export default function BookDetails() {
               } text-gray-500 flex items-center`}
             >
               {/* <button onClick={handleFavoruteAdded}  className="text-gray-500 hover:text-primary flex items-center"> */}
-              <Heart className="mr-2 h-4 w-4 " />
-              Add to Booklist
+              <Heart className="md:mr-2 h-4 w-4 " />
+              <span className="hidden sm:block">Add to Booklist</span>
             </button>
-            <button className="text-gray-500 flex items-center">
-              <Share2 className="mr-2 h-4 w-4" />
-              Share This Book
-            </button>
+
+            <FacebookShareButton
+              className="flex gap-2"
+              url={`https://www.readora.shop${window.location.pathname}`}
+              quote={"Readora Online Book Shop"}
+              hashtag="#readora #onlineshop #bookshop"
+            >
+              <button className="text-gray-500 flex items-center">
+                <Share2 className="md:mr-2 h-4 w-4" />
+
+                <span className="hidden sm:block">Share On Facebook</span>
+              </button>
+            </FacebookShareButton>
+
+            <FacebookMessengerShareButton
+              className="flex gap-2"
+              url={`${window.location.origin}${window.location.pathname}`}
+              appId="711734981208843"
+            >
+              <button className="text-gray-500 flex items-center">
+                <BsMessenger className="md:mr-2 h-4 w-4" />
+                <span className="hidden sm:block">Share On Messenger</span>
+              </button>
+            </FacebookMessengerShareButton>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -356,8 +426,8 @@ export default function BookDetails() {
             )}
 
             <button
-              // onClick={openModal}    // pdf er system akhono korini
-              className="p-2 bg-slate-200 border rounded font-bold text-[#077aa0b7]"
+              onClick={() => setIsModalOpen(true)} // pdf er system akhono korini
+              className="p-2 bg-slate-200 border rounded md:font-bold text-[#077aa0b7]"
             >
               একটু পড়ে দেখুন
             </button>
@@ -369,32 +439,35 @@ export default function BookDetails() {
       {/* </div> */}
 
       {/* PDF Preview Modal */}
-      {/* <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        className="fixed inset-0 bg-opacity-75 bg-gray-500 flex items-center justify-center"
-        overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-75"
+
+      <Modal
+        open={isModalOpen}
+        onOk={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
+        footer=""
+        className="w-screen h-screen"
+        width={book?.buyingOptions?.[1]?.fileLink ? "80%" : "30%"}
       >
-        <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl relative p-6">
-          <X
-            className="absolute top-3 right-3 cursor-pointer text-gray-500"
-            onClick={closeModal}
-          />
-          <div className="relative h-[500px] w-full">
-            {isLoading && (
-              <p className="absolute inset-0 flex items-center justify-center text-gray-500">
-                Loading...
-              </p>
-            )}
+        <div className="  relative p-6">
+          {book?.buyingOptions?.[1]?.fileLink ? (
             <iframe
-              src={book?.pdfUrl}
+              // google docs k anyone mode a kore share link ta hobe aita: https://docs.google.com/document/d/1_tlEoFNaAe1ibJXJRFKXwRbJNiyO2c-1St59sAZBWVc/edit?usp=sharing
+              // but last a edit?usp=sharing aite remove kore nicher url er motot preview likhle sudho docs ta show hobe.
+              src={
+                book?.buyingOptions?.[1]?.fileLink ||
+                "https://drive.google.com/file/d/1fSwERpyWCEW2wx5mDqvG-81stNhp1TBg/preview"
+              }
               title="PDF Preview"
-              onLoad={handleIframeLoad}
-              className="w-full h-full"
+              className="w-full h-screen"
             />
-          </div>
+          ) : (
+            <h2 className="text-xl font-bold text-center pt-11">
+              PDF Not Available
+            </h2>
+          )}
         </div>
-      </Modal> */}
+      </Modal>
+
       {/* <div className="flex justify-between border-b-2 py-4 mt-2 items-center mb-6">
         <h2 className="text-2xl font-semibold">Product Q/A</h2>
         <button onClick={openQuestionModal} className="flex items-center">
