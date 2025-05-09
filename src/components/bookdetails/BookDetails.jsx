@@ -67,30 +67,30 @@ export default function BookDetails() {
   const [bookStatus, setBookStatus] = useState("");
 
   // for facebook share
-  const appId = process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID; // তোমার real app ID
+  // const appId = process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID; // তোমার real app ID
 
-  useEffect(() => {
-    if (window.FB) {
-      window.FB.XFBML.parse();
-    } else {
-      const script = document.createElement("script");
-      script.src =
-        "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0&appId=711734981208843";
-      script.async = true;
-      script.defer = true;
-      document.body.appendChild(script);
+  // useEffect(() => {
+  //   if (window.FB) {
+  //     window.FB.XFBML.parse();
+  //   } else {
+  //     const script = document.createElement("script");
+  //     script.src =
+  //       "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0&appId=711734981208843";
+  //     script.async = true;
+  //     script.defer = true;
+  //     document.body.appendChild(script);
 
-      script.onload = () => {
-        if (window.FB) {
-          window.FB.init({
-            appId: "711734981208843",
-            xfbml: true,
-            version: "v19.0",
-          });
-        }
-      };
-    }
-  }, []);
+  //     script.onload = () => {
+  //       if (window.FB) {
+  //         window.FB.init({
+  //           appId: "711734981208843",
+  //           xfbml: true,
+  //           version: "v19.0",
+  //         });
+  //       }
+  //     };
+  //   }
+  // }, []);
 
   const session = useSession();
   // Question And Ans Form
@@ -423,13 +423,13 @@ export default function BookDetails() {
               </button>
             </FacebookMessengerShareButton>
 
-            <div>
+            {/* <div>
               <div
                 className="fb-send"
                 data-href={window.location.href}
                 data-app-id={appId}
               ></div>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
