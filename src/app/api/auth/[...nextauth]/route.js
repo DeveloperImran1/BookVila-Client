@@ -31,7 +31,7 @@ export const authOptions = {
         }
 
         const res = await axios.post(
-          `http://localhost:9000/getSingleUser`,
+          `https://book-vila-server.vercel.app/getSingleUser`,
           userInfo
         );
         const currentUser = res?.data;
@@ -88,7 +88,7 @@ export const authOptions = {
 
           console.log("newUser", newUser);
           const resp = await axios.post(
-            "http://localhost:9000/addeNewUser",
+            "https://book-vila-server.vercel.app/addeNewUser",
             newUser
           );
           console.log("SignUp korar por responce is ", resp);

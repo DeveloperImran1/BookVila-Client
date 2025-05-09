@@ -115,7 +115,7 @@ export default function BookDetails() {
   // useEffect(() => {
   //   setLoading(true)
   //   const res = axios
-  //     .get(`http://localhost:9000/book/${id}`)
+  //     .get(`https://book-vila-server.vercel.app/book/${id}`)
   //     .then((res) => {
   //       setBook(res.data);
   //     })

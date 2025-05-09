@@ -22,7 +22,7 @@ export const middleware = async (request) => {
 
   // const  {value: myEmail}  = cookies(request).get("myEmail")
 
-  // const {data} = await axios.get(`http://localhost:9000/user/${myEmail}`)
+  // const {data} = await axios.get(`https://book-vila-server.vercel.app/user/${myEmail}`)
   // console.log("current user role is ", data?.role);
 
   // if((pathname === '/dashboard/admin-container' || pathname === '/dashboard/organizer-request' || pathname === '/dashboard/user-manage') &&  data?.role !== "admin" ){
