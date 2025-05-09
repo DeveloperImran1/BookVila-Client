@@ -99,17 +99,6 @@ const BooksCard = ({ book }) => {
     <>
       {/* large device er jonno  */}
       <article className="rounded-md border-2 md:p-2 lg:p-4  w-full space-y-1 hidden lg:flex flex-col justify-between relative bg-white">
-        {/* <div className="clit-element absolute top-[-2px] left-0 z-50 overflow-hidden">
-          {bookStatus === "New" ? (
-            <p className="-rotate-[50deg] text-white top-3 left-1 font-semibold absolute ">
-              {bookStatus}
-            </p>
-          ) : (
-            <p className="-rotate-[50deg] text-white top-[9px] left-[-2px] font-semibold absolute ">
-              {bookStatus}
-            </p>
-          )}
-        </div> */}
         <div className=" absolute top-[-2px] left-0 z-50 overflow-hidden">
           <div className="relative">
             <Image
@@ -272,7 +261,7 @@ const BooksCard = ({ book }) => {
                 "https://cdn-icons-png.flaticon.com/512/5078/5078727.png"
               }
               alt="book"
-              className="w-full h-[150px] sm:h-[200px] md:h-[200px]  rounded-md"
+              className="max-w-[130px] h-[150px] sm:h-[200px] md:h-[200px] mx-auto rounded-md"
             />
           </Link>
         </div>

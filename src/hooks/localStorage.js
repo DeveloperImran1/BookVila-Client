@@ -1,7 +1,6 @@
 // import toast from "react-hot-toast";
 
-
-// // react toast: 
+// // react toast:
 // const notifyFavorute = () => toast.success("Wow Successfully Added 😍")
 // const existFavorute = () => toast.error("Allready this book Added 😊")
 // const removeFavorute = () => toast.success("Remove this book 🤷‍♂️")
@@ -16,8 +15,6 @@
 //     return favoruteBook;
 // };
 
-
-
 // export const setFavoruteBook = (book) => {
 //     let books = favoruteBookGet();
 //     const isExist = books.find(b => b?.books?._id === book?.books?._id);
@@ -30,7 +27,6 @@
 //     notifyFavorute();
 // }
 
-
 // // remove job in localStorage
 // export const removeBook = (book) => {
 //     const books = favoruteBookGet();
@@ -40,10 +36,8 @@
 //     removeFavorute();
 // }
 
-
-
 // // add to cart er jonno
-// // react toast: 
+// // react toast:
 // const notifyCart = () => toast.success("Wow Successfully Added 😍")
 // const existCart = () => toast.error("Allready this book Added 😊")
 // const removeCart = () => toast.success("Remove this book 🤷‍♂️")
@@ -58,8 +52,6 @@
 //     return cartBook;
 // };
 
-
-
 // export const setCartBook = (book) => {
 //     let books = cartBookGet();
 //     const isExist = books.find(b => b?.books?._id === book?.books?._id);
@@ -72,7 +64,6 @@
 //     notifyCart();
 // }
 
-
 // // remove job in localStorage
 // export const removeCartBook = (book) => {
 //     const books = cartBookGet();
@@ -82,20 +73,6 @@
 //     removeCart();
 // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import toast from "react-hot-toast";
 
 // Toast Messages
@@ -103,7 +80,7 @@ const notifySuccess = (message) => toast.success(message);
 const notifyError = (message) => toast.error(message);
 
 // Helper: Check for localStorage availability
-const isLocalStorageAvailable = () =>
+export const isLocalStorageAvailable = () =>
   typeof window !== "undefined" && window.localStorage;
 
 // Helper: Safely parse JSON
@@ -153,30 +130,29 @@ export const cartBookGet = () => {
   return safeParse(storedCartBook);
 };
 
-
 export const setCartBook = (book) => {
-    if (!isLocalStorageAvailable()) return;
-  
-    // Ensure books is always an array
-    const books = cartBookGet() || []; // Fallback to an empty array if null
-  
-    // Check if the book already exists
-    const isExist = books.some((b) => b?.books?._id === book?.books?._id);
-  
-    if (isExist) {
-      notifyError("Already this book is added to the cart 😊");
-      return;
-    }
-  
-    // Add the new book
-    books.push(book);
-    localStorage.setItem("cartBook", JSON.stringify(books));
-    notifySuccess("Book successfully added to cart 😍");
-  };
+  if (!isLocalStorageAvailable()) return;
+
+  // Ensure books is always an array
+  const books = cartBookGet() || []; // Fallback to an empty array if null
+
+  // Check if the book already exists
+  const isExist = books.some((b) => b?.books?._id === book?.books?._id);
+
+  if (isExist) {
+    notifyError("Already this book is added to the cart 😊");
+    return;
+  }
+
+  // Add the new book
+  books.push(book);
+  localStorage.setItem("cartBook", JSON.stringify(books));
+  notifySuccess("Book successfully added to cart 😍");
+};
 
 export const removeCartBook = (book) => {
   if (!isLocalStorageAvailable()) return;
-  const books = cartBookGet() || []; 
+  const books = cartBookGet() || [];
   const updatedBooks = books.filter((b) => b?.books?._id !== book?.books?._id);
 
   localStorage.setItem("cartBook", JSON.stringify(updatedBooks));

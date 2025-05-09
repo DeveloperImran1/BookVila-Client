@@ -37,11 +37,23 @@ const MyWishlist = () => {
 
   // add add to cart
   const handleAddtoCart = async (deletedId, book) => {
+    //   delete book to favorute list, after addto cart
+    // if (!isLocalStorageAvailable()) return;
+    const books = favoruteBookGet() || [];
+    console.log("perameter a asa book", book);
+    console.log("localstorate a available boos gulo", books);
+    const updatedBooks = books.filter((b) => b?.books?._id !== book?._id);
+    localStorage.setItem("favoruteBook", JSON.stringify(updatedBooks));
+
     const obj = {
       userEmail: session?.data?.user?.email || "demoEmail@gmail.com",
       books: book,
     };
     setCartBook(obj);
+
+    // refetch er kaj korbe
+    const res = favoruteBookGet();
+    setData(res);
   };
 
   return (
@@ -87,16 +99,15 @@ const MyWishlist = () => {
                 alt="card navigate ui"
               />
             </div>
-            <div className="space-y-2 font-semibold">
-              <h6 className="text-sm inline md:text-base lg:text-lg">
+            <div className="space-y-2 ">
+              <h6 className="text-sm  md:text-base ">
                 {book?.books?.bookName?.[0]}{" "}
               </h6>
-              <span className="text-xs font-semibold text-gray-400 md:text-sm">
-                {" "}
+              <span className="text-xs  text-gray-400 md:text-sm">
                 by {book?.books?.authorInfo?.name?.[0]}
               </span>
               <div className="flex gap-4 items-center">
-                <h2 className="text-[17px] font-semibold flex items-center ">
+                <h2 className="text-[17px]  flex items-center ">
                   <span>
                     {parseInt(
                       calculateDiscountedPrice(
@@ -107,7 +118,7 @@ const MyWishlist = () => {
                   </span>
                   <TbCurrencyTaka size={22}></TbCurrencyTaka>
                 </h2>
-                <del className="text-[17px] font-semibold text-gray-600 flex items-center">
+                <del className="text-[17px]  text-gray-600 flex items-center">
                   <span>{book?.books?.price}</span>
                   <TbCurrencyTaka size={22}></TbCurrencyTaka>
                 </del>

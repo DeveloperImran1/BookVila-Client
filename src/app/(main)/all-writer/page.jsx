@@ -1,31 +1,27 @@
 "use client";
+import BookCardSkelletion from "@/components/books/BookCardSkelletion";
+import WriterCard from "@/components/home/WriterCard";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import BooksCard from "../books/BookCard";
-import BookCardSkelletion from "../books/BookCardSkelletion";
 
-const AttributedBooks = () => {
+const AllWriters = () => {
   const axiosPublic = useAxiosPublic();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [totalPages, setTotalPages] = useState(1);
   const searchParams = useSearchParams();
-  const attribute = searchParams.get("attribute");
 
-  const { data: attributeBooks = {}, isLoading } = useQuery({
-    queryKey: ["attributeBooks", page, search],
+  const { data: queryAuthors = {}, isLoading } = useQuery({
+    queryKey: ["queryAuthors", page, search],
     queryFn: async () => {
-      //   const res = await axiosPublic.get(
-      //     `/getattributeBooks?subCategory=টপ ট্রেন্ডস&searchQuery=${search}&page=${page}`
-      //   );
       const res = await axiosPublic.get(
-        `/getAttributeBooks?attribute=${attribute}&searchQuery=${search}&page=${page}`
+        `/getAllAuthorsWithParams?searchQuery=${search}&page=${page}`
       );
-      setTotalPages(Math.ceil(res?.data?.totalBooks / 12));
+      setTotalPages(Math.ceil(res?.data?.totalAuthors / 12));
       return res?.data;
     },
   });
@@ -35,7 +31,7 @@ const AttributedBooks = () => {
     setSearch(e.target.value);
   };
 
-  console.log(attributeBooks);
+  console.log(queryAuthors);
   console.log(search);
 
   // Pagination handlers
@@ -56,7 +52,7 @@ const AttributedBooks = () => {
           src={
             "https://pathokpoint.com/_next/image?url=%2Fdefault%2Fpublisher-cover.jpg&w=1920&q=75"
           }
-          alt="books banner"
+          alt="author page banner"
           className="h-[290px] md:h-[320px] lg:h-[360px] w-full pb-[90px] md:pb-[130px] lg:pb-[160px] "
         ></Image>
 
@@ -67,11 +63,11 @@ const AttributedBooks = () => {
             src={
               "https://prokashoni.net/wp-content/themes/prokashoni/assets/images/stations/default.png"
             }
-            alt="books page logo"
+            alt="author page logo"
             className="h-[100px] md:h-[140px] lg:h-[190px] w-[100px] md:w-[140px] lg:w-[190px] rounded-full border-[4px] "
           ></Image>
           <h1 className="text-[17px] md:text-[19px] lg:text-[22px] font-bold">
-            বাতিঘর
+            লেখক সমূহ
           </h1>
         </div>
       </div>
@@ -79,7 +75,7 @@ const AttributedBooks = () => {
       <div className="bg-white mt-[10px] pt-6 px-2 md:px-5 rounded-md">
         <div className="flex items-center justify-between text-gray-500">
           <p className="text-sm md:text-base">
-            Total Result {attributeBooks?.totalBooks}
+            Total Result {queryAuthors?.totalAuthors}
           </p>
           <span className="relative   ">
             <input
@@ -101,11 +97,11 @@ const AttributedBooks = () => {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4    gap-4 mt-[20px] md:mt-[28px] lg:mt-[38px] ">
-            {attributeBooks?.books?.map((book, index) => (
-              <BooksCard key={book?._id} book={book}></BooksCard>
+          <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 mt-[10px] md:mt-[18px] lg:mt-[28px] ">
+            {queryAuthors?.authors?.map((writer) => (
+              <WriterCard key={writer?._id} writer={writer}></WriterCard>
             ))}
-          </div>
+          </section>
         )}
 
         {/* Pagination */}
@@ -138,4 +134,4 @@ const AttributedBooks = () => {
   );
 };
 
-export default AttributedBooks;
+export default AllWriters;

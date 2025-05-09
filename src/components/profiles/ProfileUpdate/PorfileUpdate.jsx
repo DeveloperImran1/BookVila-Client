@@ -243,23 +243,6 @@ function ProfileUpdate() {
                 className="border-2 rounded-md px-3 py-2 w-full transition-all duration-300 focus:outline-none focus:ring-2  "
               />
             </div>
-            <div className="mt-4">
-              <label className="block font-medium mb-1">Gender</label>
-              <div className="flex items-center space-x-4">
-                {["Male", "Female", "Others"].map((gender) => (
-                  <label key={gender} className="inline-flex items-center">
-                    <input
-                      type="radio"
-                      name="gender"
-                      value={gender}
-                      checked={data?.gender}
-                      className="form-radio text-blue-600"
-                    />
-                    <span className="ml-2">{gender}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
 
             <div className="mt-4">
               <label className="block font-medium mb-1">Gender</label>
